@@ -1,0 +1,246 @@
+{-# START_FILE readme.md #-}
+{{name}}
+===
+
+[![Hackage](https://img.shields.io/hackage/v/{{name}}.svg)](https://hackage.haskell.org/package/{{name}})
+[![Build Status](https://github.com/{{github-username}}/{{name}}/workflows/haskell-ci/badge.svg)](https://github.com/{{github-username}}/{{name}}/actions?query=workflow%3Ahaskell-ci) [![Hackage Deps](https://img.shields.io/hackage-deps/v/{{name}}.svg)](http://packdeps.haskellers.com/reverse/{{name}})
+
+`{{name}}` is a new package.
+
+Usage
+==
+
+``` haskell
+import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+```
+
+{-# START_FILE {{name}}.cabal #-}
+cabal-version: 2.4
+name:          {{name}}
+version:       0.0.1
+synopsis: See readme.md
+description: See readme.md for description.
+category: project
+author: {{author-name}}{{^author-name}}Author name here{{/author-name}}
+maintainer: {{author-email}}
+copyright: {{copyright}}{{^copyright}}{{year}}{{^year}}2021{{/year}} {{authorName}}{{^authorName}}Author name here{{/authorName}}{{/copyright}}
+license: BSD-3-Clause
+homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
+bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
+build-type: Simple
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}8.10.4{{/ghc-version}}
+source-repository head
+  type: git
+  location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
+
+common common-options
+  build-depends:
+    base >=4.7 && <5
+  default-language:
+    Haskell2010
+
+common ghc-options-stanza
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wredundant-constraints
+    -fwrite-ide-info
+    -hiedir=.hie
+
+library
+  import: common-options
+  import: ghc-options-stanza
+  hs-source-dirs:
+    src
+  default-extensions:
+  build-depends:
+  exposed-modules:
+    {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+
+executable {{name}}
+  import: common-options
+  import: ghc-options-stanza
+  main-is: app.hs
+  hs-source-dirs: app
+  build-depends:
+    {{name}},
+
+test-suite test
+  import: common-options
+  import: ghc-options-stanza
+  type: exitcode-stdio-1.0
+  main-is: test.hs
+  hs-source-dirs:
+    test
+  build-depends:
+    doctest >= 0.15 && < 0.19,
+    {{name}}
+
+{-# START_FILE {{name}}.cabal #-}
+packages: {{name}}.cabal
+
+-- if doctests seem broken, uncomment:
+-- See https://github.com/haskell/cabal/issues/6087
+-- write-ghc-environment-files: always
+
+allow-newer: true
+
+-- Might be helpful when hackage doesn't build properly...
+-- keep-going: True
+
+{-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}
+{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
+
+module {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+  (
+  )
+where
+
+import Prelude
+
+{-# START_FILE app/app.hs #-}
+{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
+
+import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+import Prelude
+
+-- $setup
+-- >>> import Prelude
+
+-- | doctest
+-- >>> putStrLn "doctest ok"
+-- doctest ok
+main :: IO ()
+main = pure ()
+
+{-# START_FILE test/test.hs #-}
+{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
+
+module Main where
+
+import Test.DocTest
+import Prelude
+
+main :: IO ()
+main =
+  doctest
+    [ "src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs",
+      "app/app.hs"
+    ]
+
+{-# START_FILE stack.yaml #-}
+resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-18.6{{/resolver}}
+
+packages:
+  - .
+
+{-# START_FILE .gitignore #-}
+/.stack-work/
+/dist-newstyle/
+stack.yaml.lock
+**/.DS_Store
+cabal.project.local*
+/.hie/
+
+{-# START_FILE .gitattributes #-}
+other/* linguist-documentation
+
+{-# START_FILE .projectile #-}
+
+{-# START_FILE hie.yaml #-}
+cradle:
+  cabal:
+    - path: "./app/{{name}}.hs"
+      component: "{{name}}:exe:{{name}}"
+    - path: "./src"
+      component: "{{name}}:lib"
+    - path: "./test/{{name}}.hs"
+      component: "{{name}}:test:{{name}}"
+
+{-# START_FILE LICENSE #-}
+Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2021{{/year}}
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the name of {{author-name}}{{^author-name}}Author name here{{/author-name}} nor the names of other
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+{-# START_FILE .github/workflows/Haskell-CI.yml #-}
+{{=>> <<=}}
+on: [push]
+name: haskell-ci
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        ghc: ['>>#ghc-version<<>>ghc-version<<>>/ghc-version<<>>^ghc-version<<8.10.4>>/ghc-version<<']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        stack: [true, false]
+    name: ghc ${{ matrix.ghc }} ${{ matrix.os }}
+    steps:
+      - name: clone project
+        uses: actions/checkout@v2
+      - name: setup stanza
+        uses: haskell/actions/setup@v1
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: 3.4
+          enable-stack: true
+          stack-version: 'latest'
+      - name: stack cache
+        if: matrix.stack == 'true'
+        uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
+          restore-keys: ${{ runner.os }}-
+      - name: cabal cache
+        if: matrix.stack == 'false'
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
+          path: ~/.cabal/store
+          restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
+      - name: cabal build
+        if: matrix.stack == 'false'
+        run: |
+          cabal update
+          cabal configure --enable-tests
+          cabal build
+          cabal test
+      - name: stack build
+        if: matrix.stack == 'true'
+        run: |
+          stack update
+          stack build --test --no-install-ghc --system-ghc
+    >>={{ }}=<<
