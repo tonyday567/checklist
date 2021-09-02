@@ -43,7 +43,7 @@ At least in terms of "How we start", Haskell has found it's groove, balancing th
 
 The template may not contain what you need, however, and may need some work. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklists, then keep reading!
 
-* Org-mode Usage and Overview
+* Usage and Overview
 
 `hecklist.org` is an org-mode file used to develop the template. It contains the template components but also is used to bootstrap a new Haskell environment, and remember and debug results of the various steps towards getting together a working Haskell project.
 
@@ -266,11 +266,11 @@ in `.ddom.d/config.el`, place any personal config preferences. Mine are:
  )
 #+end_src
 
-*** Haskell in org-mode
+*** Literate Programming
 
-Haskell works out of the box in org-mode these days and is worth playing around with for anyone interested in literate programming, such as an alternative to Jupyter.
+An org file can nicely double as a project readme. See [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]]
 
-[[file:~/.emacs.doom/.local/straight/repos/org/lisp/ob-haskell.el::;;; ob-haskell.el --- Babel Functions for Haskell -*- lexical-binding: t; -*-][ob-haskell source]]
+Haskell also works out of the box in org-mode these days and is worth playing around with for anyone interested in hacky literate programming.
 
 [[https://necromuralist.github.io/posts/org-babel-cheat-sheet/][org babel cheat sheet]]
 
