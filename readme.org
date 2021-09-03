@@ -8,19 +8,19 @@ A Haskell checklist for starting off projects, or starting over.
 
 Copy hecklist.hsfiles to wherever you start a new project and, if you have stack, type:
 
-#+begin_src zsh :results output
+#+begin_src zsh
 stack new foo hecklist
 #+end_src
 
 If you do not have stack, then first type:
 
-#+begin_src zsh :results output
+#+begin_src zsh
 ghcup install stack
 #+end_src
 
 If you do not have ghcup, then first type:
 
-#+begin_src zsh :results output
+#+begin_src zsh
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 #+end_src
 
@@ -51,13 +51,13 @@ Starting from scratch:
 2. modify the [[#Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
 3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
-  #+begin_src zsh :results output
+  #+begin_src zsh
   stack new foo hecklist
   #+end_src
 
   Current defaults are ghc-8.10.4, lts-18.6 and Lib as the library name, but they are easily changed using stack, eg
 
-  #+begin_src zsh :results output
+  #+begin_src zsh
   stack new foo9 hecklist "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
   #+end_src
 
@@ -67,6 +67,9 @@ Starting from scratch:
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
+:PROPERTIES
+:header-args :exports both
+:END
 
 Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
 
@@ -83,7 +86,7 @@ which cabal
 #+RESULTS:
 : /Users/tonyday/.ghcup/bin/cabal
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 cabal --version
 #+end_src
 
