@@ -78,7 +78,7 @@ test-suite test
     doctest >= 0.15 && < 0.19,
     {{name}}
 
-{-# START_FILE {{name}}.cabal #-}
+{-# START_FILE cabal.project #-}
 packages: {{name}}.cabal
 
 -- if doctests seem broken, uncomment:
@@ -87,7 +87,7 @@ packages: {{name}}.cabal
 
 allow-newer: true
 
--- Might be helpful when hackage doesn't build properly...
+-- Might be helpful when Hackage doesn't build properly...
 -- keep-going: True
 
 {-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}

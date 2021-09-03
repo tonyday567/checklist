@@ -644,7 +644,7 @@ If you would like to go full heavy-metal, such as include hlint and cabal-docspe
 
 * Checklist
 :PROPERTIES:
-:header-args: :tangle hecklist.hsfiles :dir ./foo :language zsh
+:header-args: :dir ./foo
 :END:
 
 I use this section to record results of compilation steps, and the process of polishing projects. Edit properties in [[#Checklist][Checklist]] to point to the right directory and check/set the correct ghc version.
