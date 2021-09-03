@@ -1,18 +1,11 @@
 #+TITLE: Hecklist
-#+PROPERTY: header-args :results output
-#+PROPERTY: header-args :exports both
+#+PROPERTY: header-args :results output :exports both
 #+OPTIONS: H:2 TOC:1 view:showall
 
-A Haskell checklist for starting off, or starting over.
-
-This project contains:
-
-- a .hsfiles template, useful for starting a new Haskell project,
-- instructions on how to use this, and
-- information on how to set up a Haskell environment.
+A Haskell checklist for starting off projects, or starting over.
 
 * Quick Start
-i
+
 Copy hecklist.hsfiles to wherever you start a new project and, if you have stack, type:
 
 #+begin_src zsh :results output
@@ -83,7 +76,7 @@ Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] 
   curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 #+end_src
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 which cabal
 #+end_src
 
