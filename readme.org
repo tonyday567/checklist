@@ -46,9 +46,9 @@ The template may not, however, contain what you need. For small changes, a direc
 
 This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also the commands used to bootstrap a new Haskell environment, and results from the various steps involved in getting together a working Haskell project.
 
-Starting from scratch, a Haskell project involves:
+To start from scratch, follow these steps:
 
-1. Set up a Haskell environment following the steps in [[#Haskell-and-Environs][Haskell and Environs]]. This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
+1. Set up a Haskell environment following the [[#Haskell-and-Environs][Haskell and Environs]] section. This includes suggestions for Doom emacs but any of the emacs preludes will also be fine.
 2. modify the [[#Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
 3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
@@ -62,8 +62,8 @@ Starting from scratch, a Haskell project involves:
   stack new foo9 hecklist "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
   #+end_src
 
-4. code, compile and test (see [[#Checklist][Checklist]] section).
-5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[#GitHub][GitHub]] section).
+4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
+5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
 
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
@@ -183,7 +183,7 @@ ghcup list
 ✔✔ ghcup 0.1.16.2       latest,recommended
 #+end_example
 
-** tools
+** installing tools
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
@@ -195,7 +195,7 @@ ghcup list
 cabal install ormolu hlint stan ghcid haskell-ci
 #+end_src
 
-~cabal~ stores executables in ~​/.cabal/bin, ~stack~ in ~​/.local/bin.
+~cabal~ stores executables in ​~​/.Cabal/bin, ~stack~ in ​~​/.local/bin.
 
 #+begin_src zsh :results output :exports both
 which hlint
@@ -223,7 +223,7 @@ haskell-ci github '--config=haskell-ci.config' 'cabal.project' --output .github/
 
 ** cabal-docspec
 
-[[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]] is a doctest runner that exists as a process outside the specification of a cabal project, in a similar manner to hlint, say.
+[[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]] is a doctest runner that exists as a process outside the specification of a cabal project, acting more like hlint then a separate cabal stanza.
 
 #+begin_src zsh
 git clone https://github.com/phadej/cabal-extras
@@ -265,13 +265,15 @@ in ~.ddom.d/config.el~, place any personal config preferences. Mine are:
 
 *** Literate Programming
 
-An org file can also be used as a project readme. Sort of see [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]] for current state.
+An org file can also be used as a project readme. Sort of.
+
+See [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]] for the current state of affairs.
 
 Haskell also works out of the box in org-mode these days and is worth playing around with for anyone interested in hacky literate programming.
 
 [[https://necromuralist.github.io/posts/org-babel-cheat-sheet/][org babel cheat sheet]]
 
-#+begin_src haskell :results value
+#+begin_src haskell :results value :exports both
 x = 1
 putStrLn $ show x
 #+end_src
@@ -321,7 +323,7 @@ import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib
 
 ** [[https://www.haskell.org/cabal/][cabal]]
 
-~cabal~s [[https://cabal.readthedocs.io/en/3.4/][docs]] have gotten very good of late, and the template should be read with those docs handy.
+~cabal~ [[https://cabal.readthedocs.io/en/3.4/][docs]] have gotten very good of late, and the template should be read with those docs handy.
 
 *** front matter
 
@@ -414,6 +416,8 @@ test-suite test
 *** cabal.project
 
 I'm currently uncertain whether cabal.project should form part of the GitHub repo, as it doesn't form part of a Hackage distribution.
+
+It does, however, form a place for things that might be needed down the track. ~allow-newer~ should be turned off before you get to uploading to haddock. GHC environment files are becoming pretty important.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE cabal.project #-}
@@ -581,6 +585,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ** action
 
+Note that github/actions use double curly brackets, and the usual mustache delimiters are easily modified to adjust to this.
+
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE .github/workflows/Haskell-CI.yml #-}
 {{=>> <<=}}
@@ -641,40 +647,7 @@ If you would like to go full heavy-metal, such as include hlint and cabal-docspe
 :header-args: :tangle hecklist.hsfiles :dir ./foo :language zsh
 :END:
 
-I use this section to record results of compilation steps, and the process of polishing projects.
-
-** Front matter
-
-Edit properties in [[#Checklist][Checklist]] to point to the right directory.
-
-#+begin_src zsh :exports both
-ls -la
-#+end_src
-
-#+RESULTS:
-| total      | 72 |         |       |      |   |     |       |                     |
-| drwxr-xr-x | 20 | tonyday | staff |  640 | 3 | Sep | 09:01 | .                   |
-| drwxr-xr-x |  8 | tonyday | staff |  256 | 3 | Sep | 08:08 | ..                  |
-| drwxr-xr-x | 12 | tonyday | staff |  384 | 2 | Sep | 21:29 | .git                |
-| -rw------- |  1 | tonyday | staff |   31 | 2 | Sep | 10:40 | .gitattributes      |
-| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | .github             |
-| -rw------- |  1 | tonyday | staff |   87 | 2 | Sep | 10:40 | .gitignore          |
-| drwxr-xr-x |  4 | tonyday | staff |  128 | 2 | Sep | 10:40 | .hie                |
-| -rw------- |  1 | tonyday | staff |    0 | 2 | Sep | 10:40 | .projectile         |
-| drwxr-xr-x |  5 | tonyday | staff |  160 | 2 | Sep | 17:16 | .stack-work         |
-| -rw------- |  1 | tonyday | staff | 1513 | 2 | Sep | 10:40 | LICENSE             |
-| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | app                 |
-| -rw-r--r-- |  1 | tonyday | staff |   34 | 3 | Sep | 09:01 | cabal.project.local |
-| drwxr-xr-x |  6 | tonyday | staff |  192 | 3 | Sep | 09:01 | dist-newstyle       |
-| -rw------- |  1 | tonyday | staff | 1318 | 2 | Sep | 10:40 | foo.cabal           |
-| -rw------- |  1 | tonyday | staff |  182 | 2 | Sep | 10:40 | hie.yaml            |
-| -rw------- |  1 | tonyday | staff |  432 | 2 | Sep | 10:40 | readme.md           |
-| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 17:16 | src                 |
-| -rw------- |  1 | tonyday | staff |   36 | 2 | Sep | 10:40 | stack.yaml          |
-| -rw------- |  1 | tonyday | staff |  447 | 2 | Sep | 17:16 | stack.yaml.lock     |
-| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | test                |
-
-Check/set the ghc version
+I use this section to record results of compilation steps, and the process of polishing projects. Edit properties in [[#Checklist][Checklist]] to point to the right directory and check/set the correct ghc version.
 
 #+begin_src zsh
 ghcup set ghc 8.10.4
@@ -708,7 +681,6 @@ ghcup set ghc 8.10.4
   :  - foo-0.0.1 (lib) (first run)
   :  - foo-0.0.1 (test:test) (first run)
   :  - foo-0.0.1 (exe:foo) (first run)
-
 
   #+begin_src zsh :results output :exports both
   cabal build
@@ -755,7 +727,6 @@ ghcup set ghc 8.10.4
   /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
   1 of 1 test suites (1 of 1 test cases) passed.
   #+end_example
-
 - [[https://docs.haskellstack.org/en/stable/README/][stack]]
 
   #+begin_src zsh :results output
@@ -763,13 +734,11 @@ ghcup set ghc 8.10.4
   #+end_src
 
   #+RESULTS:
-
 - full compile with -Werror
 
     #+begin_src zsh :results output
     stack build --test --haddock --no-haddock-deps --ghc-options -Werror --ghc-options -Wcompat --ghc-options -Wincomplete-record-updates --ghc-options -Wincomplete-uni-patterns --ghc-options -Wredundant-constraints
     #+end_src
-
 - development loops
 
   =haskell-language-server= works well for code that has recently compiled, but tends to suffer when fed projects that are less than pristine already. To bootstrap from a mess of garbage like I usually do, use =ghcid= and, when this falls over, revert to =stack build --test --file-watch= which will never fail.
