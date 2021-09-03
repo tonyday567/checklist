@@ -23,30 +23,32 @@ If you do not have ghcup, then first type:
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 #+end_src
 
+** Features
+
 The newly created project, ~foo~, should:
 
 - Be fully conformant to both the stack and cabal ecosystems, and compile under either approach.
 - Contain infrastructure for an executable, a library and testing.
-- Correctly set up for haskell-language-server integration.
+- Be correctly set up for haskell-language-server integration.
 - Pass hlint and ormolu checks.
-- Conform to become a GitHub repository, with a nicely badged readme and continuous integration support using GitHub actions.
+- Quickly become a GitHub repository, with a nicely badged readme and continuous integration support using GitHub actions.
 - Pass CI tests across linux, osx and windows.
 
 * Deeper dive
 
 This project contains everything I need to bootstrap a new project, from setting up a Haskell environment, through creation of a new project, to creating a new GitHub repository with CI support.
 
-These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed. At least in terms of =How we start=, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
+These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed. At least in terms of *How we start*, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
 
 The template may not, however, contain what you need. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklist, then keep reading!
 
 * Usage and Overview
 
-This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also the console commands used to bootstrap a new Haskell environment, and results of various steps towards getting together a working Haskell project.
+This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also the commands used to bootstrap a new Haskell environment, and results from the various steps involved in getting together a working Haskell project.
 
-Starting from scratch:
+Starting from scratch, a Haskell project involves:
 
-1. Set up a Haskell environment following the steps in [[#Haskell-and-Environs][Haskell and Environs]] This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
+1. Set up a Haskell environment following the steps in [[#Haskell-and-Environs][Haskell and Environs]]. This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
 2. modify the [[#Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
 3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
@@ -67,7 +69,7 @@ The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
 
-Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
+Setup of a modern Haskell environment is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables. ~cabal~ or ~stack~ can then be used to install other tools.
 
 ** [[https://www.haskell.org/ghcup/][ghcup]]
 
@@ -75,12 +77,16 @@ Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] 
   curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 #+end_src
 
+=ghcup= places everything in ~/.ghcup/bin
+
 #+begin_src zsh :results output :exports both
 which cabal
 #+end_src
 
 #+RESULTS:
 : /Users/tonyday/.ghcup/bin/cabal
+
+*** Versioning
 
 #+begin_src zsh :results output :exports both
 cabal --version
@@ -105,7 +111,7 @@ stack --version
 : Version 2.7.3, Git revision 7927a3aec32e2b2e5e4fb5be76d0d50eddcc197f x86_64 hpack-0.34.4
 
 
-~stack~ inspects the stack.yaml and selects the ghc that matches, so stack ghc and cabal ghc can be different.
+~stack~ inspects the stack.yaml and selects a ghc that matches, so stack ghc and system (cabal) ghc can be different.
 
 #+begin_src zsh :results output :exports both
 stack exec -- which ghc
@@ -121,13 +127,7 @@ which ghc
 #+RESULTS:
 : /Users/tonyday/.ghcup/bin/ghc
 
-#+begin_src zsh :results output
-haddock --version
-#+end_src
-
-#+RESULTS:
-: Haddock version 2.24.0, (c) Simon Marlow 2006
-: Ported to use the GHC API by David Waern 2006-2008
+Note that haskell-language-server versions matching older GHC versions are also installed, and selected automatically.
 
 #+begin_src zsh :results output :exports both
 haskell-language-server --version
@@ -136,7 +136,7 @@ haskell-language-server --version
 #+RESULTS:
 : haskell-language-server version: 1.3.0.0 (GHC: 9.0.1) (PATH: /Users/tonyday/.ghcup/bin/haskell-language-server-9.0.1~1.3.0) (GIT hash: e7c5e90b6df5dff2760d76169eddaea3bdd6a831)
 
-Note that haskell-langiuage-server versions matching older GHC versions are also installed, and selected automatically.
+And all of this is packaged up by ghcup, eg
 
 #+begin_src zsh :results output :text-properties t :exports both
 ghcup list
@@ -195,7 +195,7 @@ ghcup list
 cabal install ormolu hlint stan ghcid haskell-ci
 #+end_src
 
-~cabal~ stores executables in ~~​/.cabal/bin~, ~stack~ in ~~​/.local/bin~.
+~cabal~ stores executables in ~​/.cabal/bin, ~stack~ in ~​/.local/bin.
 
 #+begin_src zsh :results output :exports both
 which hlint
@@ -286,12 +286,20 @@ putStrLn $ show x
 
 I use org-mode to stitch together a .hsfiles for use with the ~stack new~ templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as github-name tend to be picked up in the ~/.stack/config.yaml file.
 
+It looks pretty noisy, but mustache is a simple system eg
+
+#+begin_example
+{{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+#+end_example
+
+Parsing from left to right, if lib-name exists (#), then insert lib-name, if lib-name2 exists (#) then place a ~.~ and then insert lib-name2. If lib-name doesn't exist (^), then insert ~Lib~.
+
 ** readme.md
 
 Practice varies widely, from saying nothing to all documentation being in the readme. The readme.md template:
 
 - adds some badges for Hackage, CI and dependencies.
-- Includes a short description and basic Usage example, which I thing in many cases should be repeated exactly in the cabal file as synopsis and description stanzas.
+- Includes a short description and basic Usage example, which in many cases should be exactly repeated in the cabal file as synopsis and description stanzas.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE readme.md #-}
@@ -312,6 +320,8 @@ import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib
 #+end_src
 
 ** [[https://www.haskell.org/cabal/][cabal]]
+
+~cabal~s [[https://cabal.readthedocs.io/en/3.4/][docs]] have gotten very good of late, and the template should be read with those docs handy.
 
 *** front matter
 
@@ -338,7 +348,7 @@ source-repository head
 
 *** common stanzas
 
-https://vrom911.github.io/blog/common-stanzas
+~vrom911~ has a good [[https://vrom911.github.io/blog/common-stanzas][introduction]] to common stanzas.
 
 #+begin_src org :tangle hecklist.hsfiles
 common common-options
@@ -403,8 +413,10 @@ test-suite test
 
 *** cabal.project
 
+I'm currently uncertain whether cabal.project should form part of the github repo, as it doesn't form part of a Hackage distribution.
+
 #+begin_src org :tangle hecklist.hsfiles
-{-# START_FILE {{name}}.cabal #-}
+{-# START_FILE cabal.project #-}
 packages: {{name}}.cabal
 
 -- if doctests seem broken, uncomment:
@@ -486,11 +498,9 @@ packages:
 
 ** git
 
-The .gitignore reflects the slow expansion of cruft as tools accumulate. .stack-work is stack's working directory. cabal's working directory, dist-newstyle, seems less well-named, since it keeps everything about a build and the old style has been lost to time.
+The .gitignore reflects a slow expansion of cruft as tools accumulate.
 
-stack.yaml.lock seems to be like cabal.freeze, in that it is never needed until it is, when you can never find it. cabal fusses a lot over cabal.project.local and accumulates as many backups as you have compilation loops, just in case you forget that you didn't want to ignore the project ever.
-
-Everyone uses .hie these days which are some form of cache for ghc, used especially by hls.
+Everyone uses .hie these days which is some form of cache for ghc, used especially by hls.
 
 .gitattributes can help if your project is mis-labelled in github due to excessive html or whatnot being included in the project.
 
@@ -624,7 +634,7 @@ jobs:
     >>={{ }}=<<
     #+end_src
 
-If you would like to go full-steam, such as include hlint and cabal-docspecs, haskell-ci is a very good tool, though it doesn't (yet) support stack or windows CI.
+If you would like to go full heavy-metal, such as include hlint and cabal-docspecs, haskell-ci is a very good tool, though it doesn't (yet) support stack or windows CI.
 
 * Checklist
 :PROPERTIES:
@@ -791,6 +801,9 @@ ghcup set ghc 8.10.4
 ** Analysis
 
 - [[https://github.com/kowainik/stan#stan][stan]]
+
+  It's early days still, but static analysis is the future of Haskell, and we should dog-food it.
+
   #+begin_src zsh :results output :exports both
   stan
   #+end_src
@@ -846,6 +859,9 @@ ghcup set ghc 8.10.4
   #+end_example
 
 - [[https://hackage.haskell.org/package/haddock][haddock]]
+
+  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncracies of Haskell. But can we keep up and compete with open source documentation standards? Will an IDE ever format them properly?
+
   #+begin_src zsh :results output :exports both
   cabal haddock
   #+end_src
@@ -875,6 +891,8 @@ ghcup set ghc 8.10.4
   #+end_src
 
 * GitHub
+
+Finally, this recipe can be used to push the newly minted package to github. Use with caution!
 
 #+begin_src zsh results: output
 cd foo
