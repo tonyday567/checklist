@@ -63,7 +63,7 @@ Starting from scratch, a Haskell project involves:
   #+end_src
 
 4. code, compile and test (see [[#Checklist][Checklist]] section).
-5. Create a github repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[#GitHub][GitHub]] section).
+5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[#GitHub][GitHub]] section).
 
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
@@ -284,7 +284,7 @@ putStrLn $ show x
 :header-args: :tangle hecklist.hsfiles
 :END:
 
-I use org-mode to stitch together a .hsfiles for use with the ~stack new~ templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as github-name tend to be picked up in the ~/.stack/config.yaml file.
+I use org-mode to stitch together a .hsfiles for use with the ~stack new~ templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as GitHub-name tend to be picked up in the ~/.stack/config.yaml file.
 
 It looks pretty noisy, but mustache is a simple system eg
 
@@ -413,7 +413,7 @@ test-suite test
 
 *** cabal.project
 
-I'm currently uncertain whether cabal.project should form part of the github repo, as it doesn't form part of a Hackage distribution.
+I'm currently uncertain whether cabal.project should form part of the GitHub repo, as it doesn't form part of a Hackage distribution.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE cabal.project #-}
@@ -502,7 +502,7 @@ The .gitignore reflects a slow expansion of cruft as tools accumulate.
 
 Everyone uses .hie these days which is some form of cache for ghc, used especially by hls.
 
-.gitattributes can help if your project is mis-labelled in github due to excessive html or whatnot being included in the project.
+.gitattributes can help if your project is mis-labelled in GitHub due to excessive HTML or whatnot being included in the project.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE .gitignore #-}
@@ -692,7 +692,7 @@ ghcup set ghc 8.10.4
 
   #+RESULTS:
 
-  It's so very useful to check the build plan before actiually building, as ~cabal configure~ does.
+  It's so very useful to check the build plan before actually building, as ~cabal configure~ does.
 
   #+begin_src zsh :results output :exports both
   cabal configure --enable-tests
@@ -860,7 +860,7 @@ ghcup set ghc 8.10.4
 
 - [[https://hackage.haskell.org/package/haddock][haddock]]
 
-  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncracies of Haskell. But can we keep up and compete with open source documentation standards? Will an IDE ever format them properly?
+  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell. But can we keep up and compete with open source documentation standards? Will an IDE ever format them properly?
 
   #+begin_src zsh :results output :exports both
   cabal haddock
