@@ -1,5 +1,4 @@
 #+TITLE: Hecklist
-#+PROPERTY: header-args :results output :exports both
 #+OPTIONS: H:2 TOC:1 view:showall
 
 A Haskell checklist for starting off projects, or starting over.
@@ -67,9 +66,6 @@ Starting from scratch:
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
-:PROPERTIES:
-:header-args: :exports both
-:END:
 
 Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
 
@@ -94,14 +90,14 @@ cabal --version
 : cabal-install version 3.4.0.0
 : compiled using version 3.4.0.0 of the Cabal library
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 ghc --version
 #+end_src
 
 #+RESULTS:
 : The Glorious Glasgow Haskell Compilation System, version 8.10.4
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 stack --version
 #+end_src
 
@@ -111,14 +107,14 @@ stack --version
 
 ~stack~ inspects the stack.yaml and selects the ghc that matches, so stack ghc and cabal ghc can be different.
 
-#+begin_src zsh :rsults output
+#+begin_src zsh :results output :exports both
 stack exec -- which ghc
 #+end_src
 
 #+RESULTS:
 : /Users/tonyday/.ghcup/ghc/8.10.4/bin/ghc
 
-#+begin_src zsh :rsults output
+#+begin_src zsh :results output :exports both
 which ghc
 #+end_src
 
@@ -133,7 +129,7 @@ haddock --version
 : Haddock version 2.24.0, (c) Simon Marlow 2006
 : Ported to use the GHC API by David Waern 2006-2008
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 haskell-language-server --version
 #+end_src
 
@@ -142,7 +138,7 @@ haskell-language-server --version
 
 Note that haskell-langiuage-server versions matching older GHC versions are also installed, and selected automatically.
 
-#+begin_src zsh :results output :text-properties t
+#+begin_src zsh :results output :text-properties t :exports both
 ghcup list
 #+end_src
 
@@ -201,7 +197,7 @@ cabal install ormolu hlint stan ghcid haskell-ci
 
 ~cabal~ stores executables in ~~​/.cabal/bin~, ~stack~ in ~~​/.local/bin~.
 
-#+begin_src zsh :results output
+#+begin_src zsh :results output :exports both
 which hlint
 #+end_src
 
@@ -641,7 +637,7 @@ I use this section to record results of compilation steps, and the process of po
 
 Edit properties in [[#Checklist][Checklist]] to point to the right directory.
 
-#+begin_src zsh
+#+begin_src zsh :exports both
 ls -la
 #+end_src
 
@@ -688,7 +684,7 @@ ghcup set ghc 8.10.4
 
   It's so very useful to check the build plan before actiually building, as ~cabal configure~ does.
 
-  #+begin_src zsh :results output
+  #+begin_src zsh :results output :exports both
   cabal configure --enable-tests
   #+end_src
 
@@ -704,7 +700,7 @@ ghcup set ghc 8.10.4
   :  - foo-0.0.1 (exe:foo) (first run)
 
 
-  #+begin_src zsh :results output
+  #+begin_src zsh :results output :exports both
   cabal build
   #+end_src
 
@@ -732,7 +728,7 @@ ghcup set ghc 8.10.4
   #+end_example
 
   #+begin_src zsh :results output
-  cabal test
+  cabal test :exports both
   #+end_src
 
   #+RESULTS:
@@ -752,7 +748,7 @@ ghcup set ghc 8.10.4
 
 - [[https://docs.haskellstack.org/en/stable/README/][stack]]
 
-  #+begin_src zsh :results raw
+  #+begin_src zsh :results output
     stack build --test
   #+end_src
 
@@ -771,7 +767,7 @@ ghcup set ghc 8.10.4
 ** Linting
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
-  #+begin_src zsh :results output
+  #+begin_src zsh :results output :exports both
   hlint .
   #+end_src
 
@@ -795,7 +791,7 @@ ghcup set ghc 8.10.4
 ** Analysis
 
 - [[https://github.com/kowainik/stan#stan][stan]]
-  #+begin_src zsh :results output
+  #+begin_src zsh :results output :exports both
   stan
   #+end_src
 
@@ -850,7 +846,7 @@ ghcup set ghc 8.10.4
   #+end_example
 
 - [[https://hackage.haskell.org/package/haddock][haddock]]
-  #+begin_src zsh :results output
+  #+begin_src zsh :results output :exports both
   cabal haddock
   #+end_src
 
