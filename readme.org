@@ -67,9 +67,9 @@ Starting from scratch:
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
-:PROPERTIES
-:header-args :exports both
-:END
+:PROPERTIES:
+:header-args: :exports both
+:END:
 
 Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
 
