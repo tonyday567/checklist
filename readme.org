@@ -814,7 +814,7 @@ Same compilation as above using stack.
 
 *** [[https://hackage.haskell.org/package/haddock][haddock]]
 
-  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell. But can we keep up and compete with open source documentation standards? Will an IDE ever format them properly?
+  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell.
 
   #+begin_src zsh :results output :exports both
   cabal haddock
