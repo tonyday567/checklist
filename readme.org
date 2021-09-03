@@ -712,28 +712,15 @@ ghcup set ghc 8.10.4
   cabal test :exports both
   #+end_src
 
-  #+RESULTS:
-  #+begin_example
-  Build profile: -w ghc-8.10.4 -O1
-  In order, the following will be built (use -v for more details):
-   - foo-0.0.1 (test:test) (ephemeral targets)
-  Preprocessing test suite 'test' for foo-0.0.1..
-  Building test suite 'test' for foo-0.0.1..
-  Running 1 test suites...
-  Test suite test: RUNNING...
-  Test suite test: PASS
-  Test suite logged to:
-  /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
-  1 of 1 test suites (1 of 1 test cases) passed.
-  #+end_example
-
 *** [[https://docs.haskellstack.org/en/stable/README/][stack]]
 
+Same compilation as above using stack.
+
   #+begin_src zsh :results output
-    stack build --test
+    stack clean && stack build --test
   #+end_src
 
-  #+RESULTS:
+  A full -Werror compile + haddock check.
 
   #+begin_src zsh :results output
     stack build --test --haddock --no-haddock-deps --ghc-options -Werror --ghc-options -Wcompat --ghc-options -Wincomplete-record-updates --ghc-options -Wincomplete-uni-patterns --ghc-options -Wredundant-constraints
