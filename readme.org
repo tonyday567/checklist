@@ -6,8 +6,9 @@ A Haskell checklist for starting off, or starting over.
 
 This project contains:
 
-- a .hsfiles template, useful for starting a new Haskell project, and
-- instructions on how to use this.
+- a .hsfiles template, useful for starting a new Haskell project,
+- instructions on how to use this, and
+- information on how to set up a Haskell environment.
 
 * Quick Start
 
@@ -40,21 +41,19 @@ The newly created project, ~foo~, should:
 
 * Deeper dive
 
-This project contains everything I need to bootstrap a new project, from setting up a complete Haskell environment to producing a conformant repository that fits in well with existing ecosystems, under continuous integeration across all os'es and ghc versions you may care about.
+This project contains everything I need to bootstrap a new project, from setting up a Haskell environment, through creation of a new project, to creating a new GitHub repository with CI support.
 
-These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed.
-
-At least in terms of =How we start=, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt and adopt to new ways, means and technologies as they arise.
+These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed. At least in terms of =How we start=, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
 
 The template may not, however, contain what you need. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklist, then keep reading!
 
 * Usage and Overview
 
-This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also code used to bootstrap a new Haskell environment, and results of various steps towards getting together a working Haskell project.
+This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also the console commands used to bootstrap a new Haskell environment, and results of various steps towards getting together a working Haskell project.
 
 Starting from scratch:
 
-1. Set up a Haskell environment following the steps in [[*Haskell and Environs][Haskell and Environs]]. This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
+1. Set up a Haskell environment following the steps in [[#Haskell and Environs][Haskell and Environs]] This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
 2. modify the [[*Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
 3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
@@ -75,7 +74,7 @@ The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
 
-Setup of Haskell is very straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
+Setup of Haskell is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
 
 ** [[https://www.haskell.org/ghcup/][ghcup]]
 
