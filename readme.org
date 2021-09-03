@@ -1,6 +1,6 @@
 #+TITLE: Hecklist
 #+PROPERTY: header-args :results output
-#+PROPERTY: header-args :export both
+#+PROPERTY: header-args :exports both
 #+OPTIONS: H:2 TOC:1 view:showall
 
 A Haskell checklist for starting off, or starting over.
