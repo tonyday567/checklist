@@ -1,5 +1,6 @@
 #+TITLE: Hecklist
-#+PROPERTY: header-args :results output :exports both
+#+PROPERTY: header-args :results output
+#+PROPERTY: header-args :export both
 #+OPTIONS: H:2 TOC:1 view:showall
 
 A Haskell checklist for starting off, or starting over.
@@ -11,7 +12,7 @@ This project contains:
 - information on how to set up a Haskell environment.
 
 * Quick Start
-
+i
 Copy hecklist.hsfiles to wherever you start a new project and, if you have stack, type:
 
 #+begin_src zsh :results output
