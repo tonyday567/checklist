@@ -53,8 +53,8 @@ This file, =readme.org=, is an org-mode file used to develop the template. It co
 
 Starting from scratch:
 
-1. Set up a Haskell environment following the steps in [[#Haskell and Environs][Haskell and Environs]] This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
-2. modify the [[*Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
+1. Set up a Haskell environment following the steps in [[#Haskell-and-Environs][Haskell and Environs]] This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
+2. modify the [[#Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
 3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
   #+begin_src zsh :results output
@@ -67,8 +67,8 @@ Starting from scratch:
   stack new foo9 hecklist "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
   #+end_src
 
-4. code, compile and test (see [[*Checklist][Checklist]])
-5. Create a github repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[file:checklist.org][GitHub]])
+4. code, compile and test (see [[#Checklist][Checklist]] section).
+5. Create a github repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[#GitHub][GitHub]] section).
 
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
@@ -640,6 +640,10 @@ If you would like to go full-steam, such as include hlint and cabal-docspecs, ha
 
 I use this section to record results of compilation steps, and the process of polishing projects.
 
+** Front matter
+
+Edit properties in [[#Checklist][Checklist]] to point to the right directory.
+
 #+begin_src zsh
 ls -la
 #+end_src
@@ -667,7 +671,7 @@ ls -la
 | -rw------- |  1 | tonyday | staff |  447 | 2 | Sep | 17:16 | stack.yaml.lock     |
 | drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | test                |
 
-Set the ghc version
+Check/set the ghc version
 
 #+begin_src zsh
 ghcup set ghc 8.10.4
