@@ -1,8 +1,13 @@
-#+TITLE: Haskell Checklist
+#+TITLE: Hecklist
 #+PROPERTY: header-args :results output :exports both
 #+OPTIONS: H:2 TOC:1 view:showall
 
-hecklist: a Haskell checklist for starting off.
+A Haskell checklist for starting off, or starting over.
+
+This project contains:
+
+- a .hsfiles template, useful for starting a new Haskell project, and
+- instructions on how to use this.
 
 * Quick Start
 
@@ -24,34 +29,34 @@ If you do not have ghcup, then first type:
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 #+end_src
 
-The newly created project, `foo`, is [fn: more accurately, failure in any of these features is considered to be a bug]:
+The newly created project, ~foo~, should:
 
-- Fully conformant to both the stack and cabal ecosystems, and compiles under either approach.
-- Contains infrastructure for an executable, a library and testing.
-- Is correctly set up for haskell-language-server integration.
-- Passes hlint and ormolu checks.
-- Is formulated to be a GitHub repository, with a nicely badged readme and continuous integration support using GitHub actions.
-- Passes CI tests across linux, osx and windows.
+- Be fully conformant to both the stack and cabal ecosystems, and compile under either approach.
+- Contain infrastructure for an executable, a library and testing.
+- Correctly set up for haskell-language-server integration.
+- Pass hlint and ormolu checks.
+- Conform to become a GitHub repository, with a nicely badged readme and continuous integration support using GitHub actions.
+- Pass CI tests across linux, osx and windows.
 
 * Deeper dive
 
 This project contains everything I need to bootstrap a new project, from setting up a complete Haskell environment to producing a conformant repository that fits in well with existing ecosystems, under continuous integeration across all os'es and ghc versions you may care about.
 
-These are salad days for the happy Haskell hacker. `ghcup` is the single-onboarding parent and insists that its charges play nicely with each other. `hls` usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed.
+These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed.
 
-At least in terms of "How we start", Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt and adopt to new technologies as they arise.
+At least in terms of =How we start=, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt and adopt to new ways, means and technologies as they arise.
 
-The template may not contain what you need, however, and may need some work. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklists, then keep reading!
+The template may not, however, contain what you need. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklist, then keep reading!
 
 * Usage and Overview
 
-`hecklist.org` is an org-mode file used to develop the template. It contains the template components but also is used to bootstrap a new Haskell environment, and remember and debug results of the various steps towards getting together a working Haskell project.
+This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also code used to bootstrap a new Haskell environment, and results of various steps towards getting together a working Haskell project.
 
-So, from scratch:
+Starting from scratch:
 
-1. Set up a ghcup-centric Haskell environment following the steps in [[*Haskell and Environs][Haskell and Environs]]. This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
+1. Set up a Haskell environment following the steps in [[*Haskell and Environs][Haskell and Environs]]. This includes some notes on Doom emacs but any of the emacs preludes will also be fine.
 2. modify the [[*Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
-3. Place hecklist.hsfiles where you want to create the new project and run `stack new` eg
+3. Place hecklist.hsfiles where you want to create the new project and run ~stack new~ eg
 
   #+begin_src zsh :results output
   stack new foo hecklist
@@ -64,13 +69,13 @@ So, from scratch:
   #+end_src
 
 4. code, compile and test (see [[*Checklist][Checklist]])
-5. Create a github repository and push (see [[file:checklist.org][GitHub]])
+5. Create a github repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see [[file:checklist.org][GitHub]])
 
 The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Haskell and Environs
 
-Setup of Haskell is very straight forward. `ghcup` takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in `~/.ghcup/bin`. `cabal` or `stack` can then be used to install the other tools, which are placed in `~/.cabal/bin` or `~/.local/bin`.
+Setup of Haskell is very straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables, which are all placed in ~~​/.ghcup/bin~. ~cabal~ or ~stack~ can then be used to install the other tools, which are placed in ~~​/.cabal/bin~ or ~~​/.local/bin~.
 
 ** [[https://www.haskell.org/ghcup/][ghcup]]
 
@@ -108,7 +113,7 @@ stack --version
 : Version 2.7.3, Git revision 7927a3aec32e2b2e5e4fb5be76d0d50eddcc197f x86_64 hpack-0.34.4
 
 
-`stack` inspects the stack.yaml and selects the ghc that matches, so stack ghc and cabal ghc can be different.
+~stack~ inspects the stack.yaml and selects the ghc that matches, so stack ghc and cabal ghc can be different.
 
 #+begin_src zsh :rsults output
 stack exec -- which ghc
@@ -198,7 +203,7 @@ ghcup list
 cabal install ormolu hlint stan ghcid haskell-ci
 #+end_src
 
-`cabal` stores executables in `~/.cabal/bin`, `stack` in `~/.local/bin`.
+~cabal~ stores executables in ~~​/.cabal/bin~, ~stack~ in ~~​/.local/bin~.
 
 #+begin_src zsh :results output
 which hlint
@@ -238,13 +243,13 @@ cabal install cabal-docspec:exe:cabal-docspec --allow-newer --overwrite-policy=a
 
 Haskell setup for [[https://github.com/hlissner/doom-emacs#install][Doom]] emacs is straight-forward.
 
-in `.doom.d/init.el`, uncomment the haskell line and add lsp:
+in ~.doom.d/init.el~, uncomment the haskell line and add lsp:
 
 #+begin_src elisp
 (haskell +lsp)      ; a language that's lazier than I am
 #+end_src
 
-in `.ddom.d/config.el`, place any personal config preferences. Mine are:
+in ~.ddom.d/config.el~, place any personal config preferences. Mine are:
 
 #+begin_src elisp
 ;; haskell
@@ -268,7 +273,7 @@ in `.ddom.d/config.el`, place any personal config preferences. Mine are:
 
 *** Literate Programming
 
-An org file can nicely double as a project readme. See [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]]
+An org file can also be used as a project readme. Sort of see [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]] for current state.
 
 Haskell also works out of the box in org-mode these days and is worth playing around with for anyone interested in hacky literate programming.
 
@@ -287,7 +292,7 @@ putStrLn $ show x
 :header-args: :tangle hecklist.hsfiles
 :END:
 
-I use `org-mode` to stitch together a .hsfiles for use with the `stack new` templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as github-name tend to be picked up in the ~/.stack/config.yaml file.
+I use org-mode to stitch together a .hsfiles for use with the ~stack new~ templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as github-name tend to be picked up in the ~/.stack/config.yaml file.
 
 ** readme.md
 
@@ -514,13 +519,13 @@ other/* linguist-documentation
 
 ** hls
 
-In emacs, haskell-language-server uses projectile to discover the project root directory, which is indicated by an empty `.projectile` file.
+In emacs, haskell-language-server uses projectile to discover the project root directory, which is indicated by an empty ~.projectile~ file.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE .projectile #-}
 #+end_src
 
-`hls` uses the presence of a `stack.yaml` file as an indication that stack should be used, and the creation of this file hard-codes cabal as the preferred compilation tool.
+~hls~ uses the presence of a ~stack.yaml~ file as an indication that stack should be used, and the creation of this file hard-codes cabal as the preferred compilation tool.
 
 #+begin_src org :tangle hecklist.hsfiles
 {-# START_FILE hie.yaml #-}
@@ -630,16 +635,128 @@ jobs:
 If you would like to go full-steam, such as include hlint and cabal-docspecs, haskell-ci is a very good tool, though it doesn't (yet) support stack or windows CI.
 
 * Checklist
+:PROPERTIES:
+:header-args: :tangle hecklist.hsfiles :dir ./foo :language zsh
+:END:
+
+I use this section to record results of compilation steps, and the process of polishing projects.
+
+#+begin_src zsh
+ls -la
+#+end_src
+
+#+RESULTS:
+| total      | 72 |         |       |      |   |     |       |                     |
+| drwxr-xr-x | 20 | tonyday | staff |  640 | 3 | Sep | 09:01 | .                   |
+| drwxr-xr-x |  8 | tonyday | staff |  256 | 3 | Sep | 08:08 | ..                  |
+| drwxr-xr-x | 12 | tonyday | staff |  384 | 2 | Sep | 21:29 | .git                |
+| -rw------- |  1 | tonyday | staff |   31 | 2 | Sep | 10:40 | .gitattributes      |
+| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | .github             |
+| -rw------- |  1 | tonyday | staff |   87 | 2 | Sep | 10:40 | .gitignore          |
+| drwxr-xr-x |  4 | tonyday | staff |  128 | 2 | Sep | 10:40 | .hie                |
+| -rw------- |  1 | tonyday | staff |    0 | 2 | Sep | 10:40 | .projectile         |
+| drwxr-xr-x |  5 | tonyday | staff |  160 | 2 | Sep | 17:16 | .stack-work         |
+| -rw------- |  1 | tonyday | staff | 1513 | 2 | Sep | 10:40 | LICENSE             |
+| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | app                 |
+| -rw-r--r-- |  1 | tonyday | staff |   34 | 3 | Sep | 09:01 | cabal.project.local |
+| drwxr-xr-x |  6 | tonyday | staff |  192 | 3 | Sep | 09:01 | dist-newstyle       |
+| -rw------- |  1 | tonyday | staff | 1318 | 2 | Sep | 10:40 | foo.cabal           |
+| -rw------- |  1 | tonyday | staff |  182 | 2 | Sep | 10:40 | hie.yaml            |
+| -rw------- |  1 | tonyday | staff |  432 | 2 | Sep | 10:40 | readme.md           |
+| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 17:16 | src                 |
+| -rw------- |  1 | tonyday | staff |   36 | 2 | Sep | 10:40 | stack.yaml          |
+| -rw------- |  1 | tonyday | staff |  447 | 2 | Sep | 17:16 | stack.yaml.lock     |
+| drwxr-xr-x |  3 | tonyday | staff |   96 | 2 | Sep | 10:40 | test                |
+
+Set the ghc version
+
+#+begin_src zsh
+ghcup set ghc 8.10.4
+#+end_src
+
+#+RESULTS:
+
 ** Compiling
 
 - [[https://www.haskell.org/cabal/][cabal]]
-  #+begin_src zsh results: output
-  cabal clean && cabal configure --enable-tests && cabal build && cabal test
+
+  #+begin_src zsh
+  cabal clean
   #+end_src
-- [[https://docs.haskellstack.org/en/stable/README/][stack]]
+
+  #+RESULTS:
+
+  It's so very useful to check the build plan before actiually building, as ~cabal configure~ does.
+
   #+begin_src zsh :results output
-    stack clean && stack build --test
+  cabal configure --enable-tests
   #+end_src
+
+  #+RESULTS:
+  : 'cabal.project.local' already exists, backing it up to
+  : 'cabal.project.local~5'.
+  : Resolving dependencies...
+  : Build profile: -w ghc-8.10.4 -O1
+  : In order, the following would be built (use -v for more details):
+  :  - doctest-0.18.1 (exe:doctest) (requires build)
+  :  - foo-0.0.1 (lib) (first run)
+  :  - foo-0.0.1 (test:test) (first run)
+  :  - foo-0.0.1 (exe:foo) (first run)
+
+
+  #+begin_src zsh :results output
+  cabal build
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Build profile: -w ghc-8.10.4 -O1
+  In order, the following will be built (use -v for more details):
+   - foo-0.0.1 (lib) (first run)
+   - foo-0.0.1 (test:test) (first run)
+   - foo-0.0.1 (exe:foo) (first run)
+  Configuring library for foo-0.0.1..
+  Preprocessing library for foo-0.0.1..
+  Building library for foo-0.0.1..
+  [1 of 1] Compiling Lib              ( src/Lib.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/build/Lib.o, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/build/Lib.dyn_o )
+  Configuring test suite 'test' for foo-0.0.1..
+  Configuring executable 'foo' for foo-0.0.1..
+  Preprocessing executable 'foo' for foo-0.0.1..
+  Building executable 'foo' for foo-0.0.1..
+  Preprocessing test suite 'test' for foo-0.0.1..
+  Building test suite 'test' for foo-0.0.1..
+  [1 of 1] Compiling Main             ( app/app.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/x/foo/build/foo/foo-tmp/Main.o )
+  [1 of 1] Compiling Main             ( test/test.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/build/test/test-tmp/Main.o )
+  Linking /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/x/foo/build/foo/foo ...
+  Linking /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/build/test/test ...
+  #+end_example
+
+  #+begin_src zsh :results output
+  cabal test
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Build profile: -w ghc-8.10.4 -O1
+  In order, the following will be built (use -v for more details):
+   - foo-0.0.1 (test:test) (ephemeral targets)
+  Preprocessing test suite 'test' for foo-0.0.1..
+  Building test suite 'test' for foo-0.0.1..
+  Running 1 test suites...
+  Test suite test: RUNNING...
+  Test suite test: PASS
+  Test suite logged to:
+  /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
+  1 of 1 test suites (1 of 1 test cases) passed.
+  #+end_example
+
+- [[https://docs.haskellstack.org/en/stable/README/][stack]]
+
+  #+begin_src zsh :results raw
+    stack build --test
+  #+end_src
+
+  #+RESULTS:
 
 - full compile with -Werror
 
@@ -649,11 +766,7 @@ If you would like to go full-steam, such as include hlint and cabal-docspecs, ha
 
 - development loops
 
-  `stack build --test --file-watch`
-
-  `ghcid`
-
-  use haskell-language-server
+  =haskell-language-server= works well for code that has recently compiled, but tends to suffer when fed projects that are less than pristine already. To bootstrap from a mess of garbage like I usually do, use =ghcid= and, when this falls over, revert to =stack build --test --file-watch= which will never fail.
 
 ** Linting
 
@@ -661,9 +774,13 @@ If you would like to go full-steam, such as include hlint and cabal-docspecs, ha
   #+begin_src zsh :results output
   hlint .
   #+end_src
+
+  #+RESULTS:
+  : No hints
+
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
 
-  (`--mode inplace` to actually change haskell files)
+  (~--mode inplace~ to actually change haskell files)
 
   #+begin_src zsh :results output
   ormolu --mode check $(git ls-files '*.hs')
@@ -673,6 +790,8 @@ If you would like to go full-steam, such as include hlint and cabal-docspecs, ha
   ormolu --mode check */*.hs
   #+end_src
 
+  #+RESULTS:
+
 ** Analysis
 
 - [[https://github.com/kowainik/stan#stan][stan]]
@@ -680,10 +799,75 @@ If you would like to go full-steam, such as include hlint and cabal-docspecs, ha
   stan
   #+end_src
 
+  #+RESULTS:
+  #+begin_example
+    ⓘ Checking environment variables and CLI arguments for default configurations file usage...
+      Fiasco:
+        * [Error  ] No STAN_USE_DEFAULT_CONFIG Env Variable is set
+        ,* [Error  ] No CLI option specified for no-default
+
+    ⓘ The following Configurations are used:
+
+      Result:
+
+      With the following warnings:
+        * [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
+        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
+        ,* [Warning] No CLI option specified for: checks
+        ,* [Warning] configChecks is set through the source: Default
+        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
+        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
+        ,* [Warning] No CLI option specified for: remove
+        ,* [Warning] configRemoved is set through the source: Default
+        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
+        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
+        ,* [Warning] No CLI option specified for: ignore
+        ,* [Warning] configIgnored is set through the source: Default
+
+    ⓘ Using the following .cabal file: /Users/tonyday/haskell/hecklist/foo/foo.cabal
+
+    ✔ All clean! Stan did not find any observations at the moment.
+
+             Stan's Summary:
+  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+  ┃ Analysed modules             ┃ 2      ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Analysed Lines of Code       ┃ 23     ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Total Haskell2010 extensions ┃ 0      ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Total SafeHaskell extensions ┃ 0      ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Total checked inspections    ┃ 44     ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Total found observations     ┃ 0      ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Total ignored observations   ┃ 0      ┃
+  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
+  ┃ Project health               ┃ 100%   ┃
+  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━┛
+
+  #+end_example
+
 - [[https://hackage.haskell.org/package/haddock][haddock]]
   #+begin_src zsh :results output
   cabal haddock
   #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Build profile: -w ghc-8.10.4 -O1
+  In order, the following will be built (use -v for more details):
+   - foo-0.0.1 (lib) (ephemeral targets)
+  Preprocessing library for foo-0.0.1..
+  Running Haddock on library for foo-0.0.1..
+  Haddock coverage:
+     0% (  0 /  1) in 'Lib'
+    Missing documentation for:
+      Module header
+  Documentation created:
+  /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/doc/html/foo/index.html
+  #+end_example
 
 - [[https://hackage.haskell.org][Hackage]]
 
@@ -708,19 +892,6 @@ git push origin main --force
 #+end_src
 
 #+RESULTS:
-| Initialized | empty         |      Git | repository                       | in            | /Users/tonyday/haskell/hecklist/foo/.git/ |        |           |        |
-| [main       | (root-commit) | 4447764] | new                              | project       | -                                         | forced | automated | commit |
-| 12          | files         | changed, | 210                              | insertions(+) |                                           |        |           |        |
-| create      | mode          |   100644 | .gitattributes                   |               |                                           |        |           |        |
-| create      | mode          |   100644 | .github/workflows/Haskell-CI.yml |               |                                           |        |           |        |
-| create      | mode          |   100644 | .gitignore                       |               |                                           |        |           |        |
-| create      | mode          |   100644 | .projectile                      |               |                                           |        |           |        |
-| create      | mode          |   100644 | LICENSE                          |               |                                           |        |           |        |
-| create      | mode          |   100644 | app/app.hs                       |               |                                           |        |           |        |
-| create      | mode          |   100644 | foo.cabal                        |               |                                           |        |           |        |
-| create      | mode          |   100644 | hie.yaml                         |               |                                           |        |           |        |
-| create      | mode          |   100644 | readme.md                        |               |                                           |        |           |        |
-| create      | mode          |   100644 | src/Lib.hs                       |               |                                           |        |           |        |
-| create      | mode          |   100644 | stack.yaml                       |               |                                           |        |           |        |
-| create      | mode          |   100644 | test/test.hs                     |               |                                           |        |           |        |
-
+: Reinitialized existing Git repository in /Users/tonyday/haskell/hecklist/foo/.git/
+: On branch main
+: nothing to commit, working tree clean
