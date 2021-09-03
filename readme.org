@@ -656,8 +656,7 @@ ghcup set ghc 8.10.4
 #+RESULTS:
 
 ** Compiling
-
-- [[https://www.haskell.org/cabal/][cabal]]
+*** [[https://www.haskell.org/cabal/][cabal]]
 
   #+begin_src zsh
   cabal clean
@@ -727,25 +726,25 @@ ghcup set ghc 8.10.4
   /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
   1 of 1 test suites (1 of 1 test cases) passed.
   #+end_example
-- [[https://docs.haskellstack.org/en/stable/README/][stack]]
+
+*** [[https://docs.haskellstack.org/en/stable/README/][stack]]
 
   #+begin_src zsh :results output
     stack build --test
   #+end_src
 
   #+RESULTS:
-- full compile with -Werror
 
-    #+begin_src zsh :results output
+  #+begin_src zsh :results output
     stack build --test --haddock --no-haddock-deps --ghc-options -Werror --ghc-options -Wcompat --ghc-options -Wincomplete-record-updates --ghc-options -Wincomplete-uni-patterns --ghc-options -Wredundant-constraints
-    #+end_src
-- development loops
+  #+end_src
+
+*** compilation loops
 
   =haskell-language-server= works well for code that has recently compiled, but tends to suffer when fed projects that are less than pristine already. To bootstrap from a mess of garbage like I usually do, use =ghcid= and, when this falls over, revert to =stack build --test --file-watch= which will never fail.
 
 ** Linting
-
-- [[https://hackage.haskell.org/package/hlint][hlint]]
+*** [[https://hackage.haskell.org/package/hlint][hlint]]
   #+begin_src zsh :results output :exports both
   hlint .
   #+end_src
@@ -753,7 +752,7 @@ ghcup set ghc 8.10.4
   #+RESULTS:
   : No hints
 
-- [[https://hackage.haskell.org/package/ormolu][ormolu]]
+*** [[https://hackage.haskell.org/package/ormolu][ormolu]]
 
   (~--mode inplace~ to actually change haskell files)
 
@@ -768,8 +767,7 @@ ghcup set ghc 8.10.4
   #+RESULTS:
 
 ** Analysis
-
-- [[https://github.com/kowainik/stan#stan][stan]]
+*** [[https://github.com/kowainik/stan#stan][stan]]
 
   It's early days still, but static analysis is the future of Haskell, and we should dog-food it.
 
@@ -827,7 +825,7 @@ ghcup set ghc 8.10.4
 
   #+end_example
 
-- [[https://hackage.haskell.org/package/haddock][haddock]]
+*** [[https://hackage.haskell.org/package/haddock][haddock]]
 
   I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell. But can we keep up and compete with open source documentation standards? Will an IDE ever format them properly?
 
@@ -850,7 +848,7 @@ ghcup set ghc 8.10.4
   /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/doc/html/foo/index.html
   #+end_example
 
-- [[https://hackage.haskell.org][Hackage]]
+*** [[https://hackage.haskell.org][Hackage]]
 
   Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
 
@@ -859,7 +857,7 @@ ghcup set ghc 8.10.4
   cabal upload -d --publish docs/*-docs.tar.gz
   #+end_src
 
-* GitHub
+** GitHub
 
 Finally, this recipe can be used to push the newly minted package to github. Use with caution!
 
