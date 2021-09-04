@@ -513,9 +513,10 @@ Everyone uses .hie these days which is some form of cache for ghc, used especial
 /.stack-work/
 /dist-newstyle/
 stack.yaml.lock
-**/.DS_Store
+,**/.DS_Store
 cabal.project.local*
 /.hie/
+.ghc.environment.*
 #+end_src
 
 #+begin_src org :tangle hecklist.hsfiles
@@ -708,8 +709,8 @@ ghcup set ghc 8.10.4
   Linking /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/build/test/test ...
   #+end_example
 
-  #+begin_src zsh :results output
-  cabal test :exports both
+  #+begin_src zsh :results output :exports both
+  cabal test
   #+end_src
 
 *** [[https://docs.haskellstack.org/en/stable/README/][stack]]
