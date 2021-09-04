@@ -241,7 +241,7 @@ in ~.doom.d/init.el~, uncomment the haskell line and add lsp:
 (haskell +lsp)      ; a language that's lazier than I am
 #+end_src
 
-in ~.ddom.d/config.el~, place any personal config preferences. Mine are:
+in ~.doom.d/config.el~, place any personal config preferences. Mine are:
 
 #+begin_src elisp
 ;; haskell
