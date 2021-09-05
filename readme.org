@@ -659,7 +659,7 @@ ghcup set ghc 8.10.4
 ** Compiling
 *** [[https://www.haskell.org/cabal/][cabal]]
 
-  #+begin_src zsh
+  #+begin_src sh
   cabal clean
   #+end_src
 
@@ -667,51 +667,46 @@ ghcup set ghc 8.10.4
 
   It's so very useful to check the build plan before actually building, as ~cabal configure~ does.
 
-  #+begin_src zsh :results output :exports both
+  #+begin_src sh :results output :exports both
   cabal configure --enable-tests
   #+end_src
 
   #+RESULTS:
   : 'cabal.project.local' already exists, backing it up to
-  : 'cabal.project.local~5'.
-  : Resolving dependencies...
+  : 'cabal.project.local~7'.
   : Build profile: -w ghc-8.10.4 -O1
   : In order, the following would be built (use -v for more details):
   :  - doctest-0.18.1 (exe:doctest) (requires build)
-  :  - foo-0.0.1 (lib) (first run)
-  :  - foo-0.0.1 (test:test) (first run)
-  :  - foo-0.0.1 (exe:foo) (first run)
+
+  #+begin_src sh :results output :exports both
+  cabal build
+  #+end_src
+
+  #+RESULTS:
+  : Build profile: -w ghc-8.10.4 -O1
+  : In order, the following will be built (use -v for more details):
+  :  - foo-0.0.1 (test:test) (additional components to build)
+  : Preprocessing test suite 'test' for foo-0.0.1..
+  : Building test suite 'test' for foo-0.0.1..
 
   #+begin_src zsh :results output :exports both
-  cabal build
+  cabal test
   #+end_src
 
   #+RESULTS:
   #+begin_example
   Build profile: -w ghc-8.10.4 -O1
   In order, the following will be built (use -v for more details):
-   - foo-0.0.1 (lib) (first run)
-   - foo-0.0.1 (test:test) (first run)
-   - foo-0.0.1 (exe:foo) (first run)
-  Configuring library for foo-0.0.1..
-  Preprocessing library for foo-0.0.1..
-  Building library for foo-0.0.1..
-  [1 of 1] Compiling Lib              ( src/Lib.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/build/Lib.o, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/build/Lib.dyn_o )
-  Configuring test suite 'test' for foo-0.0.1..
-  Configuring executable 'foo' for foo-0.0.1..
-  Preprocessing executable 'foo' for foo-0.0.1..
-  Building executable 'foo' for foo-0.0.1..
+   - foo-0.0.1 (test:test) (ephemeral targets)
   Preprocessing test suite 'test' for foo-0.0.1..
   Building test suite 'test' for foo-0.0.1..
-  [1 of 1] Compiling Main             ( app/app.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/x/foo/build/foo/foo-tmp/Main.o )
-  [1 of 1] Compiling Main             ( test/test.hs, /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/build/test/test-tmp/Main.o )
-  Linking /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/x/foo/build/foo/foo ...
-  Linking /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/build/test/test ...
+  Running 1 test suites...
+  Test suite test: RUNNING...
+  Test suite test: PASS
+  Test suite logged to:
+  /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
+  1 of 1 test suites (1 of 1 test cases) passed.
   #+end_example
-
-  #+begin_src zsh :results output :exports both
-  cabal test
-  #+end_src
 
 *** [[https://docs.haskellstack.org/en/stable/README/][stack]]
 
@@ -817,33 +812,49 @@ Same compilation as above using stack.
 
   I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell.
 
-  #+begin_src zsh :results output :exports both
-  cabal haddock
-  #+end_src
+  And here's a nice [[https://kowainik.github.io/posts/haddock-tips][post]] from kowainik explaining the details.
 
-  #+RESULTS:
-  #+begin_example
-  Build profile: -w ghc-8.10.4 -O1
-  In order, the following will be built (use -v for more details):
-   - foo-0.0.1 (lib) (ephemeral targets)
-  Preprocessing library for foo-0.0.1..
-  Running Haddock on library for foo-0.0.1..
-  Haddock coverage:
-     0% (  0 /  1) in 'Lib'
-    Missing documentation for:
-      Module header
-  Documentation created:
-  /Users/tonyday/haskell/hecklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/doc/html/foo/index.html
-  #+end_example
+  In particular, the ~--enable-documentation~ option creates a complete local haddock of all your dependencies.
+
+  #+begin_src zsh :results output :exports both
+  cabal haddock --enable-documentation
+  #+end_src
 
 *** [[https://hackage.haskell.org][Hackage]]
 
-  Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
+#+begin_src zsh
+cabal check
+#+end_src
 
-  #+begin_src zsh
+#+RESULTS:
+: No errors or warnings could be found in the package.
+
+#+begin_src zsh :results output
+cabal sdist
+#+end_src
+
+#+RESULTS:
+: Wrote tarball sdist to
+: /Users/tonyday/haskell/hecklist/foo/dist-newstyle/sdist/foo-0.0.1.tar.gz
+
+Hackage configuration for username and such is in ~/.cabal/config
+
+#+begin_src zsh :results output
+cabal upload dist-newstyle/sdist/foo-0.0.1.tar.gz
+#+end_src
+
+This provides a preview. Check it out and then:
+
+#+begin_src zsh :results output
+cabal upload --publish
+#+end_src
+
+Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
+
+#+begin_src zsh
   cabal haddock --builddir=docs --haddock-for-hackage --enable-doc
   cabal upload -d --publish docs/*-docs.tar.gz
-  #+end_src
+#+end_src
 
 ** GitHub
 
@@ -864,3 +875,17 @@ git push origin main --force
 : Reinitialized existing Git repository in /Users/tonyday/haskell/hecklist/foo/.git/
 : On branch main
 : nothing to commit, working tree clean
+
+*** decolonialisation
+
+#+begin_src zsh
+git branch -m master main
+git push -u origin main
+git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+#+end_src
+
+Change the default branch on GitHub to main (as all branches are still not equal, right?). See [[https://docs.github.com/en/github/administering-a-repository/setting-the-default-branch][setting a default branch]].
+
+#+begin_src zsh
+git push origin --delete master
+#+end_src
