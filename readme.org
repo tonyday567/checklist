@@ -271,6 +271,8 @@ See [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]] fo
 
 Haskell also works out of the box in org-mode these days and is worth playing around with for anyone interested in hacky literate programming.
 
+Recent [[https://dev.to/viglioni/creating-haskell-notebooks-with-org-mode-4h7][post]] from [[https://dev.to/viglioni][viglioni]] with lots of good tips.
+
 [[https://necromuralist.github.io/posts/org-babel-cheat-sheet/][org babel cheat sheet]]
 
 #+begin_src haskell :results value :exports both
