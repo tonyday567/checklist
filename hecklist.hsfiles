@@ -146,6 +146,8 @@ stack.yaml.lock
 **/.DS_Store
 cabal.project.local*
 /.hie/
+.ghc.environment.*
+/.hkgr/
 
 {-# START_FILE .gitattributes #-}
 other/* linguist-documentation

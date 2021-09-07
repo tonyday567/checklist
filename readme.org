@@ -190,12 +190,16 @@ ghcup list
 - [[https://github.com/kowainik/stan#stan][stan]]
 - [[https://hackage.haskell.org/package/haddock][haddock]]
 - [[https://github.com/haskell-CI/haskell-ci][haskell-ci]]
+- [[https://hackage.haskell.org/package/cabal-fmt][cabal-fmt]]
+- [[https://hackage.haskell.org/package/hkgr][hkgr]]
+
+For a deep dive into the cabal ecosystem: [[https://kowainik.github.io/projects/awesome-cabal][awesome-cabal]]
 
 #+begin_src zsh
-cabal install ormolu hlint stan ghcid haskell-ci
+cabal install ormolu hlint stan ghcid haskell-ci cabal-fmt hkgr --allow-newer --overwrite-policy=always
 #+end_src
 
-~cabal~ stores executables in ​~​/.Cabal/bin, ~stack~ in ​~​/.local/bin.
+~cabal~ stores executables in ​~​/.cabal/bin, ~stack~ in ​~​/.local/bin.
 
 #+begin_src zsh :results output :exports both
 which hlint
@@ -221,14 +225,20 @@ haskell-ci dump-config > haskell-ci.config
 haskell-ci github '--config=haskell-ci.config' 'cabal.project' --output .github/workflows/haskell-ci.yml
 #+end_example
 
-** cabal-docspec
+** cabal-extras
+
+cabal-extras is a github repo that contains cabal-centric tools to help with builds and development. From these, I would recommend cabal-docspec and cabal-deps.
 
 [[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]] is a doctest runner that exists as a process outside the specification of a cabal project, acting more like hlint then a separate cabal stanza.
+
+cabal-dep is a executable that helps find dependencies that can be upgraded to newer versions.
 
 #+begin_src zsh
 git clone https://github.com/phadej/cabal-extras
 cd cabal-extras/cabal-docspec
 cabal install cabal-docspec:exe:cabal-docspec --allow-newer --overwrite-policy=always
+cd ../cabal-deps
+cabal install cabal-deps:exe:cabal-deps --allow-newer --overwrite-policy=always
 #+end_src
 
 ** Doom emacs
@@ -519,6 +529,7 @@ stack.yaml.lock
 cabal.project.local*
 /.hie/
 .ghc.environment.*
+/.hkgr/
 #+end_src
 
 #+begin_src org :tangle hecklist.hsfiles
@@ -661,6 +672,7 @@ ghcup set ghc 8.10.4
 ** Compiling
 *** [[https://www.haskell.org/cabal/][cabal]]
 
+
   #+begin_src sh
   cabal clean
   #+end_src
@@ -751,7 +763,36 @@ Same compilation as above using stack.
 
   #+RESULTS:
 
+*** build linting
+
+Consistent format for cabal files. ~--inplace~ edits
+
+#+begin_src zsh
+cabal-fmt --check foo.cabal
+#+end_src
+
+Check for unused dependencies
+
+#+begin_src zsh
+cabal build --ghc-options=-Wunused-packages
+#+end_src
+
+Check for newer dependencies (cabal-deps is from cabal-extras).
+
+#+begin_src zsh
+cabal-deps
+#+end_src
+
 ** Analysis
+
+*** dependencies
+
+Get suggestions for better bounds:
+
+#+begin_src zsh
+cabal gen-bounds
+#+end_src
+
 *** [[https://github.com/kowainik/stan#stan][stan]]
 
   It's early days still, but static analysis is the future of Haskell, and we should dog-food it.
@@ -759,56 +800,6 @@ Same compilation as above using stack.
   #+begin_src zsh :results output :exports both
   stan
   #+end_src
-
-  #+RESULTS:
-  #+begin_example
-    ⓘ Checking environment variables and CLI arguments for default configurations file usage...
-      Fiasco:
-        * [Error  ] No STAN_USE_DEFAULT_CONFIG Env Variable is set
-        ,* [Error  ] No CLI option specified for no-default
-
-    ⓘ The following Configurations are used:
-
-      Result:
-
-      With the following warnings:
-        * [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
-        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
-        ,* [Warning] No CLI option specified for: checks
-        ,* [Warning] configChecks is set through the source: Default
-        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
-        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
-        ,* [Warning] No CLI option specified for: remove
-        ,* [Warning] configRemoved is set through the source: Default
-        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/haskell/hecklist/foo/.stan.toml
-        ,* [Warning] TOML Configurations file doesn't exist: /Users/tonyday/.stan.toml
-        ,* [Warning] No CLI option specified for: ignore
-        ,* [Warning] configIgnored is set through the source: Default
-
-    ⓘ Using the following .cabal file: /Users/tonyday/haskell/hecklist/foo/foo.cabal
-
-    ✔ All clean! Stan did not find any observations at the moment.
-
-             Stan's Summary:
-  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
-  ┃ Analysed modules             ┃ 2      ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Analysed Lines of Code       ┃ 23     ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Total Haskell2010 extensions ┃ 0      ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Total SafeHaskell extensions ┃ 0      ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Total checked inspections    ┃ 44     ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Total found observations     ┃ 0      ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Total ignored observations   ┃ 0      ┃
-  ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━┫
-  ┃ Project health               ┃ 100%   ┃
-  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━┛
-
-  #+end_example
 
 *** [[https://hackage.haskell.org/package/haddock][haddock]]
 
@@ -821,6 +812,20 @@ Same compilation as above using stack.
   #+begin_src zsh :results output :exports both
   cabal haddock --enable-documentation
   #+end_src
+
+*** hoogle
+
+Create a local hoogle database.
+
+#+begin_src zsh
+  cabal haddock -hoogle --enable-documentation
+#+end_src
+
+... which may be equivalent to ...
+
+#+begin_src zsh
+hoogle generate
+#+end_src
 
 *** [[https://hackage.haskell.org][Hackage]]
 
@@ -849,6 +854,14 @@ This provides a preview. Check it out and then:
 
 #+begin_src zsh :results output
 cabal upload --publish
+#+end_src
+
+Alternatively, [[https://hackage.haskell.org/package/hkgr][hkgr]] is a command line tool that adds a ~git tag~ to this workflow, which is something I always forget to do.
+
+#+begin_src zsh
+hkgr disttag
+hkgr upload
+hkgr publish
 #+end_src
 
 Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
