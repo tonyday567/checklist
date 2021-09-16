@@ -59,7 +59,7 @@ To start from scratch, follow these steps:
   Current defaults are ghc-8.10.4, lts-18.6 and Lib as the library name, but they are easily changed using stack, eg
 
   #+begin_src zsh
-  stack new foo9 hecklist "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
+  stack new foo9 hecklist -p "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
   #+end_src
 
 4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
@@ -693,7 +693,7 @@ ghcup set ghc 8.10.4
   :  - doctest-0.18.1 (exe:doctest) (requires build)
 
   #+begin_src sh :results output :exports both
-  cabal build
+  cabal build --ghc-options=-freverse-errors
   #+end_src
 
   #+RESULTS:
@@ -873,6 +873,8 @@ Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your ow
 
 ** GitHub
 
+*** repo creation
+
 Finally, this recipe can be used to push the newly minted package to github. Use with caution!
 
 #+begin_src zsh results: output
@@ -894,9 +896,7 @@ git push origin main --force
 *** decolonialisation
 
 #+begin_src zsh
-git branch -m master main
-git push -u origin main
-git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+git branch -m master main && git push -u origin main && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
 #+end_src
 
 Change the default branch on GitHub to main (as all branches are still not equal, right?). See [[https://docs.github.com/en/github/administering-a-repository/setting-the-default-branch][setting a default branch]].
@@ -904,3 +904,14 @@ Change the default branch on GitHub to main (as all branches are still not equal
 #+begin_src zsh
 git push origin --delete master
 #+end_src
+
+* ToDo Exploration
+:BACKLINKS:
+[2021-09-16 Thu 07:58] <- [[file:~/org/refile.org::*Exploration section for hecklist.][Exploration section for hecklist.]]
+:END:
+
+sub-title: follow the types
+
+[[https://williamyaoh.com/posts/2019-06-06-how-i-read-haskell-documentation.html][How I read Haskell documentation | William Yao]]
+
+~cabal repl --package <package-name>~
