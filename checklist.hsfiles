@@ -14,6 +14,37 @@ Usage
 import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
 ```
 
+{-# START_FILE readme.org #-}
+
+* {{name}}
+
+[[https://hackage.haskell.org/package/{{name}}][https://img.shields.io/hackage/v/{{name}}.svg]]
+[[https://github.com/{{github-username}}/{{name}}/actions?query=workflow%3Ahaskell-ci][https://github.com/{{github-username}}/{{name}}/workflows/haskell-ci/badge.svg]]
+
+~{{name}}~ is a new package.
+
+* Usage
+
+#+begin_src haskell :results output
+import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
+#+end_src
+
+* Development
+
+#+begin_src haskell :results output
+:set prompt "> "
+:set -Wno-type-defaults
+:set -Wno-name-shadowing
+:set -XOverloadedStrings
+#+end_src
+
+check
+
+#+begin_src haskell :results output :export both
+let x = "ok"
+putStrLn x
+#+end_src
+
 {-# START_FILE {{name}}.cabal #-}
 cabal-version: 2.4
 name:          {{name}}
