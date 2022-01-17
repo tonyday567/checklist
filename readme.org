@@ -823,11 +823,11 @@ Same compilation as above using stack.
 
   (~--mode inplace~ to actually change haskell files)
 
-  #+begin_src zsh :results output
+  #+begin_src sh :results output
   ormolu --mode check $(git ls-files '*.hs')
   #+end_src
 
-  #+begin_src zsh :results output
+  #+begin_src sh :results output
   ormolu --mode check */*.hs
   #+end_src
 
@@ -847,17 +847,11 @@ Check for unused dependencies
 cabal build --ghc-options=-Wunused-packages
 #+end_src
 
-Check for newer dependencies (cabal-deps is from cabal-extras).
-
-#+begin_src zsh
-cabal-deps
-#+end_src
-
 ** Analysis
 
 *** dependencies
 
-Get suggestions for better bounds:
+Get suggestions for better upper bounds:
 
 #+begin_src zsh
 cabal gen-bounds
