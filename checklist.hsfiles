@@ -3,7 +3,7 @@
 ===
 
 [![Hackage](https://img.shields.io/hackage/v/{{name}}.svg)](https://hackage.haskell.org/package/{{name}})
-[![Build Status](https://github.com/{{github-username}}/{{name}}/workflows/haskell-ci/badge.svg)](https://github.com/{{github-username}}/{{name}}/actions?query=workflow%3Ahaskell-ci) [![Hackage Deps](https://img.shields.io/hackage-deps/v/{{name}}.svg)](http://packdeps.haskellers.com/reverse/{{name}})
+[![Build Status](https://github.com/{{github-username}}/{{name}}/workflows/haskell-ci/badge.svg)](https://github.com/{{github-username}}/{{name}}/actions?query=workflow%3Ahaskell-ci)
 
 `{{name}}` is a new package.
 
@@ -59,7 +59,7 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}8.10.4{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}8.10.7{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
@@ -236,10 +236,31 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        ghc: ['>>#ghc-version<<>>ghc-version<<>>/ghc-version<<>>^ghc-version<<8.10.4>>/ghc-version<<']
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-        stack: [true, false]
-    name: ghc ${{ matrix.ghc }} ${{ matrix.os }}
+        ghc: ['8.8.4', '8.10.7', '9.2.1']
+        os: [ubuntu-latest]
+        manager: ['cabal']
+        docspec: [false]
+        experimental: [false]
+        include:
+          - os: windows-latest
+            ghc: '8.10.7'
+            experimental: true
+            manager: 'cabal'
+          - os: macOS-latest
+            ghc: '8.10.7'
+            experimental: true
+            manager: 'cabal'
+          - os: ubuntu-latest
+            ghc: '8.10.7'
+            experimental: true
+            manager: 'stack'
+          - os: ubuntu-latest
+            ghc: '8.10.7'
+            experimental: true
+            manager: 'cabal'
+            docspec: true
+    continue-on-error: true
+    name: ghc ${{ matrix.ghc }} ${{ matrix.os }} ${{ matrix.manager }}
     steps:
       - name: clone project
         uses: actions/checkout@v2
@@ -247,33 +268,46 @@ jobs:
         uses: haskell/actions/setup@v1
         with:
           ghc-version: ${{ matrix.ghc }}
-          cabal-version: 3.4
-          enable-stack: true
+          enable-stack: ${{ matrix.manager == 'stack' }}
           stack-version: 'latest'
-      - name: stack cache
-        if: matrix.stack == 'true'
-        uses: actions/cache@v1
-        with:
-          path: ~/.stack
-          key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
-          restore-keys: ${{ runner.os }}-
       - name: cabal cache
-        if: matrix.stack == 'false'
+        if: (matrix.manager == 'cabal')
         uses: actions/cache@v2
         with:
           key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
           path: ~/.cabal/store
           restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
+      - if: matrix.docspec
+        name: install cabal-docspec
+        run: |
+          mkdir -p $HOME/.cabal/bin
+          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
+          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20210111/cabal-docspec-0.0.0.20210111.xz > cabal-docspec.xz
+          echo '0829bd034fba901cbcfe491d98ed8b28fd54f9cb5c91fa8e1ac62dc4413c9562  cabal-docspec.xz' | sha256sum -c -
+          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
+          rm -f cabal-docspec.xz
+          chmod a+x $HOME/.cabal/bin/cabal-docspec
+          $HOME/.cabal/bin/cabal-docspec --version
       - name: cabal build
-        if: matrix.stack == 'false'
+        if: (matrix.manager == 'cabal')
         run: |
           cabal update
           cabal configure --enable-tests
           cabal build
           cabal test
+      - name: stack cache
+        if: (matrix.manager == 'stack')
+        uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
+          restore-keys: ${{ runner.os }}-
       - name: stack build
-        if: matrix.stack == 'true'
+        if: (matrix.manager == 'stack')
         run: |
           stack update
           stack build --test --no-install-ghc --system-ghc
+      - if: matrix.docspec
+        name: run cabal-docspec
+        run: cabal-docspec
     >>={{ }}=<<
