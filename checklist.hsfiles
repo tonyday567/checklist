@@ -228,7 +228,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 {-# START_FILE .github/workflows/Haskell-CI.yml #-}
-{{=>> <<=}}
+{{=>>> <<<=}}
 on: [push]
 name: haskell-ci
 jobs:
@@ -310,4 +310,4 @@ jobs:
       - if: matrix.docspec
         name: run cabal-docspec
         run: cabal-docspec
-    >>={{ }}=<<
+    >>>={{ }}=<<<
