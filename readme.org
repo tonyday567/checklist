@@ -1,7 +1,7 @@
-#+TITLE: c[h]ecklist
+#+TITLE: [c]hecklist
 #+OPTIONS: H:2 TOC:1 view:showall
 
-A Haskell c[h]ecklist. For starting off projects, starting over, or tidying up.
+A Haskell [c]hecklist. For starting off projects, starting over, or tidying up.
 
 * Quick Start
 
@@ -1011,3 +1011,145 @@ Change the default branch on GitHub to main (as all branches are still not equal
 git push origin --delete master
 #+end_src
 
+
+* babel
+
+Inspired by [[https://dev.to/viglioni/creating-haskell-notebooks-with-org-mode-4h7][Creating Haskell notebooks with org-mode - DEV Community]]
+
+** setup
+
+The babel functionality in org-mode is old and fragile. ob-haskell creates an ~inf-haskell~ buffer which is not the modern Haskell repl. The prompt has to end with a '>'.
+
+#+begin_src haskell
+:set -XOverloadedStrings
+:set -Wno-type-defaults
+:set prompt "> "
+putStrLn "ok"
+#+end_src
+
+#+RESULTS:
+: > > ok
+
+A code block with multiple lines that doesn't return any output emits a benign warning: ~org-babel-script-escape expects a string~
+
+** single session
+
+Once a haskell code block is evaluated (eg ~C-c C-c~ in the above block), you can check in the ~*haskell*~ buffer to see input and output.
+
+#+begin_src haskell
+x = [0..4]
+x
+#+end_src
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+babel feeds the code block in as single lines, returns the final computation as a result, and then tries to do some post-result format massaging, like putting the result into a table.
+
+~:results output~ in the header of the block provides the raw output as you would expect from ghci.
+
+#+begin_src haskell :results output
+x = [0..4]
+x
+#+end_src
+
+#+RESULTS:
+:
+: [0,1,2,3,4]
+
+There are also many other options buried in old docs, such as ~:post org-babel-haskell-formatter(*this*)~
+
+#+begin_src haskell :post org-babel-haskell-formatter(*this*)
+x = [0..4]
+x
+#+end_src
+
+#+RESULTS:
+: (0 1 2 3 4)
+
+** multi-line
+
+Multi-line code blocks need ~:{~ ~:}~ wrappers.
+
+#+begin_src haskell
+:{
+t1 :: Bool -> Int
+t1 z = case z of
+        True -> 1
+        False -> 0
+:}
+
+t1 True
+#+end_src
+
+#+RESULTS:
+: > 1
+
+#+begin_src haskell :results output
+:{
+t1 :: Bool -> Int
+t1 z = case z of
+        True -> 1
+        False -> 0
+:}
+
+t1 True
+#+end_src
+
+#+RESULTS:
+:
+: > 1
+
+Note that ~:set +m~ doesn't work and the process will hang.
+
+#+begin_src haskell
+:set +m
+f :: Bool -> Int
+f z = case z of
+        True -> [0..4]
+        False -> [1..9]
+#+end_src
+
+#+begin_src haskell
+f False
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+
+** org-babel-script-escape bug
+
+
+** formatter
+
+Post-computation formatting is possible, but be prepared for documentation archeology.
+
+#+RESULTS:
+: (0 1 2 3 4)
+
+#+name: org-babel-haskell-formatter
+    #+begin_src emacs-lisp :var strr="" :exports code
+      (format "%s"
+              (replace-regexp-in-string
+               (rx line-start
+                   (+ (| alphanumeric blank "." "|" ">")))
+               "" (format "%s" strr)))
+    #+end_src
+
+    #+RESULTS: org-babel-haskell-formatter
+
+#+begin_src haskell :post org-babel-haskell-formatter(*this*)
+x = [0..4]
+x
+#+end_src
+
+** embedding inline svg
+
+Example of embedding svg and other image output with ~:file line.svg :results output graphics file~
+
+#+begin_src haskell :file line.svg :results output graphics file :exports results
+x = 1
+#+end_src
+
+#+RESULTS:
+[[file:line.svg]]
