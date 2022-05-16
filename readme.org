@@ -1153,3 +1153,12 @@ x = 1
 
 #+RESULTS:
 [[file:line.svg]]
+
+
+** executable project
+
+This is required if you are working with a project, and compiling a library doesn't suit. (Library is the default in emacs)
+
+#+begin_src elisp
+(setq haskell-process-args-cabal-repl '("poker-fold:exe:poker-fold-speed"))
+#+end_src
