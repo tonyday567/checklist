@@ -189,16 +189,13 @@ ghcup list
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
-- [[https://github.com/kowainik/stan#stan][stan]]
-- [[https://hackage.haskell.org/package/haddock][haddock]]
-- [[https://github.com/haskell-CI/haskell-ci][haskell-ci]]
 - [[https://hackage.haskell.org/package/cabal-fmt][cabal-fmt]]
 - [[https://hackage.haskell.org/package/hkgr][hkgr]]
 
 For a deep dive into the cabal ecosystem: [[https://kowainik.github.io/projects/awesome-cabal][awesome-cabal]]
 
 #+begin_src zsh
-cabal install ormolu hlint stan ghcid haskell-ci cabal-fmt hkgr --allow-newer --overwrite-policy=always
+cabal install ormolu hlint ghcid cabal-fmt hkgr --allow-newer --overwrite-policy=always
 #+end_src
 
 ~cabal~ stores executables in ​~​/.cabal/bin, ~stack~ in ​~​/.local/bin.
@@ -219,28 +216,16 @@ Examples of non-trivial actions:
 - [[https://github.com/agda/agda/tree/master/.github/workflows][agda]]
 - [[https://github.com/haskell/cabal/tree/master/.github/workflows][cabal]]
 
-[[https://github.com/haskell-CI/haskell-ci][haskell-ci]] is a popular script generator for CI.
-
-#+begin_example
-haskell-ci dump-config > haskell-ci.config
-{edit configuration}
-haskell-ci github '--config=haskell-ci.config' 'cabal.project' --output .github/workflows/haskell-ci.yml
-#+end_example
-
 ** cabal-extras
 
 cabal-extras is a github repo that contains cabal-centric tools to help with builds and development. From these, I would recommend cabal-docspec and cabal-deps.
 
 [[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]] is a doctest runner that exists as a process outside the specification of a cabal project, acting more like hlint then a separate cabal stanza.
 
-cabal-dep is a executable that helps find dependencies that can be upgraded to newer versions.
-
 #+begin_src zsh
 git clone https://github.com/phadej/cabal-extras
 cd cabal-extras/cabal-docspec
-cabal install cabal-docspec:exe:cabal-docspec --allow-newer --overwrite-policy=always
-cd ../cabal-deps
-cabal install cabal-deps:exe:cabal-deps --allow-newer --overwrite-policy=always
+cabal install cabal-docspec:exe:cabal-docspec --overwrite-policy=always
 #+end_src
 
 ** Doom emacs
@@ -275,56 +260,6 @@ in ~.doom.d/config.el~, place any personal config preferences. Mine are:
  )
 #+end_src
 
-*** Literate Programming
-
-An org file can also be used as a project readme. Sort of.
-
-See [[https://github.com/novoid/github-orgmode-tests/blob/master/README.org]] for the current state of affairs.
-
-Haskell also works out of the box in org-mode these days and is worth playing around with for anyone interested in hacky literate programming.
-
-Recent [[https://dev.to/viglioni/creating-haskell-notebooks-with-org-mode-4h7][post]] from [[https://dev.to/viglioni][viglioni]] with lots of good tips.
-
-[[https://necromuralist.github.io/posts/org-babel-cheat-sheet/][org babel cheat sheet]]
-
-#+begin_src haskell :results value :exports both
-x = 1
-putStrLn $ show x
-#+end_src
-
-#+RESULTS:
-: 1
-
-* org-mode
-
-The [[https://orgmode.org/worg/org-contrib/babel/][babel]] functionality in org-mode is very old, and hasn't kept up with changes in haskell-mode practices. In particular, it uses the old haskell inferior mode to invoke ghci rather than the more modern haskell process methods. This could make it a touch fragile as it won't pick up standard configurations.
-
-Using org-mode is particularly helpful in development loops where rebooting ghci requires a large amount of state. A complex function, say, with intermediate results can be laid out using org-mode and state-of-debugging sessions can evolve and be remembered between sessions.
-
-It also works well as an alternative readme, with no gap between code blocks as basic tests and code blocks as usage documentation.
-
-#+begin_src haskell :results value
-:set prompt "> "
-:set -Wno-type-defaults
-:set -Wno-name-shadowing
-:set -XOverloadedStrings
-:set -XOverloadedLabels
-:set -XFlexibleContexts
-:set -XGADTs
-:set -XDataKinds
-#+end_src
-
-check
-
-#+BEGIN_SRC haskell :results value :export both
-let x = "ok"
-putStrLn x
-#+END_SRC
-
-#+RESULTS:
-: ok
-
-The [[https://orgmode.org/worg/org-contrib/babel/][babel]] functionality in org-mode is very old, and hasn't kept up with changes in haskell-mode practices. In particular, it uses the old haskell inferior mode to invoke ghci rather than the more modern haskell process methods. This could make it a touch fragile as it won't pick up standard configurations.
 * Templates
 :PROPERTIES:
 :header-args: :tangle checklist.hsfiles
@@ -770,7 +705,7 @@ If you would like to go full heavy-metal, such as include hlint and cabal-docspe
 I use this section to record results of compilation steps, and the process of polishing projects. Edit properties in [[#Checklist][Checklist]] to point to the right directory and check/set the correct ghc version.
 
 #+begin_src zsh
-ghcup set ghc 8.10.4
+ghcup set ghc 8.10.7
 #+end_src
 
 #+RESULTS:
@@ -893,14 +828,6 @@ Get suggestions for better upper bounds:
 cabal gen-bounds
 #+end_src
 
-*** [[https://github.com/kowainik/stan#stan][stan]]
-
-  It's early days still, but static analysis is the future of Haskell, and we should dog-food it.
-
-  #+begin_src zsh :results output :exports both
-  stan
-  #+end_src
-
 *** [[https://hackage.haskell.org/package/haddock][haddock]]
 
   I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell.
@@ -1011,14 +938,16 @@ Change the default branch on GitHub to main (as all branches are still not equal
 git push origin --delete master
 #+end_src
 
-
-* babel
-
-Inspired by [[https://dev.to/viglioni/creating-haskell-notebooks-with-org-mode-4h7][Creating Haskell notebooks with org-mode - DEV Community]]
-
+* org-mode haskell (babel)
 ** setup
 
-The babel functionality in org-mode is old and fragile. ob-haskell creates an ~inf-haskell~ buffer which is not the modern Haskell repl. The prompt has to end with a '>'.
+The [[https://orgmode.org/worg/org-contrib/babel/][babel]] functionality in org-mode is very old, and hasn't kept up with changes in haskell-mode practices. In particular, it uses the old haskell inferior mode to invoke ghci rather than the more modern haskell process methods. This could make it a touch fragile as it won't pick up standard configurations.
+
+Using org-mode is particularly helpful in development loops where rebooting ghci requires a large amount of state. A complex function, say, with intermediate results can be laid out using org-mode and state-of-debugging sessions can evolve and be remembered between sessions.
+
+It also works well as an alternative readme, with no gap between code blocks as basic tests and code blocks as usage documentation.
+
+The babel functionality, ob-haskell, creates an ~inf-haskell~ buffer which is not the modern Haskell repl. The prompt has to end with a '>'.
 
 #+begin_src haskell
 :set -XOverloadedStrings
@@ -1119,7 +1048,6 @@ f False
 
 ** org-babel-script-escape bug
 
-
 ** formatter
 
 Post-computation formatting is possible, but be prepared for documentation archeology.
@@ -1153,7 +1081,6 @@ x = 1
 
 #+RESULTS:
 [[file:line.svg]]
-
 
 ** executable project
 
