@@ -38,9 +38,9 @@ The newly created project, ~foo~, should:
 
 * Deeper dive
 
-This project contains everything I need to bootstrap a new project, from setting up a Haskell environment, through creation of a new project, to creating a new GitHub repository with CI support.
+This project contains everything needed to bootstrap a new Haskell project or clean an existing one; from setting up a Haskell environment, through creation of a new project, to creating a new GitHub repository with CI support.
 
-These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu, stan and cabal-docspecs can be mixed in and matched as needed. At least in terms of *How we start*, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
+These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu and cabal-docspecs can be mixed in and matched as needed. At least in terms of *How we start*, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
 
 The template may not, however, contain what you need. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklist, then keep reading!
 
@@ -63,7 +63,6 @@ To start from scratch, follow these steps:
   #+begin_src zsh
   stack new foo checklist -p "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
   #+end_src
-
 4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
 5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
 
@@ -144,47 +143,6 @@ And all of this is packaged up by ghcup, eg
 ghcup list
 #+end_src
 
-#+RESULTS:
-#+begin_example
-   Tool  Version        Tags                      Notes
-✗  ghc   7.10.3         base-4.8.2.0
-✗  ghc   8.0.2          base-4.9.1.0
-✗  ghc   8.2.2          base-4.10.1.0
-✗  ghc   8.4.1          base-4.11.0.0
-✗  ghc   8.4.2          base-4.11.1.0
-✗  ghc   8.4.3          base-4.11.1.0
-✗  ghc   8.4.4          base-4.11.1.0
-✗  ghc   8.6.1          base-4.12.0.0
-✗  ghc   8.6.2          base-4.12.0.0
-✗  ghc   8.6.3          base-4.12.0.0
-✗  ghc   8.6.4          base-4.12.0.0             hls-powered
-✗  ghc   8.6.5          base-4.12.0.0             hls-powered
-✗  ghc   8.8.1          base-4.13.0.0
-✗  ghc   8.8.2          base-4.13.0.0
-✗  ghc   8.8.3          base-4.13.0.0             hls-powered
-✓  ghc   8.8.4          base-4.13.0.0             hls-powered
-✗  ghc   8.10.1         base-4.14.0.0
-✗  ghc   8.10.2         base-4.14.1.0             hls-powered
-✗  ghc   8.10.3         base-4.14.1.0             hls-powered
-✔✔ ghc   8.10.4         base-4.14.1.0             hls-powered
-✗  ghc   8.10.5         base-4.14.2.0             hls-powered
-✓  ghc   8.10.6         base-4.14.3.0
-✗  ghc   8.10.7         recommended,base-4.14.3.0
-✓  ghc   9.0.1          latest,base-4.15.0.0      hls-powered
-✓  ghc   9.2.0.20210821 prerelease,base-4.16.0.0
-✗  cabal 2.4.1.0
-✗  cabal 3.0.0.0
-✗  cabal 3.2.0.0
-✔✔ cabal 3.4.0.0        latest,recommended
-✓  hls   1.1.0
-✓  hls   1.2.0
-✔✔ hls   1.3.0          latest,recommended
-✗  stack 2.5.1
-✓  stack 2.7.1
-✔✔ stack 2.7.3          latest,recommended
-✔✔ ghcup 0.1.16.2       latest,recommended
-#+end_example
-
 ** installing tools
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
@@ -216,7 +174,7 @@ Examples of non-trivial actions:
 - [[https://github.com/agda/agda/tree/master/.github/workflows][agda]]
 - [[https://github.com/haskell/cabal/tree/master/.github/workflows][cabal]]
 
-** cabal-extras
+** cabal-docspec
 
 cabal-extras is a github repo that contains cabal-centric tools to help with builds and development. From these, I would recommend cabal-docspec and cabal-deps.
 
@@ -618,7 +576,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        ghc: ['8.8.4', '8.10.7', '9.2.1']
+        ghc: ['8.8.4', '8.10.7', '9.2.2']
         os: [ubuntu-latest]
         manager: ['cabal']
         docspec: [false]
@@ -938,7 +896,7 @@ Change the default branch on GitHub to main (as all branches are still not equal
 git push origin --delete master
 #+end_src
 
-* org-mode haskell (babel)
+* Org-mode & Haskell
 ** setup
 
 The [[https://orgmode.org/worg/org-contrib/babel/][babel]] functionality in org-mode is very old, and hasn't kept up with changes in haskell-mode practices. In particular, it uses the old haskell inferior mode to invoke ghci rather than the more modern haskell process methods. This could make it a touch fragile as it won't pick up standard configurations.
