@@ -111,31 +111,14 @@ stack --version
 #+RESULTS:
 : Version 2.7.3, Git revision 7927a3aec32e2b2e5e4fb5be76d0d50eddcc197f x86_64 hpack-0.34.4
 
-
-~stack~ inspects the stack.yaml and selects a ghc that matches, so stack ghc and system (cabal) ghc can be different.
-
-#+begin_src zsh :results output :exports both
-stack exec -- which ghc
-#+end_src
-
-#+RESULTS:
-: /Users/tonyday/.ghcup/ghc/8.10.4/bin/ghc
-
-#+begin_src zsh :results output :exports both
-which ghc
-#+end_src
-
-#+RESULTS:
-: /Users/tonyday/.ghcup/bin/ghc
-
 Note that haskell-language-server versions matching older GHC versions are also installed, and selected automatically.
 
-#+begin_src zsh :results output :exports both
-haskell-language-server --version
+#+begin_src sh :results output :exports both
+haskell-language-server-wrapper --version
 #+end_src
 
 #+RESULTS:
-: haskell-language-server version: 1.3.0.0 (GHC: 9.0.1) (PATH: /Users/tonyday/.ghcup/bin/haskell-language-server-9.0.1~1.3.0) (GIT hash: e7c5e90b6df5dff2760d76169eddaea3bdd6a831)
+: haskell-language-server version: 1.9.0.0 (GHC: 9.4.4) (PATH: /Users/tonyday/.ghcup/hls/1.9.0.0/lib/haskell-language-server-1.9.0.0/bin/haskell-language-server-wrapper)
 
 And all of this is packaged up by ghcup, eg
 
@@ -143,17 +126,84 @@ And all of this is packaged up by ghcup, eg
 ghcup list
 #+end_src
 
+#+RESULTS:
+#+begin_example
+   Tool  Version  Tags                      Notes
+✗  ghc   7.10.3   base-4.8.2.0
+✗  ghc   8.0.2    base-4.9.1.0
+✗  ghc   8.2.2    base-4.10.1.0
+✗  ghc   8.4.1    base-4.11.0.0
+✗  ghc   8.4.2    base-4.11.1.0
+✗  ghc   8.4.3    base-4.11.1.0
+✗  ghc   8.4.4    base-4.11.1.0
+✗  ghc   8.6.1    base-4.12.0.0
+✗  ghc   8.6.2    base-4.12.0.0
+✗  ghc   8.6.3    base-4.12.0.0
+✗  ghc   8.6.4    base-4.12.0.0
+✗  ghc   8.6.5    base-4.12.0.0
+✗  ghc   8.8.1    base-4.13.0.0
+✗  ghc   8.8.2    base-4.13.0.0
+✗  ghc   8.8.3    base-4.13.0.0
+✗  ghc   8.8.4    base-4.13.0.0
+✗  ghc   8.10.1   base-4.14.0.0
+✗  ghc   8.10.2   base-4.14.1.0
+✗  ghc   8.10.3   base-4.14.1.0
+✗  ghc   8.10.4   base-4.14.1.0
+✗  ghc   8.10.5   base-4.14.2.0
+✗  ghc   8.10.6   base-4.14.3.0
+✗  ghc   8.10.7   base-4.14.3.0             hls-powered
+✗  ghc   9.0.1    base-4.15.0.0
+✗  ghc   9.0.2    base-4.15.1.0             hls-powered
+✗  ghc   9.2.1    base-4.16.0.0
+✗  ghc   9.2.2    base-4.16.1.0
+✗  ghc   9.2.3    base-4.16.2.0
+✗  ghc   9.2.4    base-4.16.3.0
+✔✔ ghc   9.2.5    recommended,base-4.16.4.0 hls-powered
+✗  ghc   9.2.6    base-4.16.4.0
+✓  ghc   9.2.7    base-4.16.4.0
+✗  ghc   9.4.1    base-4.17.0.0
+✗  ghc   9.4.2    base-4.17.0.0
+✗  ghc   9.4.3    base-4.17.0.0             hls-powered
+✗  ghc   9.4.4    latest,base-4.17.0.0      hls-powered
+✗  cabal 2.4.1.0
+✗  cabal 3.0.0.0
+✗  cabal 3.2.0.0
+✗  cabal 3.4.0.0
+✗  cabal 3.4.1.0
+✗  cabal 3.6.0.0
+✔✔ cabal 3.6.2.0  recommended
+✗  cabal 3.8.1.0  latest
+✗  hls   1.1.0
+✗  hls   1.2.0
+✗  hls   1.3.0
+✗  hls   1.4.0
+✗  hls   1.5.0
+✗  hls   1.5.1
+✗  hls   1.6.0.0
+✗  hls   1.6.1.0
+✗  hls   1.7.0.0
+✗  hls   1.8.0.0
+✔✔ hls   1.9.0.0  recommended
+✗  hls   1.9.1.0  latest
+✗  stack 2.5.1
+✗  stack 2.7.1
+✗  stack 2.7.3
+✗  stack 2.7.5
+✗  stack 2.9.1
+✓  stack 2.9.3    latest,recommended
+✔✔ ghcup 0.1.19.2 latest,recommended
+#+end_example
+
 ** installing tools
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
-- [[https://hackage.haskell.org/package/cabal-fmt][cabal-fmt]]
 - [[https://hackage.haskell.org/package/hkgr][hkgr]]
 
 For a deep dive into the cabal ecosystem: [[https://kowainik.github.io/projects/awesome-cabal][awesome-cabal]]
 
 #+begin_src zsh
-cabal install ormolu hlint ghcid cabal-fmt hkgr --allow-newer --overwrite-policy=always
+cabal install ormolu hlint hkgr --allow-newer --overwrite-policy=always
 #+end_src
 
 ~cabal~ stores executables in ​~​/.cabal/bin, ~stack~ in ​~​/.local/bin.
@@ -196,7 +246,7 @@ in ~.doom.d/init.el~, uncomment the haskell line and add lsp:
 (haskell +lsp)      ; a language that's lazier than I am
 #+end_src
 
-in ~.doom.d/config.el~, place any personal config preferences. Mine are:
+in ~/.config/doom/config.el~, place any personal config preferences. Mine are:
 
 #+begin_src elisp
 ;; haskell
@@ -753,7 +803,7 @@ Same compilation as above using stack.
   (~--mode inplace~ to actually change haskell files)
 
   #+begin_src sh :results output
-  ormolu --mode check $(git ls-files '*.hs')
+  ormolu --mode inplace $(git ls-files '*.hs')
   #+end_src
 
   #+begin_src sh :results output
@@ -784,6 +834,12 @@ Get suggestions for better upper bounds:
 
 #+begin_src zsh
 cabal gen-bounds
+#+end_src
+
+Find out if newer versions of existing dependencies exist.
+
+#+begin_src zsh
+cabal outdated
 #+end_src
 
 *** [[https://hackage.haskell.org/package/haddock][haddock]]
