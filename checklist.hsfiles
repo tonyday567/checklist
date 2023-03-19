@@ -59,7 +59,7 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}8.10.7{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.4.4{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
@@ -112,14 +112,7 @@ test-suite test
 {-# START_FILE cabal.project #-}
 packages: {{name}}.cabal
 
--- if doctests seem broken, uncomment:
--- See https://github.com/haskell/cabal/issues/6087
--- write-ghc-environment-files: always
-
-allow-newer: true
-
--- Might be helpful when Hackage doesn't build properly...
--- keep-going: True
+-- allow-newer: true
 
 {-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -165,7 +158,7 @@ main =
     ]
 
 {-# START_FILE stack.yaml #-}
-resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-18.24{{/resolver}}
+resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-18.23{{/resolver}}
 
 packages:
   - .
@@ -184,16 +177,6 @@ cabal.project.local*
 other/* linguist-documentation
 
 {-# START_FILE .projectile #-}
-
-{-# START_FILE hie.yaml #-}
-cradle:
-  cabal:
-    - path: "./app/{{name}}.hs"
-      component: "{{name}}:exe:{{name}}"
-    - path: "./src"
-      component: "{{name}}:lib"
-    - path: "./test/{{name}}.hs"
-      component: "{{name}}:test:{{name}}"
 
 {-# START_FILE LICENSE #-}
 Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2021{{/year}}
@@ -228,7 +211,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 {-# START_FILE .github/workflows/Haskell-CI.yml #-}
-{{=>>> <<<=}}
+{{=>> <<=}}
 on: [push]
 name: haskell-ci
 jobs:
@@ -236,7 +219,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        ghc: ['8.8.4', '8.10.7', '9.2.1']
+        ghc: ['8.8.4', '8.10.7', '9.2.2']
         os: [ubuntu-latest]
         manager: ['cabal']
         docspec: [false]
@@ -310,4 +293,4 @@ jobs:
       - if: matrix.docspec
         name: run cabal-docspec
         run: cabal-docspec
-    >>>={{ }}=<<<
+    >>={{ }}=<<

@@ -61,12 +61,10 @@ To start from scratch, follow these steps:
   Current defaults are ghc-8.10.4, lts-18.6 and Lib as the library name, but they are easily changed using stack, eg
 
   #+begin_src zsh
-  stack new foo checklist -p "ghc-version:9.0.1" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2021-09-02"
+  stack new foo checklist -p "ghc-version:9.4.4" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
   #+end_src
 4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
 5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
-
-The repo should look something like [[https://github.com/tonyday567/foo][this]].
 
 * Environs
 
@@ -80,7 +78,7 @@ Setup of a modern Haskell environment is straight forward. [[https://www.haskell
 
 =ghcup= places everything in ~/.ghcup/bin
 
-#+begin_src zsh :results output :exports both
+#+begin_src sh :results output :exports both
 which cabal
 #+end_src
 
@@ -89,7 +87,7 @@ which cabal
 
 *** Versioning
 
-#+begin_src zsh :results output :exports both
+#+begin_src sh :results output :exports both
 cabal --version
 #+end_src
 
@@ -97,14 +95,14 @@ cabal --version
 : cabal-install version 3.4.0.0
 : compiled using version 3.4.0.0 of the Cabal library
 
-#+begin_src zsh :results output :exports both
+#+begin_src sh :results output :exports both
 ghc --version
 #+end_src
 
 #+RESULTS:
 : The Glorious Glasgow Haskell Compilation System, version 8.10.4
 
-#+begin_src zsh :results output :exports both
+#+begin_src sh :results output :exports both
 stack --version
 #+end_src
 
@@ -122,7 +120,7 @@ haskell-language-server-wrapper --version
 
 And all of this is packaged up by ghcup, eg
 
-#+begin_src zsh :results output :text-properties t :exports both
+#+begin_src sh :results output :text-properties t :exports both
 ghcup list
 #+end_src
 
@@ -202,13 +200,13 @@ ghcup list
 
 For a deep dive into the cabal ecosystem: [[https://kowainik.github.io/projects/awesome-cabal][awesome-cabal]]
 
-#+begin_src zsh
+#+begin_src sh
 cabal install ormolu hlint hkgr --allow-newer --overwrite-policy=always
 #+end_src
 
 ~cabal~ stores executables in ​~​/.cabal/bin, ~stack~ in ​~​/.local/bin.
 
-#+begin_src zsh :results output :exports both
+#+begin_src sh :results output :exports both
 which hlint
 #+end_src
 
@@ -226,11 +224,11 @@ Examples of non-trivial actions:
 
 ** cabal-docspec
 
-cabal-extras is a github repo that contains cabal-centric tools to help with builds and development. From these, I would recommend cabal-docspec and cabal-deps.
+cabal-extras is a github repo that contains cabal-centric tools to help with builds and development. From these, I would recommend cabal-docspec.
 
 [[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]] is a doctest runner that exists as a process outside the specification of a cabal project, acting more like hlint then a separate cabal stanza.
 
-#+begin_src zsh
+#+begin_src sh
 git clone https://github.com/phadej/cabal-extras
 cd cabal-extras/cabal-docspec
 cabal install cabal-docspec:exe:cabal-docspec --overwrite-policy=always
@@ -240,7 +238,7 @@ cabal install cabal-docspec:exe:cabal-docspec --overwrite-policy=always
 
 Haskell setup for [[https://github.com/hlissner/doom-emacs#install][Doom]] emacs is straight-forward.
 
-in ~.doom.d/init.el~, uncomment the haskell line and add lsp:
+in ~~/.config/doom/init.el~, uncomment the haskell line and add lsp:
 
 #+begin_src elisp
 (haskell +lsp)      ; a language that's lazier than I am
@@ -254,18 +252,35 @@ in ~/.config/doom/config.el~, place any personal config preferences. Mine are:
 (after! haskell
   (setq
    haskell-font-lock-symbols t
+   haskell-interactive-popup-errors nil
    lsp-enable-folding nil
    lsp-response-timeout 120
-   company-idle-delay nil
    lsp-ui-sideline-enable nil           ; not anymore useful than flycheck
    lsp-ui-doc-enable nil                ; slow and redundant with K
-   lsp-enable-symbol-highlighting nil
-   ;; If an LSP server isn't present when I start a prog-mode buffer, you
-   ;; don't need to tell me. I know. On some systems I don't care to have a
-   ;; whole development environment for some ecosystems.
+   lsp-modeline-diagnostics-scope :project
    +lsp-prompt-to-install-server 'quiet
+   flycheck-check-syntax-automatically '(save)
+   lsp-haskell-brittany-on nil
+   lsp-haskell-floskell-on nil
+   lsp-haskell-fourmolu-on nil
+   lsp-haskell-stylish-haskell-on nil
+   lsp-haskell-retrie-on nil
+   haskell-process-show-debug-tips nil
+   haskell-process-suggest-remove-import-lines nil
+   haskell-process-suggest-restart nil
+   haskell-process-type 'cabal-repl
    )
- )
+  (global-so-long-mode -1)
+  ;; makes underscore an alphanumeric
+  (add-hook! 'haskell-mode-hook (modify-syntax-entry ?_ "w"))
+)
+#+end_src
+
+... and ...
+
+#+begin_src elisp
+(use-package! haskell-snippets
+  :after (haskell-mode yasnippet))
 #+end_src
 
 * Templates
@@ -367,7 +382,7 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}8.10.7{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.4.4{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
@@ -448,14 +463,7 @@ It does, however, form a place for things that might be needed down the track. ~
 {-# START_FILE cabal.project #-}
 packages: {{name}}.cabal
 
--- if doctests seem broken, uncomment:
--- See https://github.com/haskell/cabal/issues/6087
--- write-ghc-environment-files: always
-
-allow-newer: true
-
--- Might be helpful when Hackage doesn't build properly...
--- keep-going: True
+-- allow-newer: true
 #+end_src
 
 ** library
@@ -556,20 +564,6 @@ In emacs, haskell-language-server uses projectile to discover the project root d
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE .projectile #-}
-#+end_src
-
-~hls~ uses the presence of a ~stack.yaml~ file as an indication that stack should be used, and the creation of this file hard-codes cabal as the preferred compilation tool.
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE hie.yaml #-}
-cradle:
-  cabal:
-    - path: "./app/{{name}}.hs"
-      component: "{{name}}:exe:{{name}}"
-    - path: "./src"
-      component: "{{name}}:lib"
-    - path: "./test/{{name}}.hs"
-      component: "{{name}}:test:{{name}}"
 #+end_src
 
 ** licence
@@ -712,15 +706,14 @@ If you would like to go full heavy-metal, such as include hlint and cabal-docspe
 
 I use this section to record results of compilation steps, and the process of polishing projects. Edit properties in [[#Checklist][Checklist]] to point to the right directory and check/set the correct ghc version.
 
-#+begin_src zsh
-ghcup set ghc 8.10.7
+#+begin_src sh
+ghcup set ghc 9.4.4
 #+end_src
 
 #+RESULTS:
 
 ** Compiling
 *** [[https://www.haskell.org/cabal/][cabal]]
-
 
   #+begin_src sh
   cabal clean
@@ -752,7 +745,7 @@ ghcup set ghc 8.10.7
   : Preprocessing test suite 'test' for foo-0.0.1..
   : Building test suite 'test' for foo-0.0.1..
 
-  #+begin_src zsh :results output :exports both
+  #+begin_src sh :results output :exports both
   cabal test
   #+end_src
 
@@ -775,13 +768,13 @@ ghcup set ghc 8.10.7
 
 Same compilation as above using stack.
 
-  #+begin_src zsh :results output
+  #+begin_src sh :results output
     stack clean && stack build --test
   #+end_src
 
   A full -Werror compile + haddock check.
 
-  #+begin_src zsh :results output
+  #+begin_src sh :results output
     stack build --test --haddock --no-haddock-deps --ghc-options -Werror --ghc-options -Wcompat --ghc-options -Wincomplete-record-updates --ghc-options -Wincomplete-uni-patterns --ghc-options -Wredundant-constraints
   #+end_src
 
@@ -791,7 +784,7 @@ Same compilation as above using stack.
 
 ** Linting
 *** [[https://hackage.haskell.org/package/hlint][hlint]]
-  #+begin_src zsh :results output :exports both
+  #+begin_src sh :results output :exports both
   hlint .
   #+end_src
 
@@ -814,15 +807,9 @@ Same compilation as above using stack.
 
 *** build linting
 
-Consistent format for cabal files. ~--inplace~ edits
-
-#+begin_src zsh
-cabal-fmt --check foo.cabal
-#+end_src
-
 Check for unused dependencies
 
-#+begin_src zsh
+#+begin_src sh
 cabal build --ghc-options=-Wunused-packages
 #+end_src
 
@@ -832,13 +819,13 @@ cabal build --ghc-options=-Wunused-packages
 
 Get suggestions for better upper bounds:
 
-#+begin_src zsh
+#+begin_src sh
 cabal gen-bounds
 #+end_src
 
 Find out if newer versions of existing dependencies exist.
 
-#+begin_src zsh
+#+begin_src sh
 cabal outdated
 #+end_src
 
@@ -850,7 +837,7 @@ cabal outdated
 
   In particular, the ~--enable-documentation~ option creates a complete local haddock of all your dependencies.
 
-  #+begin_src zsh :results output :exports both
+  #+begin_src sh :results output :exports both
   cabal haddock --enable-documentation
   #+end_src
 
@@ -864,56 +851,35 @@ cabal outdated
 
 Create a local hoogle database.
 
-#+begin_src zsh
+#+begin_src sh
   cabal haddock -hoogle --enable-documentation
 #+end_src
 
 ... which may be equivalent to ...
 
-#+begin_src zsh
+#+begin_src sh
 hoogle generate
 #+end_src
 
 *** [[https://hackage.haskell.org][Hackage]]
 
-#+begin_src zsh
-cabal check
+I use [[https://hackage.haskell.org/package/hkgr][hkgr]] to upload to hackage, which is a command line tool that lets me forget about the detail.
+
+#+begin_src sh
+hkgr disttag --force
 #+end_src
 
-#+RESULTS:
-: No errors or warnings could be found in the package.
+This does some checks, then tags the current git commit with the current version in the cabal file.
 
-#+begin_src zsh :results output
-cabal sdist
-#+end_src
-
-#+RESULTS:
-: Wrote tarball sdist to
-: /Users/tonyday/haskell/checklist/foo/dist-newstyle/sdist/foo-0.0.1.tar.gz
-
-Hackage configuration for username and such is in ~/.cabal/config
-
-#+begin_src zsh :results output
-cabal upload dist-newstyle/sdist/foo-0.0.1.tar.gz
-#+end_src
-
-This provides a preview. Check it out and then:
-
-#+begin_src zsh :results output
-cabal upload --publish
-#+end_src
-
-Alternatively, [[https://hackage.haskell.org/package/hkgr][hkgr]] is a command line tool that adds a ~git tag~ to this workflow, which is something I always forget to do.
-
-#+begin_src zsh
-hkgr disttag
-hkgr upload
+#+begin_src sh
 hkgr publish
 #+end_src
 
+This uploads to hackage.
+
 Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
 
-#+begin_src zsh
+#+begin_src sh
   cabal haddock --builddir=docs --haddock-for-hackage --enable-doc
   cabal upload -d --publish docs/*-docs.tar.gz
 #+end_src
@@ -924,7 +890,7 @@ Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your ow
 
 Finally, this recipe can be used to push the newly minted package to github. Use with caution!
 
-#+begin_src zsh results: output
+#+begin_src sh results: output
 cd foo
 git init
 git add .gitignore
@@ -942,13 +908,13 @@ git push origin main --force
 
 *** decolonialisation
 
-#+begin_src zsh
+#+begin_src sh
 git branch -m master main && git push -u origin main && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
 #+end_src
 
 Change the default branch on GitHub to main (as all branches are still not equal, right?). See [[https://docs.github.com/en/github/administering-a-repository/setting-the-default-branch][setting a default branch]].
 
-#+begin_src zsh
+#+begin_src sh
 git push origin --delete master
 #+end_src
 
@@ -973,7 +939,7 @@ putStrLn "ok"
 #+RESULTS:
 : > > ok
 
-A code block with multiple lines that doesn't return any output emits a benign warning: ~org-babel-script-escape expects a string~
+A code block that doesn't return any output emits a benign warning: ~org-babel-script-escape expects a string~
 
 ** single session
 
@@ -1000,33 +966,9 @@ x
 :
 : [0,1,2,3,4]
 
-There are also many other options buried in old docs, such as ~:post org-babel-haskell-formatter(*this*)~
-
-#+begin_src haskell :post org-babel-haskell-formatter(*this*)
-x = [0..4]
-x
-#+end_src
-
-#+RESULTS:
-: (0 1 2 3 4)
-
 ** multi-line
 
 Multi-line code blocks need ~:{~ ~:}~ wrappers.
-
-#+begin_src haskell
-:{
-t1 :: Bool -> Int
-t1 z = case z of
-        True -> 1
-        False -> 0
-:}
-
-t1 True
-#+end_src
-
-#+RESULTS:
-: > 1
 
 #+begin_src haskell :results output
 :{
@@ -1052,15 +994,6 @@ f z = case z of
         True -> [0..4]
         False -> [1..9]
 #+end_src
-
-#+begin_src haskell
-f False
-#+end_src
-
-#+RESULTS:
-| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-
-** org-babel-script-escape bug
 
 ** formatter
 
