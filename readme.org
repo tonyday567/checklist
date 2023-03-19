@@ -58,10 +58,10 @@ To start from scratch, follow these steps:
   stack new foo checklist
   #+end_src
 
-  Current defaults are ghc-8.10.4, lts-18.6 and Lib as the library name, but they are easily changed using stack, eg
+  Current defaults are ghc-9.2.7, lts-20.15 and Lib as the library name, but they are easily changed using stack, eg
 
   #+begin_src zsh
-  stack new foo checklist -p "ghc-version:9.4.4" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
+  stack new foo checklist -p "ghc-version:9.2.7" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
   #+end_src
 4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
 5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
@@ -382,7 +382,7 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.4.4{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.2.7{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
@@ -527,7 +527,8 @@ main =
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE stack.yaml #-}
-resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-18.23{{/resolver}}
+resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-20.15{{/resolver}}
+
 
 packages:
   - .
@@ -606,13 +607,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ** action
 
-Note that github/actions use double curly brackets, and the usual mustache delimiters are easily modified to adjust to this.
+The double curly brackets conflict with the mustache delimiters, and inclusion of this file breaks stack new.
 
 [[https://docs.github.com/en/actions][GitHub Actions Documentation - GitHub Docs]]
 
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE .github/workflows/Haskell-CI.yml #-}
-{{=>> <<=}}
+Copy this block to .github/workflows/haskell-ci.yml to boot up github actions for the project.
+
+#+begin_src org :tangle no
 on: [push]
 name: haskell-ci
 jobs:
@@ -620,68 +621,45 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        ghc: ['8.8.4', '8.10.7', '9.2.2']
+        ghc: ['8.10.7', '9.2.7', '9.4.4']
         os: [ubuntu-latest]
-        manager: ['cabal']
-        docspec: [false]
+        manager: ['cabal', 'stack']
         experimental: [false]
         include:
           - os: windows-latest
-            ghc: '8.10.7'
+            ghc: '9.4.3'
             experimental: true
             manager: 'cabal'
           - os: macOS-latest
-            ghc: '8.10.7'
+            ghc: '9.2.7'
             experimental: true
             manager: 'cabal'
           - os: ubuntu-latest
-            ghc: '8.10.7'
+            ghc: '9.2.7'
             experimental: true
             manager: 'stack'
-          - os: ubuntu-latest
-            ghc: '8.10.7'
-            experimental: true
-            manager: 'cabal'
-            docspec: true
     continue-on-error: true
     name: ghc ${{ matrix.ghc }} ${{ matrix.os }} ${{ matrix.manager }}
     steps:
-      - name: clone project
-        uses: actions/checkout@v2
-      - name: setup stanza
-        uses: haskell/actions/setup@v1
+      - uses: actions/checkout@v3
+      - uses: haskell/actions/setup@v2
         with:
           ghc-version: ${{ matrix.ghc }}
           enable-stack: ${{ matrix.manager == 'stack' }}
-          stack-version: 'latest'
-      - name: cabal cache
-        if: (matrix.manager == 'cabal')
-        uses: actions/cache@v2
+      - if: (matrix.manager == 'cabal')
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
           path: ~/.cabal/store
           restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
-      - if: matrix.docspec
-        name: install cabal-docspec
-        run: |
-          mkdir -p $HOME/.cabal/bin
-          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
-          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20210111/cabal-docspec-0.0.0.20210111.xz > cabal-docspec.xz
-          echo '0829bd034fba901cbcfe491d98ed8b28fd54f9cb5c91fa8e1ac62dc4413c9562  cabal-docspec.xz' | sha256sum -c -
-          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
-          rm -f cabal-docspec.xz
-          chmod a+x $HOME/.cabal/bin/cabal-docspec
-          $HOME/.cabal/bin/cabal-docspec --version
       - name: cabal build
-        if: (matrix.manager == 'cabal')
         run: |
           cabal update
           cabal configure --enable-tests
           cabal build
           cabal test
-      - name: stack cache
-        if: (matrix.manager == 'stack')
-        uses: actions/cache@v1
+      - if: (matrix.manager == 'stack')
+        uses: actions/cache@v3
         with:
           path: ~/.stack
           key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
@@ -691,13 +669,7 @@ jobs:
         run: |
           stack update
           stack build --test --no-install-ghc --system-ghc
-      - if: matrix.docspec
-        name: run cabal-docspec
-        run: cabal-docspec
-    >>={{ }}=<<
-    #+end_src
-
-If you would like to go full heavy-metal, such as include hlint and cabal-docspecs, haskell-ci is a very good tool, though it doesn't (yet) support stack or windows CI.
+#+end_src
 
 * Checklist
 :PROPERTIES:
