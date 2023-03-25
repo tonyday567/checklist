@@ -777,17 +777,15 @@ Same compilation as above using stack.
 
   #+RESULTS:
 
-*** build linting
+** Analysis
+
+*** dependencies
 
 Check for unused dependencies
 
 #+begin_src sh
 cabal build --ghc-options=-Wunused-packages
 #+end_src
-
-** Analysis
-
-*** dependencies
 
 Get suggestions for better upper bounds:
 
