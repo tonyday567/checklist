@@ -46,11 +46,11 @@ putStrLn x
 #+end_src
 
 {-# START_FILE {{name}}.cabal #-}
-cabal-version: 2.4
+cabal-version: 3.4
 name:          {{name}}
-version:       0.0.1
-synopsis: See readme.md
-description: See readme.md for description.
+version:       0.0.0.1
+synopsis: See readme
+description: See readme for description.
 category: project
 author: {{author-name}}{{^author-name}}Author name here{{/author-name}}
 maintainer: {{author-email}}
@@ -59,16 +59,70 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.4.4{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.6.2{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
 
-common common-options
-  build-depends:
-    base >=4.7 && <5
-  default-language:
-    Haskell2010
+common ghc2021-stanza
+  if impl(ghc >=9.2)
+    default-language:
+      GHC2021
+  if impl(ghc <9.2)
+    default-language:
+      Haskell2010
+    default-extensions:
+      BangPatterns
+      BinaryLiterals
+      ConstrainedClassMethods
+      ConstraintKinds
+      DeriveDataTypeable
+      DeriveFoldable
+      DeriveFunctor
+      DeriveGeneric
+      DeriveLift
+      DeriveTraversable
+      DoAndIfThenElse
+      EmptyCase
+      EmptyDataDecls
+      EmptyDataDeriving
+      ExistentialQuantification
+      ExplicitForAll
+      FlexibleContexts
+      FlexibleInstances
+      ForeignFunctionInterface
+      GADTSyntax
+      GeneralisedNewtypeDeriving
+      HexFloatLiterals
+      ImplicitPrelude
+      InstanceSigs
+      KindSignatures
+      MonomorphismRestriction
+      MultiParamTypeClasses
+      NamedFieldPuns
+      NamedWildCards
+      NumericUnderscores
+      PatternGuards
+      PolyKinds
+      PostfixOperators
+      RankNTypes
+      RelaxedPolyRec
+      ScopedTypeVariables
+      StandaloneDeriving
+      StarIsType
+      TraditionalRecordSyntax
+      TupleSections
+      TypeApplications
+      TypeOperators
+      TypeSynonymInstances
+  if impl(ghc <9.2) && impl(ghc >=8.10)
+    default-extensions:
+      ImportQualifiedPost
+      StandaloneKindSignatures
+  -- but keeping ormolu happy
+  if impl(ghc >=8.10)
+    default-extensions:
+      NoImportQualifiedPost
 
 common ghc-options-stanza
   ghc-options:
@@ -77,36 +131,37 @@ common ghc-options-stanza
     -Wincomplete-record-updates
     -Wincomplete-uni-patterns
     -Wredundant-constraints
-    -fwrite-ide-info
-    -hiedir=.hie
 
 library
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   hs-source-dirs:
     src
   default-extensions:
   build-depends:
+    base >= 4.7 && <5,
   exposed-modules:
     {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
 
 executable {{name}}
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   main-is: app.hs
   hs-source-dirs: app
   build-depends:
+    base >= 4.7 && <5,
     {{name}},
 
 test-suite test
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   type: exitcode-stdio-1.0
   main-is: test.hs
   hs-source-dirs:
     test
   build-depends:
-    doctest >= 0.15 && < 0.19,
+    base >= 4.7 && <5,
+    doctest >= 0.15 && < 0.23,
     {{name}}
 
 {-# START_FILE cabal.project #-}
@@ -115,7 +170,6 @@ packages: {{name}}.cabal
 -- allow-newer: true
 
 {-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
@@ -126,7 +180,6 @@ where
 import Prelude
 
 {-# START_FILE app/app.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
@@ -142,7 +195,6 @@ main :: IO ()
 main = pure ()
 
 {-# START_FILE test/test.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module Main where
@@ -153,12 +205,11 @@ import Prelude
 main :: IO ()
 main =
   doctest
-    [ "src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs",
-      "app/app.hs"
+    [ "app/app.hs"
     ]
 
 {-# START_FILE stack.yaml #-}
-resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-18.23{{/resolver}}
+resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-21.3{{/resolver}}
 
 packages:
   - .
@@ -179,7 +230,7 @@ other/* linguist-documentation
 {-# START_FILE .projectile #-}
 
 {-# START_FILE LICENSE #-}
-Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2021{{/year}}
+Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2023{{/year}}
 
 All rights reserved.
 
@@ -209,88 +260,3 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-{-# START_FILE .github/workflows/Haskell-CI.yml #-}
-{{=>> <<=}}
-on: [push]
-name: haskell-ci
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        ghc: ['8.8.4', '8.10.7', '9.2.2']
-        os: [ubuntu-latest]
-        manager: ['cabal']
-        docspec: [false]
-        experimental: [false]
-        include:
-          - os: windows-latest
-            ghc: '8.10.7'
-            experimental: true
-            manager: 'cabal'
-          - os: macOS-latest
-            ghc: '8.10.7'
-            experimental: true
-            manager: 'cabal'
-          - os: ubuntu-latest
-            ghc: '8.10.7'
-            experimental: true
-            manager: 'stack'
-          - os: ubuntu-latest
-            ghc: '8.10.7'
-            experimental: true
-            manager: 'cabal'
-            docspec: true
-    continue-on-error: true
-    name: ghc ${{ matrix.ghc }} ${{ matrix.os }} ${{ matrix.manager }}
-    steps:
-      - name: clone project
-        uses: actions/checkout@v2
-      - name: setup stanza
-        uses: haskell/actions/setup@v1
-        with:
-          ghc-version: ${{ matrix.ghc }}
-          enable-stack: ${{ matrix.manager == 'stack' }}
-          stack-version: 'latest'
-      - name: cabal cache
-        if: (matrix.manager == 'cabal')
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
-          path: ~/.cabal/store
-          restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
-      - if: matrix.docspec
-        name: install cabal-docspec
-        run: |
-          mkdir -p $HOME/.cabal/bin
-          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
-          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20210111/cabal-docspec-0.0.0.20210111.xz > cabal-docspec.xz
-          echo '0829bd034fba901cbcfe491d98ed8b28fd54f9cb5c91fa8e1ac62dc4413c9562  cabal-docspec.xz' | sha256sum -c -
-          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
-          rm -f cabal-docspec.xz
-          chmod a+x $HOME/.cabal/bin/cabal-docspec
-          $HOME/.cabal/bin/cabal-docspec --version
-      - name: cabal build
-        if: (matrix.manager == 'cabal')
-        run: |
-          cabal update
-          cabal configure --enable-tests
-          cabal build
-          cabal test
-      - name: stack cache
-        if: (matrix.manager == 'stack')
-        uses: actions/cache@v1
-        with:
-          path: ~/.stack
-          key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
-          restore-keys: ${{ runner.os }}-
-      - name: stack build
-        if: (matrix.manager == 'stack')
-        run: |
-          stack update
-          stack build --test --no-install-ghc --system-ghc
-      - if: matrix.docspec
-        name: run cabal-docspec
-        run: cabal-docspec
-    >>={{ }}=<<

@@ -58,10 +58,10 @@ To start from scratch, follow these steps:
   stack new foo checklist
   #+end_src
 
-  Current defaults are ghc-9.2.7, lts-20.15 and Lib as the library name, but they are easily changed using stack, eg
+  Current defaults are ghc-9.6.2, nightly and Lib as the library name, but they are easily changed using stack, eg
 
   #+begin_src zsh
-  stack new foo checklist -p "ghc-version:9.2.7" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
+  stack new foo checklist -p "ghc-version:9.6.2" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
   #+end_src
 4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
 5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
@@ -92,22 +92,22 @@ cabal --version
 #+end_src
 
 #+RESULTS:
-: cabal-install version 3.4.0.0
-: compiled using version 3.4.0.0 of the Cabal library
+: cabal-install version 3.10.1.0
+: compiled using version 3.10.1.0 of the Cabal library
 
 #+begin_src sh :results output :exports both
 ghc --version
 #+end_src
 
 #+RESULTS:
-: The Glorious Glasgow Haskell Compilation System, version 8.10.4
+: The Glorious Glasgow Haskell Compilation System, version 9.6.2
 
 #+begin_src sh :results output :exports both
 stack --version
 #+end_src
 
 #+RESULTS:
-: Version 2.7.3, Git revision 7927a3aec32e2b2e5e4fb5be76d0d50eddcc197f x86_64 hpack-0.34.4
+: Version 2.11.1, Git revision c1167a6abc3f4978ccded5ba0246a57387da0e2f x86_64 hpack-0.35.2
 
 Note that haskell-language-server versions matching older GHC versions are also installed, and selected automatically.
 
@@ -116,7 +116,7 @@ haskell-language-server-wrapper --version
 #+end_src
 
 #+RESULTS:
-: haskell-language-server version: 1.9.0.0 (GHC: 9.4.4) (PATH: /Users/tonyday/.ghcup/hls/1.9.0.0/lib/haskell-language-server-1.9.0.0/bin/haskell-language-server-wrapper)
+: haskell-language-server version: 2.0.0.1 (GHC: 8.10.7) (PATH: /Users/tonyday/.ghcup/hls/2.0.0.1/lib/haskell-language-server-2.0.0.1/bin/haskell-language-server-wrapper)
 
 And all of this is packaged up by ghcup, eg
 
@@ -126,70 +126,79 @@ ghcup list
 
 #+RESULTS:
 #+begin_example
-   Tool  Version  Tags                      Notes
-✗  ghc   7.10.3   base-4.8.2.0
-✗  ghc   8.0.2    base-4.9.1.0
-✗  ghc   8.2.2    base-4.10.1.0
-✗  ghc   8.4.1    base-4.11.0.0
-✗  ghc   8.4.2    base-4.11.1.0
-✗  ghc   8.4.3    base-4.11.1.0
-✗  ghc   8.4.4    base-4.11.1.0
-✗  ghc   8.6.1    base-4.12.0.0
-✗  ghc   8.6.2    base-4.12.0.0
-✗  ghc   8.6.3    base-4.12.0.0
-✗  ghc   8.6.4    base-4.12.0.0
-✗  ghc   8.6.5    base-4.12.0.0
-✗  ghc   8.8.1    base-4.13.0.0
-✗  ghc   8.8.2    base-4.13.0.0
-✗  ghc   8.8.3    base-4.13.0.0
-✗  ghc   8.8.4    base-4.13.0.0
-✗  ghc   8.10.1   base-4.14.0.0
-✗  ghc   8.10.2   base-4.14.1.0
-✗  ghc   8.10.3   base-4.14.1.0
-✗  ghc   8.10.4   base-4.14.1.0
-✗  ghc   8.10.5   base-4.14.2.0
-✗  ghc   8.10.6   base-4.14.3.0
-✗  ghc   8.10.7   base-4.14.3.0             hls-powered
-✗  ghc   9.0.1    base-4.15.0.0
+   Tool  Version  Tags                      Notes      
+✗  ghc   7.10.3   base-4.8.2.0                         
+✗  ghc   8.0.2    base-4.9.1.0                         
+✗  ghc   8.2.2    base-4.10.1.0                        
+✗  ghc   8.4.1    base-4.11.0.0                        
+✗  ghc   8.4.2    base-4.11.1.0                        
+✗  ghc   8.4.3    base-4.11.1.0                        
+✗  ghc   8.4.4    base-4.11.1.0                        
+✗  ghc   8.6.1    base-4.12.0.0                        
+✗  ghc   8.6.2    base-4.12.0.0                        
+✗  ghc   8.6.3    base-4.12.0.0                        
+✗  ghc   8.6.4    base-4.12.0.0                        
+✗  ghc   8.6.5    base-4.12.0.0                        
+✗  ghc   8.8.1    base-4.13.0.0                        
+✗  ghc   8.8.2    base-4.13.0.0                        
+✗  ghc   8.8.3    base-4.13.0.0                        
+✗  ghc   8.8.4    base-4.13.0.0                        
+✗  ghc   8.10.1   base-4.14.0.0                        
+✗  ghc   8.10.2   base-4.14.1.0                        
+✗  ghc   8.10.3   base-4.14.1.0                        
+✗  ghc   8.10.4   base-4.14.1.0                        
+✗  ghc   8.10.5   base-4.14.2.0                        
+✗  ghc   8.10.6   base-4.14.3.0                        
+✓  ghc   8.10.7   base-4.14.3.0             hls-powered
+✗  ghc   9.0.1    base-4.15.0.0                        
 ✗  ghc   9.0.2    base-4.15.1.0             hls-powered
-✗  ghc   9.2.1    base-4.16.0.0
-✗  ghc   9.2.2    base-4.16.1.0
-✗  ghc   9.2.3    base-4.16.2.0
-✗  ghc   9.2.4    base-4.16.3.0
-✔✔ ghc   9.2.5    recommended,base-4.16.4.0 hls-powered
-✗  ghc   9.2.6    base-4.16.4.0
-✓  ghc   9.2.7    base-4.16.4.0
-✗  ghc   9.4.1    base-4.17.0.0
-✗  ghc   9.4.2    base-4.17.0.0
-✗  ghc   9.4.3    base-4.17.0.0             hls-powered
-✗  ghc   9.4.4    latest,base-4.17.0.0      hls-powered
-✗  cabal 2.4.1.0
-✗  cabal 3.0.0.0
-✗  cabal 3.2.0.0
-✗  cabal 3.4.0.0
-✗  cabal 3.4.1.0
-✗  cabal 3.6.0.0
-✔✔ cabal 3.6.2.0  recommended
-✗  cabal 3.8.1.0  latest
-✗  hls   1.1.0
-✗  hls   1.2.0
-✗  hls   1.3.0
-✗  hls   1.4.0
-✗  hls   1.5.0
-✗  hls   1.5.1
-✗  hls   1.6.0.0
-✗  hls   1.6.1.0
-✗  hls   1.7.0.0
-✗  hls   1.8.0.0
-✔✔ hls   1.9.0.0  recommended
-✗  hls   1.9.1.0  latest
-✗  stack 2.5.1
-✗  stack 2.7.1
-✗  stack 2.7.3
-✗  stack 2.7.5
-✗  stack 2.9.1
-✓  stack 2.9.3    latest,recommended
-✔✔ ghcup 0.1.19.2 latest,recommended
+✗  ghc   9.2.1    base-4.16.0.0                        
+✗  ghc   9.2.2    base-4.16.1.0                        
+✗  ghc   9.2.3    base-4.16.2.0                        
+✗  ghc   9.2.4    base-4.16.3.0                        
+✓  ghc   9.2.5    base-4.16.4.0                        
+✗  ghc   9.2.6    base-4.16.4.0                        
+✓  ghc   9.2.7    base-4.16.4.0             hls-powered
+✓  ghc   9.2.8    recommended,base-4.16.4.0 hls-powered
+✗  ghc   9.4.1    base-4.17.0.0                        
+✗  ghc   9.4.2    base-4.17.0.0                        
+✗  ghc   9.4.3    base-4.17.0.0                        
+✓  ghc   9.4.4    base-4.17.0.0                        
+✓  ghc   9.4.5    base-4.17.1.0             hls-powered
+✓  ghc   9.6.1    base-4.18.0.0                        
+✔✔ ghc   9.6.2    latest,base-4.18.0.0      hls-powered
+✗  cabal 2.4.1.0                                       
+✗  cabal 3.0.0.0                                       
+✗  cabal 3.2.0.0                                       
+✗  cabal 3.4.0.0                                       
+✗  cabal 3.4.1.0                                       
+✗  cabal 3.6.0.0                                       
+✓  cabal 3.6.2.0  recommended                          
+✓  cabal 3.8.1.0                                       
+✔✔ cabal 3.10.1.0 latest                               
+✗  hls   1.1.0                                         
+✗  hls   1.2.0                                         
+✗  hls   1.3.0                                         
+✗  hls   1.4.0                                         
+✗  hls   1.5.0                                         
+✗  hls   1.5.1                                         
+✗  hls   1.6.0.0                                       
+✗  hls   1.6.1.0                                       
+✗  hls   1.7.0.0                                       
+✗  hls   1.8.0.0                                       
+✓  hls   1.9.0.0                                       
+✓  hls   1.9.1.0                                       
+✓  hls   1.10.0.0                                      
+✗  hls   2.0.0.0                                       
+✔✔ hls   2.0.0.1  latest,recommended                   
+✗  stack 2.5.1                                         
+✗  stack 2.7.1                                         
+✗  stack 2.7.3                              2022-02-02 
+✓  stack 2.7.5                                         
+✗  stack 2.9.1                                         
+✓  stack 2.9.3    recommended                          
+✔✔ stack 2.11.1   latest                               
+✔✔ ghcup 0.1.19.4 latest,recommended                   
 #+end_example
 
 ** installing tools
@@ -215,12 +224,13 @@ which hlint
 
 ** Haskell CI
 
-GitHub actions is the current and common practice for continuous integration of projects. The [[https://github.com/haskell/actions/tree/main/setup#readme][haskell/action]] repo is the best place to find useful explanations.
+GitHub actions is the current and common practice for continuous integration of projects. The current checklist CI includes actions from:
 
-Examples of non-trivial actions:
-- [[https://github.com/haskell/haskell-language-server/tree/master/.github/workflows][haskell-language-server]]
-- [[https://github.com/agda/agda/tree/master/.github/workflows][agda]]
-- [[https://github.com/haskell/cabal/tree/master/.github/workflows][cabal]]
+- [[https://github.com/haskell/actions/tree/main/setup#readme][haskell/action]]
+
+- [[https://github.com/haskell-actions/][haskell-actions]]
+
+- [[https://github.com/freckle/stack-action][freckle/stack-action]]
 
 ** cabal-docspec
 
@@ -325,7 +335,7 @@ import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib
 
 ** readme.org
 
-an alterative readme.
+an alternative readme.
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE readme.org #-}
@@ -369,11 +379,11 @@ putStrLn x
 
 #+begin_src org
 {-# START_FILE {{name}}.cabal #-}
-cabal-version: 2.4
+cabal-version: 3.4
 name:          {{name}}
-version:       0.0.1
-synopsis: See readme.md
-description: See readme.md for description.
+version:       0.0.0.1
+synopsis: See readme
+description: See readme for description.
 category: project
 author: {{author-name}}{{^author-name}}Author name here{{/author-name}}
 maintainer: {{author-email}}
@@ -382,7 +392,7 @@ license: BSD-3-Clause
 homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
 bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
 build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.2.7{{/ghc-version}}
+tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.6.2{{/ghc-version}}
 source-repository head
   type: git
   location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
@@ -393,11 +403,65 @@ source-repository head
 ~vrom911~ has a good [[https://vrom911.github.io/blog/common-stanzas][introduction]] to common stanzas.
 
 #+begin_src org :tangle checklist.hsfiles
-common common-options
-  build-depends:
-    base >=4.7 && <5
-  default-language:
-    Haskell2010
+common ghc2021-stanza
+  if impl(ghc >=9.2)
+    default-language:
+      GHC2021
+  if impl(ghc <9.2)
+    default-language:
+      Haskell2010
+    default-extensions:
+      BangPatterns
+      BinaryLiterals
+      ConstrainedClassMethods
+      ConstraintKinds
+      DeriveDataTypeable
+      DeriveFoldable
+      DeriveFunctor
+      DeriveGeneric
+      DeriveLift
+      DeriveTraversable
+      DoAndIfThenElse
+      EmptyCase
+      EmptyDataDecls
+      EmptyDataDeriving
+      ExistentialQuantification
+      ExplicitForAll
+      FlexibleContexts
+      FlexibleInstances
+      ForeignFunctionInterface
+      GADTSyntax
+      GeneralisedNewtypeDeriving
+      HexFloatLiterals
+      ImplicitPrelude
+      InstanceSigs
+      KindSignatures
+      MonomorphismRestriction
+      MultiParamTypeClasses
+      NamedFieldPuns
+      NamedWildCards
+      NumericUnderscores
+      PatternGuards
+      PolyKinds
+      PostfixOperators
+      RankNTypes
+      RelaxedPolyRec
+      ScopedTypeVariables
+      StandaloneDeriving
+      StarIsType
+      TraditionalRecordSyntax
+      TupleSections
+      TypeApplications
+      TypeOperators
+      TypeSynonymInstances
+  if impl(ghc <9.2) && impl(ghc >=8.10)
+    default-extensions:
+      ImportQualifiedPost
+      StandaloneKindSignatures
+  -- but keeping ormolu happy
+  if impl(ghc >=8.10)
+    default-extensions:
+      NoImportQualifiedPost
 
 common ghc-options-stanza
   ghc-options:
@@ -406,20 +470,19 @@ common ghc-options-stanza
     -Wincomplete-record-updates
     -Wincomplete-uni-patterns
     -Wredundant-constraints
-    -fwrite-ide-info
-    -hiedir=.hie
 #+end_src
 
 *** library stanza
 
 #+begin_src org :tangle checklist.hsfiles
 library
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   hs-source-dirs:
     src
   default-extensions:
   build-depends:
+    base >= 4.7 && <5,
   exposed-modules:
     {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
 #+end_src
@@ -428,11 +491,12 @@ library
 
 #+begin_src org :tangle checklist.hsfiles
 executable {{name}}
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   main-is: app.hs
   hs-source-dirs: app
   build-depends:
+    base >= 4.7 && <5,
     {{name}},
 #+end_src
 
@@ -442,14 +506,15 @@ I've left this test stanza in for completeness, but I'm tending to drop it altog
 
 #+begin_src org :tangle checklist.hsfiles
 test-suite test
-  import: common-options
+  import: ghc2021-stanza
   import: ghc-options-stanza
   type: exitcode-stdio-1.0
   main-is: test.hs
   hs-source-dirs:
     test
   build-depends:
-    doctest >= 0.15 && < 0.19,
+    base >= 4.7 && <5,
+    doctest >= 0.15 && < 0.23,
     {{name}}
 #+end_src
 
@@ -457,7 +522,7 @@ test-suite test
 
 I'm currently uncertain whether cabal.project should form part of the GitHub repo, as it doesn't form part of a Hackage distribution.
 
-It does, however, form a place for things that might be needed down the track. ~allow-newer~ should be turned off before you get to uploading to haddock. GHC environment files are becoming pretty important.
+It does, however, form a place for things that might be needed down the track. ~allow-newer~ should be turned off before you get to uploading to hackage.
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE cabal.project #-}
@@ -470,7 +535,6 @@ packages: {{name}}.cabal
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
@@ -485,7 +549,6 @@ import Prelude
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE app/app.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
@@ -507,7 +570,6 @@ Calling the file {{name}}.hs doesn't seem to work well, here, with the Name beco
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE test/test.hs #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module Main where
@@ -518,8 +580,7 @@ import Prelude
 main :: IO ()
 main =
   doctest
-    [ "src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs",
-      "app/app.hs"
+    [ "app/app.hs"
     ]
 #+end_src
 
@@ -527,8 +588,7 @@ main =
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE stack.yaml #-}
-resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-20.15{{/resolver}}
-
+resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-21.3{{/resolver}}
 
 packages:
   - .
@@ -573,7 +633,7 @@ Hard-coded BSD3.
 
 #+begin_src org :tangle checklist.hsfiles
 {-# START_FILE LICENSE #-}
-Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2021{{/year}}
+Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2023{{/year}}
 
 All rights reserved.
 
@@ -617,58 +677,113 @@ Copy this block to .github/workflows/haskell-ci.yml to boot up github actions fo
 on: [push]
 name: haskell-ci
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        ghc: ['8.10.7', '9.2.7', '9.4.4']
-        os: [ubuntu-latest]
-        manager: ['cabal', 'stack']
-        experimental: [false]
-        include:
-          - os: windows-latest
-            ghc: '9.4.3'
-            experimental: true
-            manager: 'cabal'
-          - os: macOS-latest
-            ghc: '9.2.7'
-            experimental: true
-            manager: 'cabal'
-          - os: ubuntu-latest
-            ghc: '9.2.7'
-            experimental: true
-            manager: 'stack'
-    continue-on-error: true
-    name: ghc ${{ matrix.ghc }} ${{ matrix.os }} ${{ matrix.manager }}
+  hlint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: haskell/actions/hlint-setup@v2
+    - uses: haskell/actions/hlint-run@v2
+      with:
+        path: .
+        fail-on: warning
+  ormolu:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: haskell/actions/setup@v2
+      - uses: haskell-actions/run-ormolu@v11
+  stack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: freckle/stack-action@v4
+  cabal:
+    name: GHC ${{ matrix.ghc-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        ghc-version: ['9.6', '9.4', '9.2', '9.0', '8.10', '8.8', '8.6']
+        docspec: [false]
+        experimental: [false]
+
+        include:
+          - os: windows-latest
+            ghc-version: '9.6'
+          - os: macos-latest
+            ghc-version: '9.6'
+          - os: ubuntu-latest
+            ghc-version: '9.6'
+            docspec: true
+            experimental: true
+            name: docspec
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up GHC ${{ matrix.ghc-version }}
+        uses: haskell/actions/setup@v2
+        id: setup
         with:
-          ghc-version: ${{ matrix.ghc }}
-          enable-stack: ${{ matrix.manager == 'stack' }}
-      - if: (matrix.manager == 'cabal')
-        uses: actions/cache@v3
-        with:
-          key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
-          path: ~/.cabal/store
-          restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
-      - name: cabal build
+          ghc-version: ${{ matrix.ghc-version }}
+
+      - name: Installed minor versions of GHC and Cabal
+        shell: bash
         run: |
-          cabal update
-          cabal configure --enable-tests
-          cabal build
-          cabal test
-      - if: (matrix.manager == 'stack')
-        uses: actions/cache@v3
-        with:
-          path: ~/.stack
-          key: ${{ runner.os }}-${{ hashFiles('stack.yaml') }}
-          restore-keys: ${{ runner.os }}-
-      - name: stack build
-        if: (matrix.manager == 'stack')
+          GHC_VERSION=$(ghc --numeric-version)
+          CABAL_VERSION=$(cabal --numeric-version)
+          echo "GHC_VERSION=${GHC_VERSION}"     >> "${GITHUB_ENV}"
+          echo "CABAL_VERSION=${CABAL_VERSION}" >> "${GITHUB_ENV}"
+
+      - name: Configure the build
         run: |
-          stack update
-          stack build --test --no-install-ghc --system-ghc
+          cabal configure --enable-tests --enable-benchmarks --disable-documentation
+          cabal build --dry-run
+        # The last step generates dist-newstyle/cache/plan.json for the cache key.
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-plan-${{ hashFiles('**/plan.json') }}
+          restore-keys: |
+            ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-
+
+      - name: Install dependencies
+        run: cabal build all --only-dependencies
+
+      # Cache dependencies already here, so that we do not have to rebuild them should the subsequent steps fail.
+      - name: Save cached dependencies
+        uses: actions/cache/save@v3
+        # Caches are immutable, trying to save with the same key would error.
+        if: ${{ !steps.cache.outputs.cache-hit
+          || steps.cache.outputs.cache-primary-key != steps.cache.outputs.cache-matched-key }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Build
+        run: cabal build all
+
+      - name: Run tests
+        run: cabal test all
+
+      - name: Check cabal file
+        run: cabal check
+
+      - if: matrix.docspec
+        name: cabal-docspec
+        run: |
+          mkdir -p $HOME/.cabal/bin
+          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
+          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20230406/cabal-docspec-0.0.0.20230406-x86_64-linux.xz > cabal-docspec.xz
+          echo '68fa9addd5dc453d533a74a763950499d4593b1297c9a05c3ea5bd1acc04c9dd cabal-docspec.xz' | sha256sum -c -
+          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
+          rm -f cabal-docspec.xz
+          chmod a+x $HOME/.cabal/bin/cabal-docspec
+          $HOME/.cabal/bin/cabal-docspec --version
+          cabal-docspec --check-properties
 #+end_src
 
 * Checklist
@@ -876,18 +991,6 @@ git push origin main --force
 : On branch main
 : nothing to commit, working tree clean
 
-*** decolonialisation
-
-#+begin_src sh
-git branch -m master main && git push -u origin main && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
-#+end_src
-
-Change the default branch on GitHub to main (as all branches are still not equal, right?). See [[https://docs.github.com/en/github/administering-a-repository/setting-the-default-branch][setting a default branch]].
-
-#+begin_src sh
-git push origin --delete master
-#+end_src
-
 * Org-mode & Haskell
 ** setup
 
@@ -963,29 +1066,6 @@ f :: Bool -> Int
 f z = case z of
         True -> [0..4]
         False -> [1..9]
-#+end_src
-
-** formatter
-
-Post-computation formatting is possible, but be prepared for documentation archeology.
-
-#+RESULTS:
-: (0 1 2 3 4)
-
-#+name: org-babel-haskell-formatter
-    #+begin_src emacs-lisp :var strr="" :exports code
-      (format "%s"
-              (replace-regexp-in-string
-               (rx line-start
-                   (+ (| alphanumeric blank "." "|" ">")))
-               "" (format "%s" strr)))
-    #+end_src
-
-    #+RESULTS: org-babel-haskell-formatter
-
-#+begin_src haskell :post org-babel-haskell-formatter(*this*)
-x = [0..4]
-x
 #+end_src
 
 ** embedding inline svg
