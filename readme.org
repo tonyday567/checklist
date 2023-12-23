@@ -1,80 +1,54 @@
 #+TITLE: [c]hecklist
 #+OPTIONS: H:2 TOC:1 view:showall
 
-A Haskell [c]hecklist. For starting off projects, starting over, or tidying up.
+A Haskell [c]hecklist. For starting off, rebooting, or just tidying things up.
+
+* Changes
+
+The initial Haskell [c]hecklist was released around ghc-8.10, and, at time of writing, ghc-9.8.1 is in `ghcup list`.
+
+The checklist now concentrates on a cabal-style workflow. I personally no longer use stack and would be concerned that any stack-based advice would become stale. Stack is also, in my opinion, a complete workflow compared with cabal where gaps remain.
+
+The use of templates has been abandoned in favour of `cabal new`, with advice and snippets around additions.
+
+The combination of emacs org-mode and Haskell development has progressed, and for even more bespokity, I have switched to haskell-ng.
+
+Developments surrounding cabal are in a state of flux, and, until stability, I use cabal-fix for my cabal file needs.
 
 * Quick Start
 
-Copy checklist.hsfiles to wherever you start a new project and, if you have stack, type:
+To quickly install Haskell, follow the instructions at [[https://www.haskell.org/ghcup/][GHCup]].
 
-#+begin_src zsh
-stack new foo checklist
+To quickly create a new Haskell project, run `cabal init` interactively or:
+
+#+begin_src sh :results output
+mkdir xyzzy
+cd xyzzy
+cabal init --simple --overwrite --libandexe --tests --language=GHC2021 --license=BSD-2-Clause  -p xyzzy
+#+end_src
+
+A quick test of these installations is to compile and test the project using cabal:
+
+#+begin_src sh :results output
+cabal build && cabal install && cabal test
+#+end_src
+
+* Tools
+
+Setup of a modern Haskell environment is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack & the haskell-language-server. ~cabal~ can then be used to install other tools.
+
+** [[https://www.haskell.org/ghcup/][ghcup-managed tools]]
+
+#+begin_src sh :results output
+ghcup list -c set -r
 #+end_src
 
 #+RESULTS:
-
-If you do not have stack, then first type:
-
-#+begin_src zsh
-ghcup install stack
-#+end_src
-
-If you do not have ghcup, then first type:
-
-#+begin_src zsh
-curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-#+end_src
-
-** Features
-
-The newly created project, ~foo~, should:
-
-- Be fully conformant to both the stack and cabal ecosystems, and compile under either approach.
-- Contain infrastructure for an executable, a library and testing.
-- Be correctly set up for haskell-language-server integration.
-- Pass hlint and ormolu checks.
-- Quickly become a GitHub repository, with a nicely badged readme and continuous integration support using GitHub actions.
-- Pass CI tests across linux, osx and windows.
-
-* Deeper dive
-
-This project contains everything needed to bootstrap a new Haskell project or clean an existing one; from setting up a Haskell environment, through creation of a new project, to creating a new GitHub repository with CI support.
-
-These are salad days for the happy Haskell hacker. ~ghcup~ is the single-onboarding parent and insists that its charges play nicely with each other. ~haskell-language-server~ usage is locked in and leveraging lsp development. Checkers like hlint, ormolu and cabal-docspecs can be mixed in and matched as needed. At least in terms of *How we start*, Haskell has found it's groove, balancing the efficiency of a centralised onboarding experience with an ability to adapt to and adopt new ways, means and technologies as they arise.
-
-The template may not, however, contain what you need. For small changes, a direct edit of the hsfiles template with the [[http://mustache.github.io/mustache.5.html][mustache]] manual open is fairly easy. For deeper dives, or if you'd like to contribute bug fixes or develop your own checklist, then keep reading!
-
-* Usage and Overview
-
-This file, =readme.org=, is an org-mode file used to develop the template. It contains the template components but also the commands used to bootstrap a new Haskell environment, and results from the various steps involved in getting together a working Haskell project.
-
-To start from scratch, follow these steps:
-
-1. Set up a Haskell environment following the [[#Haskell-and-Environs][Haskell and Environs]] section. This includes suggestions for Doom emacs but any of the emacs preludes will also be fine.
-2. modify the [[#Templates][Templates]] and run org-babel-tangle ~C-c C-v t~
-3. Place checklist.hsfiles where you want to create the new project and run ~stack new~ eg
-
-  #+begin_src zsh
-  stack new foo checklist
-  #+end_src
-
-  Current defaults are ghc-9.6.2, nightly and Lib as the library name, but they are easily changed using stack, eg
-
-  #+begin_src zsh
-  stack new foo checklist -p "ghc-version:9.6.2" -p "lib-name:Foo" -p "lib-name2:Bar" -p "resolver:nightly-2023-09-03"
-  #+end_src
-4. code, compile and test (perhaps referring to the [[#Checklist][Checklist]] section).
-5. Create a GitHub repository and [[https://www.youtube.com/watch?v=vCadcBR95oU][push it]] (see the [[#GitHub][GitHub]] section for an example workflow).
-
-* Environs
-
-Setup of a modern Haskell environment is straight forward. [[https://www.haskell.org/ghcup/][ghcup]] takes care of ghc, cabal, stack, haskell-language-server and haddock executables. ~cabal~ or ~stack~ can then be used to install other tools.
-
-** [[https://www.haskell.org/ghcup/][ghcup]]
-
-#+begin_src zsh :results output
-  curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-#+end_src
+: ghc 9.8.1 latest,base-4.19.0.0 hls-powered,2023-10-09
+: cabal 3.10.2.0 latest
+: hls 2.5.0.0 latest
+: stack 2.13.1 latest
+: ghcup 0.1.20.0 latest,recommended
 
 =ghcup= places everything in ~/.ghcup/bin
 
@@ -83,131 +57,23 @@ which cabal
 #+end_src
 
 #+RESULTS:
-: /Users/tonyday/.ghcup/bin/cabal
+: /Users/tonyday567/.ghcup/bin/cabal
 
-*** Versioning
 
-#+begin_src sh :results output :exports both
-cabal --version
-#+end_src
-
-#+RESULTS:
-: cabal-install version 3.10.1.0
-: compiled using version 3.10.1.0 of the Cabal library
-
-#+begin_src sh :results output :exports both
-ghc --version
-#+end_src
-
-#+RESULTS:
-: The Glorious Glasgow Haskell Compilation System, version 9.6.2
-
-#+begin_src sh :results output :exports both
-stack --version
-#+end_src
-
-#+RESULTS:
-: Version 2.11.1, Git revision c1167a6abc3f4978ccded5ba0246a57387da0e2f x86_64 hpack-0.35.2
-
-Note that haskell-language-server versions matching older GHC versions are also installed, and selected automatically.
+Haskell-language-server versions matching older GHC versions are also installed, and selected automatically.
 
 #+begin_src sh :results output :exports both
 haskell-language-server-wrapper --version
 #+end_src
 
 #+RESULTS:
-: haskell-language-server version: 2.0.0.1 (GHC: 8.10.7) (PATH: /Users/tonyday/.ghcup/hls/2.0.0.1/lib/haskell-language-server-2.0.0.1/bin/haskell-language-server-wrapper)
-
-And all of this is packaged up by ghcup, eg
-
-#+begin_src sh :results output :text-properties t :exports both
-ghcup list
-#+end_src
-
-#+RESULTS:
-#+begin_example
-   Tool  Version  Tags                      Notes      
-✗  ghc   7.10.3   base-4.8.2.0                         
-✗  ghc   8.0.2    base-4.9.1.0                         
-✗  ghc   8.2.2    base-4.10.1.0                        
-✗  ghc   8.4.1    base-4.11.0.0                        
-✗  ghc   8.4.2    base-4.11.1.0                        
-✗  ghc   8.4.3    base-4.11.1.0                        
-✗  ghc   8.4.4    base-4.11.1.0                        
-✗  ghc   8.6.1    base-4.12.0.0                        
-✗  ghc   8.6.2    base-4.12.0.0                        
-✗  ghc   8.6.3    base-4.12.0.0                        
-✗  ghc   8.6.4    base-4.12.0.0                        
-✗  ghc   8.6.5    base-4.12.0.0                        
-✗  ghc   8.8.1    base-4.13.0.0                        
-✗  ghc   8.8.2    base-4.13.0.0                        
-✗  ghc   8.8.3    base-4.13.0.0                        
-✗  ghc   8.8.4    base-4.13.0.0                        
-✗  ghc   8.10.1   base-4.14.0.0                        
-✗  ghc   8.10.2   base-4.14.1.0                        
-✗  ghc   8.10.3   base-4.14.1.0                        
-✗  ghc   8.10.4   base-4.14.1.0                        
-✗  ghc   8.10.5   base-4.14.2.0                        
-✗  ghc   8.10.6   base-4.14.3.0                        
-✓  ghc   8.10.7   base-4.14.3.0             hls-powered
-✗  ghc   9.0.1    base-4.15.0.0                        
-✗  ghc   9.0.2    base-4.15.1.0             hls-powered
-✗  ghc   9.2.1    base-4.16.0.0                        
-✗  ghc   9.2.2    base-4.16.1.0                        
-✗  ghc   9.2.3    base-4.16.2.0                        
-✗  ghc   9.2.4    base-4.16.3.0                        
-✓  ghc   9.2.5    base-4.16.4.0                        
-✗  ghc   9.2.6    base-4.16.4.0                        
-✓  ghc   9.2.7    base-4.16.4.0             hls-powered
-✓  ghc   9.2.8    recommended,base-4.16.4.0 hls-powered
-✗  ghc   9.4.1    base-4.17.0.0                        
-✗  ghc   9.4.2    base-4.17.0.0                        
-✗  ghc   9.4.3    base-4.17.0.0                        
-✓  ghc   9.4.4    base-4.17.0.0                        
-✓  ghc   9.4.5    base-4.17.1.0             hls-powered
-✓  ghc   9.6.1    base-4.18.0.0                        
-✔✔ ghc   9.6.2    latest,base-4.18.0.0      hls-powered
-✗  cabal 2.4.1.0                                       
-✗  cabal 3.0.0.0                                       
-✗  cabal 3.2.0.0                                       
-✗  cabal 3.4.0.0                                       
-✗  cabal 3.4.1.0                                       
-✗  cabal 3.6.0.0                                       
-✓  cabal 3.6.2.0  recommended                          
-✓  cabal 3.8.1.0                                       
-✔✔ cabal 3.10.1.0 latest                               
-✗  hls   1.1.0                                         
-✗  hls   1.2.0                                         
-✗  hls   1.3.0                                         
-✗  hls   1.4.0                                         
-✗  hls   1.5.0                                         
-✗  hls   1.5.1                                         
-✗  hls   1.6.0.0                                       
-✗  hls   1.6.1.0                                       
-✗  hls   1.7.0.0                                       
-✗  hls   1.8.0.0                                       
-✓  hls   1.9.0.0                                       
-✓  hls   1.9.1.0                                       
-✓  hls   1.10.0.0                                      
-✗  hls   2.0.0.0                                       
-✔✔ hls   2.0.0.1  latest,recommended                   
-✗  stack 2.5.1                                         
-✗  stack 2.7.1                                         
-✗  stack 2.7.3                              2022-02-02 
-✓  stack 2.7.5                                         
-✗  stack 2.9.1                                         
-✓  stack 2.9.3    recommended                          
-✔✔ stack 2.11.1   latest                               
-✔✔ ghcup 0.1.19.4 latest,recommended                   
-#+end_example
+: haskell-language-server version: 2.5.0.0 (GHC: 9.2.8) (PATH: /Users/tonyday567/.ghcup/hls/2.5.0.0/lib/haskell-language-server-2.5.0.0/bin/haskell-language-server-wrapper)
 
 ** installing tools
 
 - [[https://hackage.haskell.org/package/hlint][hlint]]
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
 - [[https://hackage.haskell.org/package/hkgr][hkgr]]
-
-For a deep dive into the cabal ecosystem: [[https://kowainik.github.io/projects/awesome-cabal][awesome-cabal]]
 
 #+begin_src sh
 cabal install ormolu hlint hkgr --allow-newer --overwrite-policy=always
@@ -220,17 +86,11 @@ which hlint
 #+end_src
 
 #+RESULTS:
-: /Users/tonyday/.cabal/bin/hlint
+: /Users/tonyday567/.cabal/bin/hlint
 
 ** Haskell CI
 
-GitHub actions is the current and common practice for continuous integration of projects. The current checklist CI includes actions from:
-
-- [[https://github.com/haskell/actions/tree/main/setup#readme][haskell/action]]
-
-- [[https://github.com/haskell-actions/][haskell-actions]]
-
-- [[https://github.com/freckle/stack-action][freckle/stack-action]]
+GitHub actions are the current and common practice for continuous integration of projects. The current checklist CI uses actions from [[https://github.com/haskell-actions/][haskell-actions]].
 
 ** cabal-docspec
 
@@ -286,37 +146,212 @@ in ~/.config/doom/config.el~, place any personal config preferences. Mine are:
 )
 #+end_src
 
-... and ...
+* checklist
 
-#+begin_src elisp
-(use-package! haskell-snippets
-  :after (haskell-mode yasnippet))
-#+end_src
 
-* Templates
-:PROPERTIES:
-:header-args: :tangle checklist.hsfiles
-:END:
+[[https://hackage.haskell.org/package/mealy]]
+[[https://github.com/tonyday567/mealy]]
 
-I use org-mode to stitch together a .hsfiles for use with the ~stack new~ templating system, which uses the [[http://mustache.github.io/mustache.5.html][Mustache]] specification under the hood. Values such as GitHub-name tend to be picked up in the ~/.stack/config.yaml file.
+- [ ] version check&bump
 
-It looks pretty noisy, but mustache is a simple system eg
+  #+begin_src sh :results output
+  cd ~/haskell/mealy
+  #+end_src
 
-#+begin_example
-{{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
-#+end_example
+  0.4.4.1
+- [ ] ghcup upgrades
 
-Parsing from left to right, if lib-name exists (#), then insert lib-name, if lib-name2 exists (#) then place a ~.~ and then insert lib-name2. If lib-name doesn't exist (^), then insert ~Lib~.
+  #+begin_src sh :results output
+  ghcup list -c set -r
+  #+end_src
 
+  #+RESULTS:
+  : ghc 9.8.1 latest,base-4.19.0.0 hls-powered,2023-10-09
+  : cabal 3.10.2.0 latest
+  : hls 2.5.0.0 latest
+  : stack 2.13.1 latest
+  : ghcup 0.1.20.0 latest,recommended
+- [ ] cabal.project check
+
+  #+begin_src sh :results output
+  cat cabal.project
+  #+end_src
+
+  #+RESULTS:
+  : packages:
+  :   mealy.cabal
+- [ ] upstream publishings
+- [ ] cabal update
+
+  #+begin_src sh :results output
+  cabal update
+  #+end_src
+
+  #+RESULTS:
+  : Downloading the latest package list from hackage.haskell.org
+  : Package list of hackage.haskell.org has been updated.
+  : The index-state is set to 2023-12-19T03:05:53Z.
+  : To revert to previous state run:
+  :     cabal v2-update 'hackage.haskell.org,2023-12-18T22:41:30Z'
+- [ ] cabal outdated
+    #+begin_src sh :results output
+    cabal outdated
+    #+end_src
+
+    #+RESULTS:
+    : Outdated dependencies:
+    : primitive >=0.7.2 && <0.9 (latest: 0.9.0.0)
+- [ ] cabal gen-bounds
+    #+begin_src sh :results output
+    cabal gen-bounds
+    #+end_src
+
+    #+RESULTS:
+    : Resolving dependencies...
+    : Congratulations, all your dependencies have upper bounds!
+- [ ] cabal build --ghc-options=-Wunused-packages
+    #+begin_src sh :results output
+    cabal clean && cabal build --ghc-options=-Wunused-packages
+    #+end_src
+
+    #+RESULTS:
+    : Up to date
+- [ ] cabal-fix
+
+    #+begin_src sh :results output
+    cabal-fix --gen
+    #+end_src
+
+    #+begin_src sh :results output
+    cabal-fix -f ~/haskell/cabal-fix/my-cabal-fix.config
+    #+end_src
+
+    #+RESULTS:
+    : Nothing
+
+    #+begin_src sh :results output
+    cabal-fix -i
+    #+end_src
+
+    #+RESULTS:
+- [ ] cabal build --prefer-oldest
+
+    #+begin_src sh :results output
+    cabal build --prefer-oldest
+    #+end_src
+- [ ] FIXMEs & TODOs
+- [ ] pragma cleanup
+- [ ] cabal-docspec
+
+    #+begin_src sh :results output
+    cabal-docspec
+    #+end_src
+
+    #+RESULTS:
+- [ ] cabal install
+    #+begin_src sh :results output
+    cabal install
+    #+end_src
+- [ ] cabal test
+    #+begin_src sh :results output
+    cabal test
+    #+end_src
+- [ ] cabal bench
+    #+begin_src sh :results output
+    cabal bench
+    #+end_src
+
+    #+RESULTS:
+    #+begin_example
+    Build profile: -w ghc-9.8.1 -O1
+    In order, the following will be built (use -v for more details):
+     - perf-0.12.0.1 (bench:perf-bench) (ephemeral targets)
+    Preprocessing benchmark 'perf-bench' for perf-0.12.0.1..
+    Building benchmark 'perf-bench' for perf-0.12.0.1..
+    [1 of 1] Compiling Main             ( app/bench.hs, /Users/tonyday/haskell/perf/dist-newstyle/build/x86_64-osx/ghc-9.8.1/perf-0.12.0.1/b/perf-bench/build/perf-bench/perf-bench-tmp/Main.o )
+    [1 of 2] Compiling Main             ( app/bench.hs, /Users/tonyday/haskell/perf/dist-newstyle/build/x86_64-osx/ghc-9.8.1/perf-0.12.0.1/b/perf-bench/build/perf-bench/perf-bench-tmp/Main.o )
+    [2 of 2] Linking /Users/tonyday/haskell/perf/dist-newstyle/build/x86_64-osx/ghc-9.8.1/perf-0.12.0.1/b/perf-bench/build/perf-bench/perf-bench [Objects changed]
+    Running 1 benchmarks...
+    Benchmark perf-bench: RUNNING...
+    label1          label2          old result      new result      change
+
+    sum             time            1.38e4          1.85e4          degraded
+    Benchmark perf-bench: ERROR
+    #+end_example
+- [ ] ormolu
+
+  #+begin_src sh :results output
+  ormolu --mode check $(git ls-files '*.hs')
+  #+end_src
+
+  #+RESULTS:
+
+  #+begin_src sh :results output
+  ormolu --mode inplace $(git ls-files '*.hs')
+  #+end_src
+
+  #+RESULTS:
+- [ ] hlint
+  #+begin_src sh :results output
+  hlint .
+  #+end_src
+
+  #+RESULTS:
+  : No hints
+- [ ] CI upgrade
+
+  - check tested-with line in cabal file
+- [ ] exact version bump
+  0.4.4.1
+- [ ] branch, push & check CI
+- [ ] haddock
+
+  #+begin_src sh :results output
+  cabal haddock
+  #+end_src
+- [ ] readme
+- [ ] magit range
+- [ ] ChangeLog
+- [ ] PR to main
+- [ ] merge PR
+- [ ] immediate checkout and pull main
+- [ ] final check
+
+  #+begin_src sh :results output
+  cabal clean && cabal build && cabal-docspec
+  #+end_src
+- [ ] hkgr tagdist
+
+  #+begin_src sh :results output
+  hkgr tagdist
+  #+end_src
+
+  #+RESULTS:
+  : v0.12.0.1
+  : Running hlint
+  : Wrote tarball sdist to /Users/tonyday/haskell/perf/.hkgr/perf-0.12.0.1.tar.gz
+- [ ] hkgr publish
+
+  #+begin_src sh :results output
+  hkgr tagdist
+  #+end_src
+- [ ] check Hackage
+        Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
+
+        #+begin_src sh
+        cabal haddock --builddir=docs --haddock-for-hackage --enable-doc
+        cabal upload -d --publish docs/*-docs.tar.gz
+        #+end_src
+
+* extra Files
 ** readme.md
 
-Practice varies widely, from saying nothing to all documentation being in the readme. The readme.md template:
+Practice varies widely, from saying nothing to all documentation being in the readme. This readme.md template:
 
 - adds some badges for Hackage & CI.
 - Includes a short description and basic Usage example, which in many cases should be exactly repeated in the cabal file as synopsis and description stanzas.
 
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE readme.md #-}
+#+begin_src org :tangle readme.md
 {{name}}
 ===
 
@@ -333,13 +368,20 @@ import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib
 ```
 #+end_src
 
+
+readmes can be included as documentation within a cabal file like so:
+
+#+begin_src sh :results output
+extra-doc-files:
+    ChangeLog.md
+    readme.md
+#+end_src
+
 ** readme.org
 
 an alternative readme.
 
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE readme.org #-}
-
+#+begin_src org :tangle readme.org
 ,* {{name}}
 
 [[https://hackage.haskell.org/package/{{name}}][https://img.shields.io/hackage/v/{{name}}.svg]]
@@ -356,7 +398,6 @@ import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib
 ,* Development
 
 ,#+begin_src haskell :results output
-:set prompt "> "
 :set -Wno-type-defaults
 :set -Wno-name-shadowing
 :set -XOverloadedStrings
@@ -371,38 +412,171 @@ putStrLn x
 
 #+end_src
 
-** [[https://www.haskell.org/cabal/][cabal]]
 
-~cabal~ [[https://cabal.readthedocs.io/en/3.4/][docs]] have gotten very good of late, and the template should be read with those docs handy.
+** .hlint.yaml
 
-*** front matter
-
-#+begin_src org
-{-# START_FILE {{name}}.cabal #-}
-cabal-version: 3.4
-name:          {{name}}
-version:       0.0.0.1
-synopsis: See readme
-description: See readme for description.
-category: project
-author: {{author-name}}{{^author-name}}Author name here{{/author-name}}
-maintainer: {{author-email}}
-copyright: {{copyright}}{{^copyright}}{{year}}{{^year}}2021{{/year}} {{authorName}}{{^authorName}}Author name here{{/authorName}}{{/copyright}}
-license: BSD-3-Clause
-homepage: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
-bug-reports: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}/issues
-build-type: Simple
-tested-with: GHC == {{#ghc-version}}{{ghc-version}}{{/ghc-version}}{{^ghc-version}}9.6.2{{/ghc-version}}
-source-repository head
-  type: git
-  location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
+#+begin_src :tangle .hlint.yaml
+- ignore: {name: Use if}
+- ignore: {name: Use bimap}
+- ignore: {name: Eta reduce}
+- ignore: {name: Redundant fromInteger}
 #+end_src
 
-*** common stanzas
+** .ghci
 
-~vrom911~ has a good [[https://vrom911.github.io/blog/common-stanzas][introduction]] to common stanzas.
+#+begin_src :tangle .ghci
+:set -XRebindableSyntax
+:set -XOverloadedStrings
+:set -Wno-type-defaults
+#+end_src
 
-#+begin_src org :tangle checklist.hsfiles
+** .gitignore
+
+#+begin_src org :tangle .gitignore
+/.stack-work/
+/dist-newstyle/
+stack.yaml.lock
+**/.DS_Store
+cabal.project.local*
+/.hie/
+.ghc.environment.*
+/.hkgr/
+#+end_src
+
+** .gitattributes
+
+#+begin_src org :tangle .gitattributes
+{-# START_FILE .gitattributes #-}
+other/* linguist-documentation
+#+end_src
+
+** .projectile
+
+In emacs, haskell-language-server uses projectile to discover the project root directory, which is indicated by an empty ~.projectile~ file.
+
+#+begin_src org :tangle .projectile
+#+end_src
+
+** .github/workflows/haskell-ci.yml
+
+This CI includes tests for ormolu, hlint, cabal-doctest and the usual cabal checks across a wide GHC range.
+
+[[https://docs.github.com/en/actions][GitHub Actions Documentation - GitHub Docs]]
+
+#+begin_src org :tangle .github/workflows/haskell-ci.yml
+on: [push]
+name: haskell-ci
+jobs:
+  hlint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: haskell-actions/hlint-setup@v2
+    - uses: haskell-actions/hlint-run@v2
+      with:
+        path: .
+        fail-on: warning
+  ormolu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: haskell-actions/run-ormolu@v14
+  cabal:
+    name: GHC ${{ matrix.ghc-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        ghc-version: ['9.8', '9.6', '9.4', '9.2', '8.10']
+        docspec: [false]
+        experimental: [false]
+
+        include:
+          - os: windows-latest
+            ghc-version: '9.6'
+          - os: macos-latest
+            ghc-version: '9.6'
+          - os: ubuntu-latest
+            ghc-version: '9.6'
+            docspec: true
+            experimental: true
+            name: docspec
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up GHC ${{ matrix.ghc-version }}
+        uses: haskell-actions/setup@v2
+        id: setup
+        with:
+          ghc-version: ${{ matrix.ghc-version }}
+
+      - name: Installed minor versions of GHC and Cabal
+        shell: bash
+        run: |
+          GHC_VERSION=$(ghc --numeric-version)
+          CABAL_VERSION=$(cabal --numeric-version)
+          echo "GHC_VERSION=${GHC_VERSION}"     >> "${GITHUB_ENV}"
+          echo "CABAL_VERSION=${CABAL_VERSION}" >> "${GITHUB_ENV}"
+
+      - name: Configure the build
+        run: |
+          cabal configure --enable-tests --enable-benchmarks --disable-documentation
+          cabal build --dry-run
+        # The last step generates dist-newstyle/cache/plan.json for the cache key.
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-plan-${{ hashFiles('**/plan.json') }}
+          restore-keys: |
+            ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-
+
+      - name: Install dependencies
+        run: cabal build all --only-dependencies
+
+      # Cache dependencies already here, so that we do not have to rebuild them should the subsequent steps fail.
+      - name: Save cached dependencies
+        uses: actions/cache/save@v3
+        # Caches are immutable, trying to save with the same key would error.
+        if: ${{ !steps.cache.outputs.cache-hit
+          || steps.cache.outputs.cache-primary-key != steps.cache.outputs.cache-matched-key }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Build
+        run: cabal build all
+
+      - name: Check cabal file
+        run: cabal check
+
+      - if: matrix.docspec
+        name: cabal-docspec
+        run: |
+          mkdir -p $HOME/.cabal/bin
+          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
+          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20230406/cabal-docspec-0.0.0.20230406-x86_64-linux.xz > cabal-docspec.xz
+          echo '68fa9addd5dc453d533a74a763950499d4593b1297c9a05c3ea5bd1acc04c9dd cabal-docspec.xz' | sha256sum -c -
+          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
+          rm -f cabal-docspec.xz
+          chmod a+x $HOME/.cabal/bin/cabal-docspec
+          $HOME/.cabal/bin/cabal-docspec --version
+          cabal-docspec
+#+end_src
+
+* extra cabal stanzas
+
+~cabal~ [[https://cabal.readthedocs.io/en/3.4/][docs]] have gotten very good of late, and these recommended stanzas should be read with those docs handy.
+
+** ghc2021-stanza
+
+This stanza reproduces the GHC2021 extensions for ghc's prior to 9.2.
+
+#+begin_src org
 common ghc2021-stanza
   if impl(ghc >=9.2)
     default-language:
@@ -462,7 +636,11 @@ common ghc2021-stanza
   if impl(ghc >=8.10)
     default-extensions:
       NoImportQualifiedPost
+#+end_src
 
+** ghc-options-stanza
+
+#+begin_src org
 common ghc-options-stanza
   ghc-options:
     -Wall
@@ -472,526 +650,28 @@ common ghc-options-stanza
     -Wredundant-constraints
 #+end_src
 
-*** library stanza
+Stanzas are used like so:
 
-#+begin_src org :tangle checklist.hsfiles
+#+begin_src org
 library
   import: ghc2021-stanza
   import: ghc-options-stanza
-  hs-source-dirs:
-    src
-  default-extensions:
-  build-depends:
-    base >= 4.7 && <5,
-  exposed-modules:
-    {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
 #+end_src
 
-*** executable stanza
+** ghc-options-exe-stanza
 
-#+begin_src org :tangle checklist.hsfiles
-executable {{name}}
-  import: ghc2021-stanza
-  import: ghc-options-stanza
-  main-is: app.hs
-  hs-source-dirs: app
-  build-depends:
-    base >= 4.7 && <5,
-    {{name}},
+#+begin_src org
+common ghc-options-exe-stanza
+    ghc-options:
+        -fforce-recomp
+        -funbox-strict-fields
+        -rtsopts
+        -threaded
+        -with-rtsopts=-N
 #+end_src
 
-*** test stanza
+* org-mode notes
 
-I've left this test stanza in for completeness, but I'm tending to drop it altogether in preference to running cabal-docspec as a separate process to compilation.
-
-#+begin_src org :tangle checklist.hsfiles
-test-suite test
-  import: ghc2021-stanza
-  import: ghc-options-stanza
-  type: exitcode-stdio-1.0
-  main-is: test.hs
-  hs-source-dirs:
-    test
-  build-depends:
-    base >= 4.7 && <5,
-    doctest >= 0.15 && < 0.23,
-    {{name}}
-#+end_src
-
-*** cabal.project
-
-I'm currently uncertain whether cabal.project should form part of the GitHub repo, as it doesn't form part of a Hackage distribution.
-
-It does, however, form a place for things that might be needed down the track. ~allow-newer~ should be turned off before you get to uploading to hackage.
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE cabal.project #-}
-packages: {{name}}.cabal
-
--- allow-newer: true
-#+end_src
-
-** library
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE src/{{#lib-name}}{{lib-name}}{{#lib-name2}}/{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}.hs #-}
-{-# OPTIONS_GHC -Wno-unused-imports #-}
-
-module {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
-  (
-  )
-where
-
-import Prelude
-#+end_src
-
-** app
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE app/app.hs #-}
-{-# OPTIONS_GHC -Wno-unused-imports #-}
-
-import {{#lib-name}}{{lib-name}}{{#lib-name2}}.{{lib-name2}}{{/lib-name2}}{{/lib-name}}{{^lib-name}}Lib{{/lib-name}}
-import Prelude
-
--- $setup
--- >>> import Prelude
-
--- | doctest
--- >>> putStrLn "doctest ok"
--- doctest ok
-main :: IO ()
-main = pure ()
-#+end_src
-
-Calling the file {{name}}.hs doesn't seem to work well, here, with the Name becoming capitalised somewhere.
-
-** test
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE test/test.hs #-}
-{-# OPTIONS_GHC -Wno-unused-imports #-}
-
-module Main where
-
-import Test.DocTest
-import Prelude
-
-main :: IO ()
-main =
-  doctest
-    [ "app/app.hs"
-    ]
-#+end_src
-
-** stack
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE stack.yaml #-}
-resolver: {{#resolver}}{{resolver}}{{/resolver}}{{^resolver}}lts-21.3{{/resolver}}
-
-packages:
-  - .
-#+end_src
-
-** git
-
-The .gitignore reflects a slow expansion of cruft as tools accumulate.
-
-Everyone uses .hie these days which is some form of cache for ghc, used especially by hls.
-
-.gitattributes can help if your project is mis-labelled in GitHub due to excessive HTML or whatnot being included in the project.
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE .gitignore #-}
-/.stack-work/
-/dist-newstyle/
-stack.yaml.lock
-,**/.DS_Store
-cabal.project.local*
-/.hie/
-.ghc.environment.*
-/.hkgr/
-#+end_src
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE .gitattributes #-}
-other/* linguist-documentation
-#+end_src
-
-** hls
-
-In emacs, haskell-language-server uses projectile to discover the project root directory, which is indicated by an empty ~.projectile~ file.
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE .projectile #-}
-#+end_src
-
-** licence
-
-Hard-coded BSD3.
-
-#+begin_src org :tangle checklist.hsfiles
-{-# START_FILE LICENSE #-}
-Copyright {{author-name}}{{^author-name}}Author name here{{/author-name}} (c) {{year}}{{^year}}2023{{/year}}
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-
-    * Neither the name of {{author-name}}{{^author-name}}Author name here{{/author-name}} nor the names of other
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#+end_src
-
-** action
-
-The double curly brackets conflict with the mustache delimiters, and inclusion of this file breaks stack new.
-
-[[https://docs.github.com/en/actions][GitHub Actions Documentation - GitHub Docs]]
-
-Copy this block to .github/workflows/haskell-ci.yml to boot up github actions for the project.
-
-#+begin_src org :tangle no
-on: [push]
-name: haskell-ci
-jobs:
-  hlint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: haskell/actions/hlint-setup@v2
-    - uses: haskell/actions/hlint-run@v2
-      with:
-        path: .
-        fail-on: warning
-  ormolu:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: haskell-actions/run-ormolu@v11
-  stack:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: freckle/stack-action@v4
-  cabal:
-    name: GHC ${{ matrix.ghc-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        ghc-version: ['9.6', '9.4', '9.2', '9.0', '8.10', '8.8', '8.6']
-        docspec: [false]
-        experimental: [false]
-
-        include:
-          - os: windows-latest
-            ghc-version: '9.6'
-          - os: macos-latest
-            ghc-version: '9.6'
-          - os: ubuntu-latest
-            ghc-version: '9.6'
-            docspec: true
-            experimental: true
-            name: docspec
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up GHC ${{ matrix.ghc-version }}
-        uses: haskell/actions/setup@v2
-        id: setup
-        with:
-          ghc-version: ${{ matrix.ghc-version }}
-
-      - name: Installed minor versions of GHC and Cabal
-        shell: bash
-        run: |
-          GHC_VERSION=$(ghc --numeric-version)
-          CABAL_VERSION=$(cabal --numeric-version)
-          echo "GHC_VERSION=${GHC_VERSION}"     >> "${GITHUB_ENV}"
-          echo "CABAL_VERSION=${CABAL_VERSION}" >> "${GITHUB_ENV}"
-
-      - name: Configure the build
-        run: |
-          cabal configure --enable-tests --enable-benchmarks --disable-documentation
-          cabal build --dry-run
-        # The last step generates dist-newstyle/cache/plan.json for the cache key.
-
-      - name: Restore cached dependencies
-        uses: actions/cache/restore@v3
-        id: cache
-        with:
-          path: ${{ steps.setup.outputs.cabal-store }}
-          key: ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-plan-${{ hashFiles('**/plan.json') }}
-          restore-keys: |
-            ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-
-
-      - name: Install dependencies
-        run: cabal build all --only-dependencies
-
-      # Cache dependencies already here, so that we do not have to rebuild them should the subsequent steps fail.
-      - name: Save cached dependencies
-        uses: actions/cache/save@v3
-        # Caches are immutable, trying to save with the same key would error.
-        if: ${{ !steps.cache.outputs.cache-hit
-          || steps.cache.outputs.cache-primary-key != steps.cache.outputs.cache-matched-key }}
-        with:
-          path: ${{ steps.setup.outputs.cabal-store }}
-          key: ${{ steps.cache.outputs.cache-primary-key }}
-
-      - name: Build
-        run: cabal build all
-
-      - name: Run tests
-        run: cabal test all
-
-      - name: Check cabal file
-        run: cabal check
-
-      - if: matrix.docspec
-        name: cabal-docspec
-        run: |
-          mkdir -p $HOME/.cabal/bin
-          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
-          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20230406/cabal-docspec-0.0.0.20230406-x86_64-linux.xz > cabal-docspec.xz
-          echo '68fa9addd5dc453d533a74a763950499d4593b1297c9a05c3ea5bd1acc04c9dd cabal-docspec.xz' | sha256sum -c -
-          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
-          rm -f cabal-docspec.xz
-          chmod a+x $HOME/.cabal/bin/cabal-docspec
-          $HOME/.cabal/bin/cabal-docspec --version
-          cabal-docspec --check-properties
-#+end_src
-
-* Checklist
-:PROPERTIES:
-:header-args: :dir ./foo
-:END:
-
-I use this section to record results of compilation steps, and the process of polishing projects. Edit properties in [[#Checklist][Checklist]] to point to the right directory and check/set the correct ghc version.
-
-#+begin_src sh
-ghcup set ghc 9.4.4
-#+end_src
-
-#+RESULTS:
-
-** Compiling
-*** [[https://www.haskell.org/cabal/][cabal]]
-
-  #+begin_src sh
-  cabal clean
-  #+end_src
-
-  #+RESULTS:
-
-  It's so very useful to check the build plan before actually building, as ~cabal configure~ does.
-
-  #+begin_src sh :results output :exports both
-  cabal configure --enable-tests
-  #+end_src
-
-  #+RESULTS:
-  : 'cabal.project.local' already exists, backing it up to
-  : 'cabal.project.local~7'.
-  : Build profile: -w ghc-8.10.4 -O1
-  : In order, the following would be built (use -v for more details):
-  :  - doctest-0.18.1 (exe:doctest) (requires build)
-
-  #+begin_src sh :results output :exports both
-  cabal build --ghc-options=-freverse-errors
-  #+end_src
-
-  #+RESULTS:
-  : Build profile: -w ghc-8.10.4 -O1
-  : In order, the following will be built (use -v for more details):
-  :  - foo-0.0.1 (test:test) (additional components to build)
-  : Preprocessing test suite 'test' for foo-0.0.1..
-  : Building test suite 'test' for foo-0.0.1..
-
-  #+begin_src sh :results output :exports both
-  cabal test
-  #+end_src
-
-  #+RESULTS:
-  #+begin_example
-  Build profile: -w ghc-8.10.4 -O1
-  In order, the following will be built (use -v for more details):
-   - foo-0.0.1 (test:test) (ephemeral targets)
-  Preprocessing test suite 'test' for foo-0.0.1..
-  Building test suite 'test' for foo-0.0.1..
-  Running 1 test suites...
-  Test suite test: RUNNING...
-  Test suite test: PASS
-  Test suite logged to:
-  /Users/tonyday/haskell/checklist/foo/dist-newstyle/build/x86_64-osx/ghc-8.10.4/foo-0.0.1/t/test/test/foo-0.0.1-test.log
-  1 of 1 test suites (1 of 1 test cases) passed.
-  #+end_example
-
-*** [[https://docs.haskellstack.org/en/stable/README/][stack]]
-
-Same compilation as above using stack.
-
-  #+begin_src sh :results output
-    stack clean && stack build --test
-  #+end_src
-
-  A full -Werror compile + haddock check.
-
-  #+begin_src sh :results output
-    stack build --test --haddock --no-haddock-deps --ghc-options -Werror --ghc-options -Wcompat --ghc-options -Wincomplete-record-updates --ghc-options -Wincomplete-uni-patterns --ghc-options -Wredundant-constraints
-  #+end_src
-
-*** compilation loops
-
-  =haskell-language-server= works well for code that has recently compiled, but tends to suffer when fed projects that are less than pristine already. To bootstrap from a mess of garbage like I usually do, use =ghcid= and, when this falls over, revert to =stack build --test --file-watch= which will never fail.
-
-** Linting
-*** [[https://hackage.haskell.org/package/hlint][hlint]]
-  #+begin_src sh :results output :exports both
-  hlint .
-  #+end_src
-
-  #+RESULTS:
-  : No hints
-
-*** [[https://hackage.haskell.org/package/ormolu][ormolu]]
-
-  (~--mode inplace~ to actually change haskell files)
-
-  #+begin_src sh :results output
-  ormolu --mode inplace $(git ls-files '*.hs')
-  #+end_src
-
-  #+begin_src sh :results output
-  ormolu --mode check */*.hs
-  #+end_src
-
-  #+RESULTS:
-
-** Analysis
-
-*** dependencies
-
-Check for unused dependencies
-
-#+begin_src sh
-cabal build --ghc-options=-Wunused-packages
-#+end_src
-
-Get suggestions for better upper bounds:
-
-#+begin_src sh
-cabal gen-bounds
-#+end_src
-
-Find out if newer versions of existing dependencies exist.
-
-#+begin_src sh
-cabal outdated
-#+end_src
-
-*** [[https://hackage.haskell.org/package/haddock][haddock]]
-
-  I love Haddocks. They can be stunningly beautiful and are equipped to handle the idiosyncrasies of Haskell.
-
-  And here's a nice [[https://kowainik.github.io/posts/haddock-tips][post]] from kowainik explaining the details.
-
-  In particular, the ~--enable-documentation~ option creates a complete local haddock of all your dependencies.
-
-  #+begin_src sh :results output :exports both
-  cabal haddock --enable-documentation
-  #+end_src
-
-  Or you can open a single dependency with
-
-  #+begin_src sh
-  stack haddock --open xyzzy
-  #+end_src
-
-*** hoogle
-
-Create a local hoogle database.
-
-#+begin_src sh
-  cabal haddock -hoogle --enable-documentation
-#+end_src
-
-... which may be equivalent to ...
-
-#+begin_src sh
-hoogle generate
-#+end_src
-
-*** [[https://hackage.haskell.org][Hackage]]
-
-I use [[https://hackage.haskell.org/package/hkgr][hkgr]] to upload to hackage, which is a command line tool that lets me forget about the detail.
-
-#+begin_src sh
-hkgr disttag --force
-#+end_src
-
-This does some checks, then tags the current git commit with the current version in the cabal file.
-
-#+begin_src sh
-hkgr publish
-#+end_src
-
-This uploads to hackage.
-
-Sometimes haddocks don't build on Hackage. Here's a recipe for uploading your own docs.
-
-#+begin_src sh
-  cabal haddock --builddir=docs --haddock-for-hackage --enable-doc
-  cabal upload -d --publish docs/*-docs.tar.gz
-#+end_src
-
-** GitHub
-
-*** repo creation
-
-Finally, this recipe can be used to push the newly minted package to github. Use with caution!
-
-#+begin_src sh results: output
-cd foo
-git init
-git add .gitignore
-git add **
-git add .**
-git commit -m "new project - forced automated commit"
-git remote add origin https://github.com/tonyday567/foo.git
-git push origin main --force
-#+end_src
-
-#+RESULTS:
-: Reinitialized existing Git repository in /Users/tonyday/haskell/checklist/foo/.git/
-: On branch main
-: nothing to commit, working tree clean
-
-* Org-mode & Haskell
 ** setup
 
 The [[https://orgmode.org/worg/org-contrib/babel/][babel]] functionality in org-mode is very old, and hasn't kept up with changes in haskell-mode practices. In particular, it uses the old haskell inferior mode to invoke ghci rather than the more modern haskell process methods. This could make it a touch fragile as it won't pick up standard configurations.
@@ -1000,19 +680,16 @@ Using org-mode is particularly helpful in development loops where rebooting ghci
 
 It also works well as an alternative readme, with no gap between code blocks as basic tests and code blocks as usage documentation.
 
-The babel functionality, ob-haskell, creates an ~inf-haskell~ buffer which is not the modern Haskell repl. The prompt has to end with a '>'.
+The babel functionality, ob-haskell, creates an ~inf-haskell~ buffer which is not the modern Haskell repl.
 
 #+begin_src haskell
 :set -XOverloadedStrings
 :set -Wno-type-defaults
-:set prompt "> "
 putStrLn "ok"
 #+end_src
 
 #+RESULTS:
 : > > ok
-
-A code block that doesn't return any output emits a benign warning: ~org-babel-script-escape expects a string~
 
 ** single session
 
@@ -1039,6 +716,13 @@ x
 :
 : [0,1,2,3,4]
 
+Note that double brackets will be interpreted by org-mode as a link, even inside a result section.
+
+#+begin_src haskell :results output
+x = [[0..4]]
+x
+#+end_src
+
 ** multi-line
 
 Multi-line code blocks need ~:{~ ~:}~ wrappers.
@@ -1058,27 +742,6 @@ t1 True
 :
 : > 1
 
-Note that ~:set +m~ doesn't work and the process will hang.
-
-#+begin_src haskell
-:set +m
-f :: Bool -> Int
-f z = case z of
-        True -> [0..4]
-        False -> [1..9]
-#+end_src
-
-** embedding inline svg
-
-Example of embedding svg and other image output with ~:file line.svg :results output graphics file~
-
-#+begin_src haskell :file line.svg :results output graphics file :exports results
-x = 1
-#+end_src
-
-#+RESULTS:
-[[file:line.svg]]
-
 ** executable project
 
 This is required if you are working with a project, and compiling a library doesn't suit. (Library is the default in emacs)
@@ -1086,3 +749,9 @@ This is required if you are working with a project, and compiling a library does
 #+begin_src elisp
 (setq haskell-process-args-cabal-repl '("poker-fold:exe:poker-fold-speed"))
 #+end_src
+
+* ToDo haskell-ng
+
+I am experimenting with haskell-ng mode, a replacement for haskell-mode, which utilises tree-sitter.
+
+* ToDo cabal-fix
