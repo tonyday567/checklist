@@ -8,8 +8,8 @@ A Haskell [c]hecklist. For starting off, rebooting, or just freshening up the li
 A very, very short list for creating and maintaining a Haskell project.
 
 - [ ] Install Haskell via [[https://www.haskell.org/ghcup/][ghcup]]. Install everything.
-- [ ] Create a new directory and run [[*cabal init][cabal init]]. Follow the prompts.
-- [ ] (optional) Install a few more [[*Extra tooling][tools]].
+- [ ] Create a new directory and run [[#cabal-init][cabal init]]. Follow the prompts.
+- [ ] (optional) Install a few more [[#extra-tooling][tools]].
 - [ ] Pick an IDE; vscode, neo-vim, [[*emacs][emacs]] or unix command line. It all works.
 - [ ] (optional) read through the [[*Extras][extras]] section, cut/paste or =tangle=.
 - [ ] (optional) read through the [[*cabal stanzas][cabal stanzas]] section, and cut/paste some stanzas. Or not.
