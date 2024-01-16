@@ -1,13 +1,13 @@
 #+TITLE: [c]hecklist
 #+OPTIONS: H:2 TOC:1 view:showall
 
-A Haskell [c]hecklist[fn:1]. For starting off, rebooting, or just freshening up.
+A Haskell [c]hecklist. For starting off, rebooting, or just freshening up the lippy.
 
 * Quick Start 🛼
 
-A very, very short list[fn:slow] for creating and maintaining a Haskell project.
+A very, very short list for creating and maintaining a Haskell project.
 
-- [ ] Install Haskell via [[https://www.haskell.org/ghcup/][GHCup]]. Install everything.
+- [ ] Install Haskell via [[https://www.haskell.org/ghcup/][ghcup]]. Install everything.
 - [ ] Create a new directory and run [[*cabal init][cabal init]]. Follow the prompts.
 - [ ] (optional) Install a few more [[*Extra tooling][tools]].
 - [ ] Pick an IDE; vscode, neo-vim, [[*emacs][emacs]] or unix command line. It all works.
@@ -177,6 +177,9 @@ This is a checklist I use for preparing a new release:
   #+end_src
 
 * cabal init
+:PROPERTIES:
+:ID:       b7a5d8bb-e62f-4e7d-a57b-37f0bb326c0e
+:END:
 
 To quickly create a new Haskell project, run `cabal init` interactively or look through the cabal docs and use the command line. A minimal installation looks somewhat like this:
 
@@ -633,8 +636,11 @@ Despite its corniness and fragility, org-mode is now integral to my development 
 
 For haskell-ng-mode, it requires the  [[https://github.com/tonyday567/ob-haskell-ng][ob-haskell-ng]] package.
 
-* Footnotes
-[fn:changes] This is version 2 of the checklist, with a substantial diff to version 1. The initial Haskell [c]hecklist was released around ghc-8.10, and, at time of writing, ghc-9.8.1 is in `ghcup list`.
+* ChangeLog
+
+** v1 ==> v2
+
+This is version 2 of the checklist, with a substantial diff to version 1. The initial Haskell [c]hecklist was released around ghc-8.10, and, at time of writing, ghc-9.8.1 is in `ghcup list`.
 
 The checklist now concentrates on a cabal-style workflow. I personally no longer use stack and would be concerned that any stack-based advice would become stale. Stack is also, in my opinion, a complete workflow compared with cabal where gaps remain.
 
@@ -642,9 +648,7 @@ The use of templates has been abandoned in favour of =cabal init=, with advice a
 
 The combination of emacs org-mode and Haskell development has progressed, and for even more bespokity, I am experimenting with haskell-ng. Developments surrounding cabal are in a state of flux, and, until stability, I use cabal-fix for my cabal file needs.
 
-[fn:slow] A slower guide
-
-welcome to Haskell!
+* welcome to Haskell!
 
 Or, as Iago quips, "welcome, sir, to Cyprus. Goats and Monkeys!" Haskell is this corner solution to several problem domains difficult to pin, existing beyond some line demarcating the civilised empires of software development. Much of it will not make sense at first, and maybe ever, but if you stay long enough, you'll begin to grow fond of even the goats and monkeys.
 
