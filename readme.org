@@ -86,19 +86,13 @@ This is a checklist I use for preparing a new release:
 - [ ] cabal-fix
 
     #+begin_src sh :results output
-    cabal-fix --gen
+    cabal-fix check
     #+end_src
 
     #+begin_src sh :results output
-    cabal-fix -f ~/haskell/cabal-fix/my-cabal-fix.config
+    cabal-fix inplace
     #+end_src
 
-    #+RESULTS:
-    : Nothing
-
-    #+begin_src sh :results output
-    cabal-fix -i
-    #+end_src
 - [ ] cabal build --prefer-oldest
 
     #+begin_src sh :results output
@@ -190,7 +184,7 @@ This is a checklist I use for preparing a new release:
 
 * cabal init
 
-To quickly create a new Haskell project, run `cabal init` interactively or look through the cabal docs and use the command line. A minimal installation looks somewhat like this:
+To quickly create a new Haskell project, run `cabal init` interactively or look through the cabal docs and use the command line eg
 
 #+begin_src sh :results output :exports both
 mkdir minimal && cd minimal && cabal init --minimal --simple --overwrite --lib --tests --language=GHC2021 --license=BSD-2-Clause -p minimal
@@ -681,10 +675,9 @@ So here's what you need to know, as you start your Haskell journey:
 - the code you write will be the best you ever write, and it will survive (subject to staying current with the GHC grind)
 - you will be disappointed with the number of bums actually on seats. Dependency management is very important - before you commit to any dependency, look at the upstream chain for signs of care and attention.
 - GHC is a monopolist provider of compilation support.
-- Haskell has never been corporatised. We've had our suger mommas, yes, but we are no indentured slave to some global capitalist machine.
-- We are somewhat detachable from the technical fashions of the day. We get swept up like other projects do, but tend to be slow in committing to trends.
+- Haskell has never been corporatised. We've had our suger mommas, yes, but we are no indentured slave to some global capitalist machine, oi!
 - Learn to love strings. Compilation is strings all the way down. No matter how you dress them up, it's all strings in a long computation chain.
 
-Haskell, is above all, beautiful. Well-crafted, solid, unfancy, machine precisioned where it matters, sludgy and open to ideas where it doesn't.
+Haskell, is above all, lovable. Well-crafted, solid, unfancy, machine precisioned where it matters, sludgy and open to ideas where it doesn't.
 
 Enjoy your time with us!
