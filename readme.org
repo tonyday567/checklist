@@ -1,7 +1,17 @@
 #+TITLE: [c]hecklist
-#+OPTIONS: H:2 TOC:1 view:showall
 
-A Haskell [c]hecklist. For starting off, rebooting, or just freshening up the lippy.
+A Haskell [c]hecklist. For starting off, rebooting, or just freshening up.
+
+* contents :TOC_1:
+- [[#quick-start-][Quick Start 🛼]]
+- [[#checklist][Checklist]]
+- [[#cabal-init][cabal init]]
+- [[#tooling][Tooling]]
+- [[#extras][Extras]]
+- [[#cabal-stanzas][cabal stanzas]]
+- [[#emacs][emacs]]
+- [[#changelog][ChangeLog]]
+- [[#welcome-to-haskell][welcome to Haskell!]]
 
 * Quick Start 🛼
 
@@ -10,11 +20,13 @@ A very, very short list for creating and maintaining a Haskell project.
 - [ ] Install Haskell via [[https://www.haskell.org/ghcup/][ghcup]]. Install everything.
 - [ ] Create a new directory and run [[#cabal-init][cabal init]]. Follow the prompts.
 - [ ] (optional) Install a few more [[#extra-tooling][tools]].
-- [ ] Pick an IDE; vscode, neo-vim, [[*emacs][emacs]] or unix command line. It all works.
-- [ ] (optional) read through the [[*Extras][extras]] section, cut/paste or =tangle=.
-- [ ] (optional) read through the [[*cabal stanzas][cabal stanzas]] section, and cut/paste some stanzas. Or not.
+- [ ] Pick an IDE; vscode, neo-vim, [[#emacs][emacs]] or unix command line. It all works.
+- [ ] (optional) read through the [[#extras][extras]] section, cut/paste or =tangle=.
+- [ ] (optional) read through the [[#cabal-stanzas][cabal stanzas]] section, and cut/paste some stanzas. Or not.
 - [ ] (required) hack happy Haskell for your new pet project.
-- [ ] follow the [[*Checklist][checklist]] when you want to tidy up.
+- [ ] follow the [[#checklist][checklist]] when you want to tidy up.
+
+[[#welcome-to-haskell][Welcome]] to Haskell!
 
 * Checklist
 
@@ -177,9 +189,6 @@ This is a checklist I use for preparing a new release:
   #+end_src
 
 * cabal init
-:PROPERTIES:
-:ID:       b7a5d8bb-e62f-4e7d-a57b-37f0bb326c0e
-:END:
 
 To quickly create a new Haskell project, run `cabal init` interactively or look through the cabal docs and use the command line. A minimal installation looks somewhat like this:
 
