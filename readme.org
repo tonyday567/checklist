@@ -653,7 +653,7 @@ The combination of emacs org-mode and Haskell development has progressed, and fo
 
 * welcome to Haskell!
 
-Or, as Iago quips, "welcome, sir, to Cyprus. Goats and Monkeys!" Haskell is this corner solution to several problem domains difficult to pin, existing beyond some line demarcating the civilised empires of software development. Much of it will not make sense at first, and maybe ever, but if you stay long enough, you'll begin to grow fond of even the goats and monkeys.
+Or, as Othello quips, "welcome, sir, to Cyprus. Goats and Monkeys!" Haskell is this corner solution to several problem domains difficult to pin, existing beyond some line demarcating the civilised empires of software development. Much of it will not make sense at first, and maybe ever, but if you stay long enough, you'll begin to grow fond of even the goats and monkeys.
 
 Birthed by committee in 1987 for use as an academic tool, it has now grown to not only be the 28th most popular language for tutorials, but also used industrially by over 0.2% of github users, making it somewhere between the 25th and 50th most popular language on the planet.
 Even before deep subsumption queer-coded the place, the community has been diverse, with both American and European programmers in its ranks.
