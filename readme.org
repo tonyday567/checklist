@@ -92,7 +92,6 @@ This is a checklist I use for preparing a new release:
     #+begin_src sh :results output
     cabal-fix inplace
     #+end_src
-
 - [ ] cabal build --prefer-oldest
 
     #+begin_src sh :results output
@@ -254,6 +253,7 @@ This guide uses the following tools, which, when used together, provide the mode
 - [[https://hackage.haskell.org/package/ormolu][ormolu]]
 - [[https://hackage.haskell.org/package/hkgr][hkgr]]
 - [[https://hackage.haskell.org/package/ghcid][ghcid]]
+- [[https://github.com/MercuryTechnologies/ghciwatch][ghciwatch]]
 - [[https://github.com/tonyday567/cabal-fix][cabal-fix]]
 - [[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]]
 
@@ -263,6 +263,12 @@ Most of the tools can be installed via cabal:
 
 #+begin_src sh
 cabal install ormolu hlint hkgr ghcid cabal-fix --allow-newer --overwrite-policy=always
+#+end_src
+
+ghciwatch is via our cousins at rust:
+
+#+begin_src sh
+cargo install ghciwatch
 #+end_src
 
 ~cabal~ stores executables in ​~​/.cabal/bin, ~stack~ in ​~​/.local/bin.
