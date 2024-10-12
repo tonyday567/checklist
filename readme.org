@@ -1,4 +1,4 @@
-#+TITLE: [c]hecklist
+#+TITLE: [c]hecklist v2.1
 
 A Haskell [c]hecklist. For starting off, rebooting, or just freshening up.
 
@@ -29,8 +29,6 @@ A very, very short list for creating and maintaining a Haskell project.
 [[#welcome-to-haskell][Welcome]] to Haskell!
 
 * Checklist
-
-This is a checklist I use for preparing a new release:
 
 - [ ] version bump
 
@@ -99,20 +97,20 @@ This is a checklist I use for preparing a new release:
     #+end_src
 - [ ] FIXMEs & TODOs
 - [ ] pragma cleanup
-- [ ] cabal-docspec
+- [ ] doctests
 
     #+begin_src sh :results output
     cabal-docspec
     #+end_src
 
-    #+RESULTS:
+  https://github.com/martijnbastiaan/doctest-parallel
+
+    #+begin_src sh :results output
+    cabal run doctests
+    #+end_src
 - [ ] cabal install
     #+begin_src sh :results output
     cabal install
-    #+end_src
-- [ ] cabal test
-    #+begin_src sh :results output
-    cabal test
     #+end_src
 - [ ] cabal bench
     #+begin_src sh :results output
@@ -136,7 +134,6 @@ This is a checklist I use for preparing a new release:
   hlint .
   #+end_src
 - [ ] CI upgrade
-
   - check tested-with line in cabal file
   - check ./.github/workflow/haskell-ci.yaml actions for updates
 - [ ] exact version bump
@@ -262,7 +259,7 @@ This guide uses the following tools, which, when used together, provide the mode
 Most of the tools can be installed via cabal:
 
 #+begin_src sh
-cabal install ormolu hlint hkgr ghcid cabal-fix --allow-newer --overwrite-policy=always
+cabal install ormolu hlint hkgr cabal-fix --allow-newer --overwrite-policy=always
 #+end_src
 
 ghciwatch is via our cousins at rust:
@@ -397,13 +394,21 @@ GitHub actions are the current and common practice for continuous integration of
 [[https://docs.github.com/en/actions][GitHub Actions Documentation - GitHub Docs]]
 
 #+begin_src org :tangle .github/workflows/haskell-ci.yml
+name: build
 on: [push]
-name: haskell-ci
+
+# INFO: The following configuration block ensures that only one build runs per branch,
+# which may be desirable for projects with a costly build process.
+# Remove this block from the CI workflow to let each CI job run to completion.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   hlint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: haskell-actions/hlint-setup@v2
     - uses: haskell-actions/hlint-run@v2
       with:
@@ -412,46 +417,31 @@ jobs:
   ormolu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: haskell-actions/run-ormolu@v14
-  cabal:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/run-ormolu@v16
+  build:
     name: GHC ${{ matrix.ghc-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        ghc-version: ['9.8', '9.6', '9.4', '9.2', '8.10']
-        docspec: [false]
-        experimental: [false]
+        ghc-version: ['9.10', '9.8', '9.6']
 
         include:
           - os: windows-latest
-            ghc-version: '9.6'
+            ghc-version: '9.8'
           - os: macos-latest
-            ghc-version: '9.6'
-          - os: ubuntu-latest
-            ghc-version: '9.6'
-            docspec: true
-            experimental: true
-            name: docspec
+            ghc-version: '9.8'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up GHC ${{ matrix.ghc-version }}
         uses: haskell-actions/setup@v2
         id: setup
         with:
           ghc-version: ${{ matrix.ghc-version }}
-
-      - name: Installed minor versions of GHC and Cabal
-        shell: bash
-        run: |
-          GHC_VERSION=$(ghc --numeric-version)
-          CABAL_VERSION=$(cabal --numeric-version)
-          echo "GHC_VERSION=${GHC_VERSION}"     >> "${GITHUB_ENV}"
-          echo "CABAL_VERSION=${CABAL_VERSION}" >> "${GITHUB_ENV}"
 
       - name: Configure the build
         run: |
@@ -460,23 +450,25 @@ jobs:
         # The last step generates dist-newstyle/cache/plan.json for the cache key.
 
       - name: Restore cached dependencies
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache
+        env:
+          key: ${{ runner.os }}-ghc-${{ steps.setup.outputs.ghc-version }}-cabal-${{ steps.setup.outputs.cabal-version }}
         with:
           path: ${{ steps.setup.outputs.cabal-store }}
-          key: ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-plan-${{ hashFiles('**/plan.json') }}
-          restore-keys: |
-            ${{ runner.os }}-ghc-${{ env.GHC_VERSION }}-cabal-${{ env.CABAL_VERSION }}-
+          key: ${{ env.key }}-plan-${{ hashFiles('**/plan.json') }}
+          restore-keys: ${{ env.key }}-
 
       - name: Install dependencies
+        # If we had an exact cache hit, the dependencies will be up to date.
+        if: steps.cache.outputs.cache-hit != 'true'
         run: cabal build all --only-dependencies
 
       # Cache dependencies already here, so that we do not have to rebuild them should the subsequent steps fail.
       - name: Save cached dependencies
-        uses: actions/cache/save@v3
-        # Caches are immutable, trying to save with the same key would error.
-        if: ${{ !steps.cache.outputs.cache-hit
-          || steps.cache.outputs.cache-primary-key != steps.cache.outputs.cache-matched-key }}
+        uses: actions/cache/save@v4
+        # If we had an exact cache hit, trying to save the cache would error because of key clash.
+        if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: ${{ steps.setup.outputs.cabal-store }}
           key: ${{ steps.cache.outputs.cache-primary-key }}
@@ -484,21 +476,25 @@ jobs:
       - name: Build
         run: cabal build all
 
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.ghc-version == '9.8'}}
+        name: doctests
+        run: cabal run doctests
+
       - name: Check cabal file
         run: cabal check
+#+end_src
 
-      - if: matrix.docspec
-        name: cabal-docspec
-        run: |
-          mkdir -p $HOME/.cabal/bin
-          echo "$HOME/.cabal/bin" >> $GITHUB_PATH
-          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-0.0.0.20230406/cabal-docspec-0.0.0.20230406-x86_64-linux.xz > cabal-docspec.xz
-          echo '68fa9addd5dc453d533a74a763950499d4593b1297c9a05c3ea5bd1acc04c9dd cabal-docspec.xz' | sha256sum -c -
-          xz -d < cabal-docspec.xz > $HOME/.cabal/bin/cabal-docspec
-          rm -f cabal-docspec.xz
-          chmod a+x $HOME/.cabal/bin/cabal-docspec
-          $HOME/.cabal/bin/cabal-docspec --version
-          cabal-docspec
+** test/doctests.hs
+
+#+begin_src org :tangle test/doctests.hs
+module Main where
+
+import System.Environment (getArgs)
+import Test.DocTest (mainFromCabal)
+import Prelude (IO, (=<<))
+
+main :: IO ()
+main = mainFromCabal "{{{name}}}" =<< getArgs
 #+end_src
 
 * cabal stanzas
@@ -607,6 +603,23 @@ common ghc-options-exe-stanza
         -with-rtsopts=-N
 #+end_src
 
+** doctest-parallel
+
+https://github.com/martijnbastiaan/doctest-parallel
+
+
+#+begin_src cabal-ng
+test-suite doctests
+    import: ghc2021-stanza
+    main-is: doctests.hs
+    hs-source-dirs: test
+    build-depends:
+        , base             >=4.14 && <5
+        , doctest-parallel >=0.3 && <0.4
+    ghc-options: -threaded
+    type: exitcode-stdio-1.0
+#+end_src
+
 ** extras-doc-files
 
 readmes can be included as documentation within a cabal file like so:
@@ -646,7 +659,9 @@ Despite its corniness and fragility, org-mode is now integral to my development 
 For haskell-ng-mode, it requires the  [[https://github.com/tonyday567/ob-haskell-ng][ob-haskell-ng]] package.
 
 * ChangeLog
-
+** v2.1
+- added doctest-parallel to checklist, docs & CI
+- removed cabal-docspecs from CI
 ** v1 ==> v2
 
 This is version 2 of the checklist, with a substantial diff to version 1. The initial Haskell [c]hecklist was released around ghc-8.10, and, at time of writing, ghc-9.8.1 is in `ghcup list`.
