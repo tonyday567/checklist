@@ -1,58 +1,63 @@
-#+TITLE: [c]hecklist v2.1
+#+TITLE: [C]hecklist2024
 
-A Haskell [c]hecklist. For starting off, rebooting, or just freshening up.
+A Haskell [C]hecklist. For starting off, rebooting, or just freshening up.
 
-* contents :TOC_1:
-- [[#quick-start-][Quick Start 🛼]]
-- [[#checklist][Checklist]]
-- [[#cabal-init][cabal init]]
-- [[#tooling][Tooling]]
-- [[#extras][Extras]]
-- [[#cabal-stanzas][cabal stanzas]]
-- [[#emacs][emacs]]
-- [[#changelog][ChangeLog]]
-- [[#welcome-to-haskell][welcome to Haskell!]]
+* Checklist2024
+
+A new GHC and a new GHC2024 needs a refresh of the Haskell [C]hecklist. Highlights include:
+
+- [[https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/control.html#extension-GHC2024][GHC2024]] is here and a GHC2024 cabal stanza [[*ghc2024-stanza][backport]] is included.
+- Given the spread of the community, [[*.github/workflows/haskell-ci.yml][CI recommendations]] cover ghc-8.6 to ghc-8.12.
+- [[https://hackage.haskell.org/package/cabal-gild][cabal-gild]], a cabal file formatter, gets included in the checklist.
+
+The checklist has been tested with:
+
+#+begin_src sh :results output
+ghcup list -c set -r
+#+end_src
+
+#+RESULTS:
+: ghc 9.12.2 latest,base-4.21.0.0 hls-powered,2025-03-12
+: cabal 3.14.2.0 latest
+: hls 2.10.0.0 recommended
+: stack 3.7.1 latest
+: ghcup 0.1.50.2 latest,recommended
 
 * Quick Start 🛼
 
 A very, very short list for creating and maintaining a Haskell project.
 
 - [ ] Install Haskell via [[https://www.haskell.org/ghcup/][ghcup]]. Install everything.
-- [ ] Create a new directory and run [[#cabal-init][cabal init]]. Follow the prompts.
-- [ ] (optional) Install a few more [[#extra-tooling][tools]].
-- [ ] Pick an IDE; vscode, neo-vim, [[#emacs][emacs]] or unix command line. It all works.
-- [ ] (optional) read through the [[#extras][extras]] section, cut/paste or =tangle=.
-- [ ] (optional) read through the [[#cabal-stanzas][cabal stanzas]] section, and cut/paste some stanzas. Or not.
+- [ ] Create a new directory and run [[*cabal init][cabal init]]. Follow the prompts.
+- [ ] (optional) Install a few more [[*extra tooling][tools]].
+- [ ] Pick an IDE; vscode, neo-vim, emacs or unix command line. It all works.
+- [ ] (optional) read through the [[*extras][extras]] section.
+- [ ] (optional) read through the [[*cabal stanzas][cabal stanzas]] section.
 - [ ] (required) hack happy Haskell for your new pet project.
-- [ ] follow the [[#checklist][checklist]] when you want to tidy up.
+- [ ] follow the [[*checklist][checklist]] when you want to tidy up.
 
-[[#welcome-to-haskell][Welcome]] to Haskell!
+Welcome to [[*Musings on Haskell2024][Haskell2024]]
 
 * Checklist
 
 - [ ] version bump
-
-  Check current hackage version and bump cabal file version.
 - [ ] ghcup upgrades
 
-  Check if tooling is current, and upgrade.
+  Check if tooling is current, and upgrade with ghcup as needed.
 
   #+begin_src sh :results output :exports both
   ghcup list -c set -r
   #+end_src
-
-  #+RESULTS:
-  : ghc 9.8.1 latest,base-4.19.0.0 hls-powered,2023-10-09
-  : cabal 3.10.2.0 latest
-  : hls 2.5.0.0 latest
-  : stack 2.13.1 latest
-  : ghcup 0.1.20.0 latest,recommended
 - [ ] cabal.project check
 
   Is the cabal.project & cabal.project.local files clean?
 
   #+begin_src sh :results output
   cat cabal.project
+  #+end_src
+
+  #+begin_src sh :results output
+  cat cabal.project.local
   #+end_src
 - [ ] upstream publishings
 
@@ -62,13 +67,6 @@ A very, very short list for creating and maintaining a Haskell project.
   #+begin_src sh :results output
   cabal update
   #+end_src
-
-  #+RESULTS:
-  : Downloading the latest package list from hackage.haskell.org
-  : Package list of hackage.haskell.org has been updated.
-  : The index-state is set to 2023-12-19T03:05:53Z.
-  : To revert to previous state run:
-  :     cabal v2-update 'hackage.haskell.org,2023-12-18T22:41:30Z'
 - [ ] cabal outdated
     #+begin_src sh :results output
     cabal outdated
@@ -81,29 +79,23 @@ A very, very short list for creating and maintaining a Haskell project.
     #+begin_src sh :results output
     cabal clean && cabal build --ghc-options=-Wunused-packages
     #+end_src
-- [ ] cabal-fix
+- [ ] cabal formatter
 
     #+begin_src sh :results output
-    cabal-fix check
+    cabal-gild -m check --input=xyzzy.cabal
     #+end_src
 
     #+begin_src sh :results output
-    cabal-fix inplace
+    cabal-gild --io=xyzzy.cabal
     #+end_src
-- [ ] cabal build --prefer-oldest
-
-    #+begin_src sh :results output
-    cabal build --prefer-oldest
-    #+end_src
-- [ ] FIXMEs & TODOs
 - [ ] pragma cleanup
+
+  Consider a backported GHC2024.
 - [ ] doctests
 
     #+begin_src sh :results output
     cabal-docspec
     #+end_src
-
-  https://github.com/martijnbastiaan/doctest-parallel
 
     #+begin_src sh :results output
     cabal run doctests
@@ -136,15 +128,27 @@ A very, very short list for creating and maintaining a Haskell project.
 - [ ] CI upgrade
   - check tested-with line in cabal file
   - check ./.github/workflow/haskell-ci.yaml actions for updates
-- [ ] exact version bump
+- [ ] ChangeLog
+- [ ] Versioning
+
+  Check current hackage version and bump the package version in the cabal file, based on PvP.
+
+  https://pvp.haskell.org/
 - [ ] branch, push & check CI
+- [ ] stack checks
+
+  https://github.com/commercialhaskell/stackage/blob/master/verify-package
+
+  #+begin_src sh :results output
+  stack init --resolver nightly --ignore-subdirs
+  stack build --resolver nightly --haddock --test --bench --no-run-benchmarks
+  #+end_src
 - [ ] haddock
 
   #+begin_src sh :results output
   cabal haddock
   #+end_src
 - [ ] readme
-- [ ] ChangeLog
 - [ ] PR to main
 - [ ] merge PR
 - [ ] immediate checkout and pull main
@@ -183,20 +187,20 @@ A very, very short list for creating and maintaining a Haskell project.
 To quickly create a new Haskell project, run `cabal init` interactively or look through the cabal docs and use the command line eg
 
 #+begin_src sh :results output :exports both
-mkdir minimal && cd minimal && cabal init --minimal --simple --overwrite --lib --tests --language=GHC2021 --license=BSD-2-Clause -p minimal
+mkdir minimal && cd minimal && cabal init --minimal --simple --overwrite --lib --tests --language=GHC2024 --license=BSD-2-Clause -p minimal
 #+end_src
 
 #+RESULTS:
 #+begin_example
-[Log] Using cabal specification: 3.0
-[Log] Creating fresh file LICENSE...
-[Log] Creating fresh file CHANGELOG.md...
-[Log] Creating fresh directory ./src...
-[Log] Creating fresh file src/MyLib.hs...
-[Log] Creating fresh directory ./test...
-[Log] Creating fresh file test/Main.hs...
-[Log] Creating fresh file minimal.cabal...
-[Warning] No synopsis given. You should edit the .cabal file and add one.
+[Info] Using cabal specification: 3.0
+[Info] Creating fresh file LICENSE...
+[Info] Creating fresh file CHANGELOG.md...
+[Info] Creating fresh directory ./src...
+[Info] Creating fresh file src/MyLib.hs...
+[Info] Creating fresh directory ./test...
+[Info] Creating fresh file test/Main.hs...
+[Info] Creating fresh file minimal.cabal...
+[Warn] No synopsis given. You should edit the .cabal file and add one.
 [Info] You may want to edit the .cabal file and add a Description field.
 
 #+end_example
@@ -204,8 +208,35 @@ mkdir minimal && cd minimal && cabal init --minimal --simple --overwrite --lib -
 A quick test of these installations is to compile and test the project using cabal:
 
 #+begin_src sh :results output
-cabal build && cabal test
+cd minimal && cabal build && cabal test
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Resolving dependencies...
+Build profile: -w ghc-9.12.2 -O1
+In order, the following will be built (use -v for more details):
+ - minimal-0.1.0.0 (lib) (first run)
+Configuring library for minimal-0.1.0.0...
+Preprocessing library for minimal-0.1.0.0...
+Building library for minimal-0.1.0.0...
+[1 of 1] Compiling MyLib            ( src/MyLib.hs, dist-newstyle/build/aarch64-osx/ghc-9.12.2/minimal-0.1.0.0/build/MyLib.o, dist-newstyle/build/aarch64-osx/ghc-9.12.2/minimal-0.1.0.0/build/MyLib.dyn_o )
+Build profile: -w ghc-9.12.2 -O1
+In order, the following will be built (use -v for more details):
+ - minimal-0.1.0.0 (test:minimal-test) (first run)
+Configuring test suite 'minimal-test' for minimal-0.1.0.0...
+Preprocessing test suite 'minimal-test' for minimal-0.1.0.0...
+Building test suite 'minimal-test' for minimal-0.1.0.0...
+[1 of 1] Compiling Main             ( test/Main.hs, dist-newstyle/build/aarch64-osx/ghc-9.12.2/minimal-0.1.0.0/t/minimal-test/build/minimal-test/minimal-test-tmp/Main.o )
+[2 of 2] Linking dist-newstyle/build/aarch64-osx/ghc-9.12.2/minimal-0.1.0.0/t/minimal-test/build/minimal-test/minimal-test
+Running 1 test suites...
+Test suite minimal-test: RUNNING...
+Test suite not yet implemented.
+Test suite minimal-test: PASS
+Test suite logged to:
+/Users/tonyday567/checklist/minimal/./dist-newstyle/build/aarch64-osx/ghc-9.12.2/minimal-0.1.0.0/t/minimal-test/test/minimal-0.1.0.0-minimal-test.log
+1 of 1 test suites (1 of 1 test cases) passed.
+#+end_example
 
 * Tooling
 
@@ -218,11 +249,11 @@ ghcup list -c set -r
 #+end_src
 
 #+RESULTS:
-: ghc 9.8.1 latest,base-4.19.0.0 hls-powered,2023-10-09
-: cabal 3.10.2.0 latest
-: hls 2.5.0.0 latest
-: stack 2.13.1 latest
-: ghcup 0.1.20.0 latest,recommended
+: ghc 9.12.2 latest,base-4.21.0.0 hls-powered,2025-03-12
+: cabal 3.14.2.0 latest
+: hls 2.10.0.0 recommended
+: stack 3.7.1 latest
+: ghcup 0.1.50.2 latest,recommended
 
 =ghcup= places everything in ~/.ghcup/bin
 
@@ -242,7 +273,10 @@ haskell-language-server-wrapper --version
 #+RESULTS:
 : haskell-language-server version: 2.5.0.0 (GHC: 9.2.8) (PATH: /Users/tonyday567/.ghcup/hls/2.5.0.0/lib/haskell-language-server-2.5.0.0/bin/haskell-language-server-wrapper)
 
-** Extra tooling
+** extra tooling
+:PROPERTIES:
+:ID:       60c44d9b-9b7a-4c97-aee7-f77aa4f5d924
+:END:
 
 This guide uses the following tools, which, when used together, provide the modern Haskell experience:
 
@@ -251,15 +285,16 @@ This guide uses the following tools, which, when used together, provide the mode
 - [[https://hackage.haskell.org/package/hkgr][hkgr]]
 - [[https://hackage.haskell.org/package/ghcid][ghcid]]
 - [[https://github.com/MercuryTechnologies/ghciwatch][ghciwatch]]
-- [[https://github.com/tonyday567/cabal-fix][cabal-fix]]
 - [[https://github.com/phadej/cabal-extras/blob/master/cabal-docspec/MANUAL.md][cabal-docspec]]
+- [[https://github.com/martijnbastiaan/doctest-parallel][doctest-parallel]]
+- [[https://hackage.haskell.org/package/cabal-gild][cabal-gild]]
 
 *** cabal installations
 
 Most of the tools can be installed via cabal:
 
 #+begin_src sh
-cabal install ormolu hlint hkgr cabal-fix --allow-newer --overwrite-policy=always
+cabal install ormolu hlint hkgr cabal-gild --allow-newer --overwrite-policy=always
 #+end_src
 
 ghciwatch is via our cousins at rust:
@@ -290,16 +325,6 @@ cabal install cabal-docspec:exe:cabal-docspec --overwrite-policy=always
 * Extras
 
 A project typically needs a few more files that ~cabal init~ doesn't cover.
-
-** tangling
-
-On emacs, inserting appropriate value in the macros below, adding this file to the project directory and running =org-babel-tangle= will add files directly.
-
-[[https://orgmode.org/manual/Macro-Replacement.html][Macro Replacement (The Org Manual)]]
-
-#+MACRO: name minimal
-#+MACRO: lib-name MyLib
-#+MACRO: github-username yourgithubname
 
 ** readme.md
 
@@ -393,6 +418,15 @@ GitHub actions are the current and common practice for continuous integration of
 
 [[https://docs.github.com/en/actions][GitHub Actions Documentation - GitHub Docs]]
 
+As at publication, the latest actions are:
+
+- actions/checkout@v4
+- actions/cache/restore@v4
+- haskell-actions/setup@v2
+- haskell-actions/hlint-setup@v2
+- haskell-actions/run-ormolu@v17
+- haskell-actions/setup@v2
+
 #+begin_src org :tangle .github/workflows/haskell-ci.yml
 name: build
 on: [push]
@@ -418,7 +452,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: haskell-actions/run-ormolu@v16
+      - uses: haskell-actions/run-ormolu@v17
   build:
     name: GHC ${{ matrix.ghc-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -426,13 +460,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        ghc-version: ['9.10', '9.8', '9.6']
+        ghc-version: ['9.12', '9.10', '9.8', '9.6']
 
         include:
           - os: windows-latest
-            ghc-version: '9.8'
+            ghc-version: '9.12'
           - os: macos-latest
-            ghc-version: '9.8'
+            ghc-version: '9.12'
 
     steps:
       - uses: actions/checkout@v4
@@ -476,7 +510,7 @@ jobs:
       - name: Build
         run: cabal build all
 
-      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.ghc-version == '9.8'}}
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.ghc-version == '9.12'}}
         name: doctests
         run: cabal run doctests
 
@@ -505,74 +539,116 @@ Stanzas are used like so:
 
 #+begin_src cabal-ng
 library
-  import: ghc2021-stanza
+  import: ghc2024-stanza
   import: ghc-options-stanza
 #+end_src
 
-** ghc2021-stanza
+** ghc2024-stanza
 
-[[https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/control.html#extension-GHC2021][GHC2021]] is the future. For the past, this stanza reproduces the GHC2021 extensions for ghc's prior to 9.2.
+[[https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/control.html#extension-GHC2021][GHC2024]] is the future. For the past, these stanzas reproduce the GHC2024 extensions for ghc's between 9.2 and 9.10.
 
 #+begin_src cabal-ng
-common ghc2021-stanza
-  if impl(ghc >=9.2)
+common ghc2024-additions
+  default-extensions:
+    DataKinds
+    DerivingStrategies
+    DisambiguateRecordFields
+    ExplicitNamespaces
+    GADTs
+    LambdaCase
+    MonoLocalBinds
+    RoleAnnotations
+
+common ghc2024-stanza
+  if impl(ghc >=9.10)
+    default-language:
+      GHC2024
+  else
+    import: ghc2024-additions
     default-language:
       GHC2021
-  if impl(ghc <9.2)
-    default-language:
-      Haskell2010
-    default-extensions:
-      BangPatterns
-      BinaryLiterals
-      ConstrainedClassMethods
-      ConstraintKinds
-      DeriveDataTypeable
-      DeriveFoldable
-      DeriveFunctor
-      DeriveGeneric
-      DeriveLift
-      DeriveTraversable
-      DoAndIfThenElse
-      EmptyCase
-      EmptyDataDecls
-      EmptyDataDeriving
-      ExistentialQuantification
-      ExplicitForAll
-      FlexibleContexts
-      FlexibleInstances
-      ForeignFunctionInterface
-      GADTSyntax
-      GeneralisedNewtypeDeriving
-      HexFloatLiterals
-      ImplicitPrelude
-      InstanceSigs
-      KindSignatures
-      MonomorphismRestriction
-      MultiParamTypeClasses
-      NamedFieldPuns
-      NamedWildCards
-      NumericUnderscores
-      PatternGuards
-      PolyKinds
-      PostfixOperators
-      RankNTypes
-      RelaxedPolyRec
-      ScopedTypeVariables
-      StandaloneDeriving
-      StarIsType
-      TraditionalRecordSyntax
-      TupleSections
-      TypeApplications
-      TypeOperators
-      TypeSynonymInstances
+#+end_src
+
+** ghc2024-wide-stanza
+
+The stanzas below faithfully extend GHC2024 back into the ghc-8 series:
+
+#+begin_src cabal-ng
+common ghc2021-additions
+  default-extensions:
+    BangPatterns
+    BinaryLiterals
+    ConstrainedClassMethods
+    ConstraintKinds
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveLift
+    DeriveTraversable
+    DoAndIfThenElse
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitForAll
+    FlexibleContexts
+    FlexibleInstances
+    ForeignFunctionInterface
+    GADTSyntax
+    GeneralisedNewtypeDeriving
+    HexFloatLiterals
+    ImplicitPrelude
+    InstanceSigs
+    KindSignatures
+    MonomorphismRestriction
+    MultiParamTypeClasses
+    NamedFieldPuns
+    NamedWildCards
+    NumericUnderscores
+    PatternGuards
+    PolyKinds
+    PostfixOperators
+    RankNTypes
+    RelaxedPolyRec
+    ScopedTypeVariables
+    StandaloneDeriving
+    StarIsType
+    TraditionalRecordSyntax
+    TupleSections
+    TypeApplications
+    TypeOperators
+    TypeSynonymInstances
+
   if impl(ghc <9.2) && impl(ghc >=8.10)
     default-extensions:
       ImportQualifiedPost
       StandaloneKindSignatures
-  -- but keeping ormolu happy
-  if impl(ghc >=8.10)
-    default-extensions:
-      NoImportQualifiedPost
+
+common ghc2024-additions
+  default-extensions:
+    DataKinds
+    DerivingStrategies
+    DisambiguateRecordFields
+    ExplicitNamespaces
+    GADTs
+    LambdaCase
+    MonoLocalBinds
+    RoleAnnotations
+
+common ghc2024-stanza
+  if impl(ghc >=9.10)
+    default-language:
+      GHC2024
+  elif impl(ghc >=9.2)
+    import: ghc2024-additions
+    default-language:
+      GHC2021
+  else
+    import: ghc2021-additions
+    import: ghc2024-additions
+    default-language:
+      Haskell2010
 #+end_src
 
 ** ghc-options-stanza
@@ -630,75 +706,3 @@ extra-doc-files:
     readme.md
 #+end_src
 
-readme.org comes out scrambled eggs, but one day it might not:
-
-#+begin_src cabal-ng
-extra-doc-files:
-    ChangeLog.md
-    readme.org
-#+end_src
-
-* emacs
-
-It's kind of a shame that usage of emacs has declined amongst the Haskell community of late. Emacs praxis is radically shifting, partially due to the introduction of treesitter and the rewrites needed. [[https://gitlab.com/magus/haskell-ng-mode][haskell-ng-mode]] has 500 lines of elisp versus the 27000 line monster that is [[https://github.com/haskell/haskell-mode][haskell-mode]]. Haskell could learn a thing or two about how old projects can undergo paradigm shift.
-
-See my doom emacs [[https://github.com/tonyday567/doom][dotfiles]] for the boring details.
-
-Despite its corniness and fragility, org-mode is now integral to my development loop.
-
-- Using org-mode is particularly helpful where rebooting ghci requires a large amount of state. A complex function, say, with intermediate results can be laid out using org-mode and state-of-debugging sessions can evolve and be remembered between sessions.
-
-- It works well as an alternative readme, with no gap between code blocks as basic tests and code blocks as usage documentation.
-
-- Org-mode provides a =curation= of historical ghci work, in between the complete backlog of computations, and a polished up module.
-
-- it enables a form of parallel type-tetris that can't be had with any repl.
-
-- Note taking can be wider, and encompass shell commands, copy/pasted code snippets, sites visited, random thoughts and unexplored byways.
-
-For haskell-ng-mode, it requires the  [[https://github.com/tonyday567/ob-haskell-ng][ob-haskell-ng]] package.
-
-* ChangeLog
-** v2.1
-- added doctest-parallel to checklist, docs & CI
-- removed cabal-docspecs from CI
-** v1 ==> v2
-
-This is version 2 of the checklist, with a substantial diff to version 1. The initial Haskell [c]hecklist was released around ghc-8.10, and, at time of writing, ghc-9.8.1 is in `ghcup list`.
-
-The checklist now concentrates on a cabal-style workflow. I personally no longer use stack and would be concerned that any stack-based advice would become stale. Stack is also, in my opinion, a complete workflow compared with cabal where gaps remain.
-
-The use of templates has been abandoned in favour of =cabal init=, with advice and snippets around additions.
-
-The combination of emacs org-mode and Haskell development has progressed, and for even more bespokity, I am experimenting with haskell-ng. Developments surrounding cabal are in a state of flux, and, until stability, I use cabal-fix for my cabal file needs.
-
-* welcome to Haskell!
-
-Or, as Othello quips, "welcome, sir, to Cyprus. Goats and Monkeys!" Haskell is this corner solution to several problem domains difficult to pin, existing beyond some line demarcating the civilised empires of software development. Much of it will not make sense at first, and maybe ever, but if you stay long enough, you'll begin to grow fond of even the goats and monkeys.
-
-Birthed by committee in 1987 for use as an academic tool, it has now grown to not only be the 28th most popular language for tutorials, but also used industrially by over 0.2% of github users, making it somewhere between the 25th and 50th most popular language on the planet.
-Even before deep subsumption queer-coded the place, the community has been diverse, with both American and European programmers in its ranks.
-
-At 37, you can't expect Haskell to have tight onboarding, or clean lines.  Getting the dad bod in shape, the wine-mom belly some room, knocking off a few of the rougher edges can be painful. Almost uniquely, though, the Haskell project seems dedicated to doing this, and time and again makes difficult decisions and takes risks that our corporate cousins would never take in the dark forest of software design.
-
-So, at times, old stalwarts drag themselves away from their rust, their OCaml and Idris Two, and start yelling about stuff, waking up even older, white male professors via their mailing-lists, and they whine, on what used to be Twitter, about how their tutorials need editing. Again. Or someone announces Haskell is dying, or dead already, or has bad tooling, and that some committee somewhere must act, or has already, irrevocably, acted in poor taste. Popcorn gets thrown, hands are wrung, and then it all settles down again; we all just resume whatever we were doing in whatever corners we play in before the bru-ha-ha begun.
-
-How it all works, how the work gets done, who is in charge, where is it all going; these are questions we don't care to look at too closely. At 37, sometimes a vibe is all you have left.
-
-So here's what you need to know, as you start your Haskell journey:
-
-- tooling is great, and getting to be first-in-class. Complainants usually have old setups they're trying to freshen up, haven't read the manual, or are grinding axes.
-- documentation is getting better, but used to be poor, and docs can be difficult to backport. Most internet advice is poorly curated by search algorithms and not current.
-- the secret sauce of Haskell is the language pragmas. Innovation gets wrapped up in new pragmas that the user can choose to turn on. GHC2021 is an important milestone.
-- you probably wont get a job in Haskell. Do it for love.
-- fancy Haskell is over-rated, and unfancy (pattern matching, composition-style, type-first coding, ghci) is a joy.
-- you will enjoy coding in Haskell, to the point where it becomes painful to code in anything else.
-- the code you write will be the best you ever write, and it will survive (subject to staying current with the GHC grind)
-- you will be disappointed with the number of bums actually on seats. Dependency management is very important - before you commit to any dependency, look at the upstream chain for signs of care and attention.
-- GHC is a monopolist provider of compilation support.
-- Haskell has never been corporatised. We've had our suger mommas, yes, but we are no indentured slave to some global capitalist machine, oi!
-- Learn to love strings. Compilation is strings all the way down. No matter how you dress them up, it's all strings in a long computation chain.
-
-Haskell, is above all, lovable. Well-crafted, solid, unfancy, machine precisioned where it matters, sludgy and open to ideas where it doesn't.
-
-Enjoy your time with us!
